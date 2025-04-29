@@ -12,4 +12,8 @@ Las siguientes propuestas estan pendientes a revision y se requiere un mayor ani
 ### Proyecto elegido:
 Pendiente a seleccionar
 
+### Informacion administrativa:
+[**Administracion participativa**](https://github.com/Ozia112/proyecto_prog_estructurada/blob/main/informacion_administrativa/administracion_participativa.md)
+
+---
 Escrito por TM-01
