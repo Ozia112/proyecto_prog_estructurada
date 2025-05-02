@@ -16,8 +16,6 @@ El proyecto se basa en el formato clásico de preguntas de opción múltiple, pe
 ## Aplicaciones de Conocimientos del Curso
 Este proyecto permite poner en práctica diversos temas del curso, tales como:
 
-- ``Manejo de Archivos``: Lectura de datos estructurados desde archivos de texto y almacenamiento de resultados.
-
 - ``Uso de Structs``: Definición de estructuras para representar preguntas, opciones y respuestas correctas.
 
 - ``Memoria Dinámica``: Asignación dinámica de memoria para adaptar el número de preguntas según el archivo de entrada.
@@ -50,7 +48,6 @@ The project is based on the classic multiple-choice question format, but with fe
 ## Course Knowledge Applications
 This project allows the application of various course topics, such as:
 
-- ``File Handling``: Reading structured data from text files and saving results.
 
 - ``Use of Structs``: Defining structures to represent questions, options, and correct answers.
 
