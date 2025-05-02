@@ -5,7 +5,7 @@ Las siguientes propuestas estan pendientes a revision y se requiere un mayor ani
 ### Propuestas:
 - [**Propuesta 1** (_Battleship_)](https://github.com/Ozia112/proyecto_prog_estructurada/blob/main/Propuestas/propuesta_1.md)
 
-- [**Propuesta 2**](https://github.com/Ozia112/proyecto_prog_estructurada/blob/main/Propuestas/propuesta_2.md)
+- [**Propuesta 2** (_Trivia_)](https://github.com/Ozia112/proyecto_prog_estructurada/blob/main/Propuestas/propuesta_2.md)
 
 - [**Propuesta 3**](https://github.com/Ozia112/proyecto_prog_estructurada/blob/main/Propuestas/propuesta_3.md)
 
