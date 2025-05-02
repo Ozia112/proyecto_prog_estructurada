@@ -7,7 +7,7 @@ Las siguientes propuestas estan pendientes a revision y se requiere un mayor ani
 
 - [**Propuesta 2** (_Trivia_)](https://github.com/Ozia112/proyecto_prog_estructurada/blob/main/Propuestas/propuesta_2.md)
 
-- [**Propuesta 3**(_Dados_)](https://github.com/Ozia112/proyecto_prog_estructurada/blob/main/Propuestas/propuesta_3.md)
+- [**Propuesta 3** (_Dados_)](https://github.com/Ozia112/proyecto_prog_estructurada/blob/main/Propuestas/propuesta_3.md)
 
 ### Proyecto elegido:
 Pendiente a seleccionar
