@@ -1,6 +1,6 @@
 #include <stdio.h> // libreria para poder usar la funcion printf.
 #include <stdlib.h> // libreria para poder usar la funcion system.
-#include "battleship_librarie.h" // libreria que contiene las funciones para el juego.
+#include "battleship_librarie.h"    // libreria que contiene las funciones para el juego.
 #include <string.h> // libreria para poder usar la funcion strcspn.
 #include <windows.h> // libreria para poder usar la funcion sleep.
 	
