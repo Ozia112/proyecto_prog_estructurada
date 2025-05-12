@@ -1,0 +1,8 @@
+# Ignorar carpeta de configuracion de VSCode
+codigo_fuente/.vscode/
+
+# Ignorar carpetas de compilacion
+codigo_fuente/build/
+
+# Inorar archivos de configuracion de compilacion
+codigo_fuente/desktop.ini
