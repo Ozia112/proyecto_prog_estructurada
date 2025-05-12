@@ -10,7 +10,7 @@ Las siguientes propuestas estan pendientes a revision y se requiere un mayor ani
 - [**Propuesta 3** (_Dados_)](https://github.com/Ozia112/proyecto_prog_estructurada/blob/main/Propuestas/propuesta_3.md)
 
 ### Proyecto elegido:
-Pendiente a seleccionar
+Battleship
 
 ### Informacion administrativa:
 [**Administracion participativa**](https://github.com/Ozia112/proyecto_prog_estructurada/blob/main/informacion_administrativa/administracion_participativa.md)
