@@ -2,7 +2,7 @@
 #define BATTLESHIP_LIBRARIE_H
 
 #define BOARD_SIZE 10
-#define MAX_NAME_LENGTH 20
+#define MAX_NAME_LENGTH 21
 #define NUM_SHIPS 5
 
 struct ship

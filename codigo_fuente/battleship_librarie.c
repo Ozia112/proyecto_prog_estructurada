@@ -12,12 +12,11 @@
 #define SHIP_STER 1
 #define SHIP_BODY 2 
 #define BOARD_SIZE 10
-#define MAX_NAME_LENGTH 21
 #define NUM_SHIPS 5
 
 // Caracteres para las partes del barco.
-#define ship_tip 207 // Caracter "Â¤" para punta de barco 
-#define ship_body 254 // CarÃ¡cter "â– " para cuerpo de barco
+#define ship_tip 207 // Caracter "¤" para punta de barco 
+#define ship_body 254 // Caracter " " para cuerpo de barco
 
 // Definicion de colores para la consola.
 #define WaterColor 3
