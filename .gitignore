@@ -6,3 +6,6 @@ codigo_fuente/build/
 
 # Inorar archivos de configuracion de compilacion
 codigo_fuente/desktop.ini
+
+#ignorar .exe
+codigo_fuente/*.exe
