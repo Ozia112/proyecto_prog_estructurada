@@ -1,38 +1,41 @@
 #ifndef BS_CONSOLE_UTILS_H
 #define BS_CONSOLE_UTILS_H
 
-#include <stdio.h>
+#include <windows.h>
+
+static inline void limpiar_pantalla(){
+	system("cls");
+}
 
 /* Códigos ANSI básicos */
-#define RESET_COLOR      "\x1b[0m"
-#define ANSI_NEGRO       "\x1b[30m"
-#define ANSI_ROJO        "\x1b[31m"
-#define ANSI_VERDE       "\x1b[32m"
-#define ANSI_AMARILLO    "\x1b[33m"
-#define ANSI_AZUL        "\x1b[34m"
-#define ANSI_MAGENTA     "\x1b[35m"
-#define ANSI_CYAN        "\x1b[36m"
-#define ANSI_BLANCO      "\x1b[37m"
-
-/* Opciones de estilo */
-#define ANSI_NEGRITA     "\x1b[1m"
+#define NEGRO           0
+#define AZUL            1
+#define VERDE           2
+#define AQUA            3
+#define ROJO            4
+#define PURPUR          5
+#define AMARILLO        6
+#define GRIS_CLARO      7
+#define GRIS_OSCURO     8
+#define AZUL_CLARO      9
+#define VERDE_CLARO    10
+#define AQUA_CLARO     11
+#define ROJO_CLARO     12
+#define FUCSIA         13
+#define AMARILLO_C     14
+#define BLANCO         15
 
 /* Colores específicos para el juego */
-#define WATER_COLOR      ANSI_AZUL
-#define ERROR_COLOR      ANSI_ROJO
-#define INFO_COLOR       ANSI_AMARILLO
-#define SHIP_COLOR       ANSI_CYAN
-#define DEFAULT_COLOR    RESET_COLOR
-#define SUCCCESS_COLOR   ANSI_VERDE
+#define WATER_COLOR      AZUL_CLARO
+#define ERROR_COLOR      ROJO
+#define INFO_COLOR       AMARILLO
+#define SHIP_COLOR       BLANCO
+#define DEFAULT_COLOR    GRIS_CLARO
+#define SUCCCESS_COLOR   VERDE
 
-/* Función inline para cambiar color */
-static inline void cambiar_color_txt(const char *ansi_code) {
-    fputs(ansi_code, stdout);
+static inline void cambiar_color_txt(int color)
+{
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
 
-/* Función inline para limpiar pantalla */
-static inline void limpiar_pantalla(void) {
-    fputs("\x1b[2J\x1b[H", stdout);  // Borra y mueve cursor al inicio
-}
-
-#endif /* BS_CONSOLE_UTILS_H */
+#endif
