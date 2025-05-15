@@ -1,0 +1,17 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "compilar y ejecutar",
+      "type": "shell",
+      "command": "cmd",
+      "args": [
+        "/c", "del /f /q battleship.exe & gcc main.c .\\bs_common.h .\\bs_logic.c .\\bs_ui.c -o .\\battleship.exe"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ]
+}
