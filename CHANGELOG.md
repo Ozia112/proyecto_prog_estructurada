@@ -1,3 +1,4 @@
+- **ebca8df 2025-05-16** _type: **R/C**_ | Modificacion de task y launch, added changelog [``TM-01``]
 - **bdb5cfd 2025-05-16** _type: **C**_ | Mejoras generales y optimizacion de codigo 16d05a (HEAD -> main, origin/main, origin/HEAD) [``TM-01``]
 - **2eb79cb 2025-05-15** _type: **C**_ | Implementar funciones de validación y colocación de barcos en el juego Batalla Naval [``TM-01``]
 - **f748b02 2025-05-15** _type: **C**_ | Modificacion de console utils para vscode [``TM-01``]
