@@ -8,11 +8,14 @@ void inicializar_barco(struct ship *barco, int size) {
     barco->orientation = 'U'; // No definido
     barco->direction = 'U'; // No definido
 
-    // Inicializar coordenadas a -1 para indicar que no está colocado.
-    barco->startShip[0] = -1;
-    barco->startShip[1] = -1;
-    barco->endShip[0] = -1;
-    barco->endShip[1] = -1;
+    // Reservar memoria para el estado del barco.
+    barco->status = (int **)malloc(size * sizeof(int *));
+    for (int i = 0; i < size; i++) {
+        barco->status[i] = (int *)malloc(3 * sizeof(int)); // 3 columnas para x, y y estado
+        barco->status[i][0] = -1; // Inicializar coordenadas x a -1
+        barco->status[i][1] = -1; // Inicializar coordenadas y a -1
+        barco->status[i][2] = 0; // Inicializar estado a 0 (agua)
+    }
 }
 
 // Inicializar jugadores.
@@ -106,87 +109,138 @@ bool validar_solapamiento(int matriz[BOARD_SIZE][BOARD_SIZE], int filaInicio, in
     return true; // No hay solapamiento
 }
 
-void colocar_barco_en_tablero(int matriz[BOARD_SIZE][BOARD_SIZE], struct ship *ship_i) {
-    int i;
+void colocar_barco_en_tablero(int matriz[BOARD_SIZE][BOARD_SIZE], struct ship *ship_i, int filaInicio, 
+                              int filaFin, int columnaInicio, int columnaFin) {
+    int i, idx = 0;
 
+    // Guardar las coordenadas de inicio y fin del barco.
     if (ship_i->orientation == 'H') {
         if (ship_i->direction == 'E') {
-            for (i = ship_i->startShip[1]; i <= ship_i->endShip[1]; i++) {
-                if (i == ship_i->startShip[1]) {
-                    matriz[ship_i->startShip[0]][i] = SHIP_STER; // se asigna el valor 1 para la popa del barco.
+            for (i = columnaInicio; i <= columnaFin; i++, idx ++) {
+                if (idx == 0) {
+                    matriz[filaInicio][i] = SHIP_STER; // se asigna el valor 1 para la popa del barco.
                 } else {
-                    matriz[ship_i->startShip[0]][i] = SHIP_BODY; // se asigna el valor 2 para el cuerpo del barco.
+                    matriz[filaInicio][i] = SHIP_BODY; // se asigna el valor 2 para el cuerpo del barco.
+                }
+                ship_i->status[idx][0] = filaInicio; // Guardar coordenadas x
+                ship_i->status[idx][1] = i; // Guardar coordenadas y
+                if (idx == 0) {
+                    ship_i->status[idx][2] = SHIP_STER; // Estado de la punta del barco
+                } else {
+                    ship_i->status[idx][2] = SHIP_BODY; // Estado del cuerpo del barco
                 }
             }
         } else if (ship_i->direction == 'O') {
-            for (i = ship_i->startShip[1]; i >= ship_i->endShip[1]; i--) {
-                if (i == ship_i->startShip[1]) {
-                    matriz[ship_i->startShip[0]][i] = SHIP_STER; // se asigna el valor 1 para la popa del barco.
+            for (i = columnaInicio; i >= columnaFin; i--, idx++) {
+                if (idx == 0) {
+                    matriz[filaInicio][i] = SHIP_STER; // se asigna el valor 1 para la popa del barco.
                 } else {
-                    matriz[ship_i->startShip[0]][i] = SHIP_BODY; // se asigna el valor 2 para el cuerpo del barco.
+                    matriz[filaInicio][i] = SHIP_BODY; // se asigna el valor 2 para el cuerpo del barco.
                 }
+                ship_i->status[idx][0] = filaInicio; // Guardar coordenadas x
+                ship_i->status[idx][1] = i; // Guardar coordenadas y
+                if (idx == 0) {
+                    ship_i->status[idx][2] = SHIP_STER; // Estado de la punta del barco
+                } else {
+                    ship_i->status[idx][2] = SHIP_BODY; // Estado del cuerpo del barco
+                }  
             }
         }
     } else if (ship_i->orientation == 'V') {
         if (ship_i->direction == 'S') {
-            for (i = ship_i->startShip[0]; i <= ship_i->endShip[0]; i++) {
-                if (i == ship_i->startShip[0]) {
-                    matriz[i][ship_i->startShip[1]] = SHIP_STER; // se asigna el valor 1 para la popa del barco.
+            for (i = filaInicio; i <= filaFin; i++, idx++) {
+                if (idx == 0) {
+                    matriz[i][columnaInicio] = SHIP_STER; // se asigna el valor 1 para la popa del barco.
                 } else {
-                    matriz[i][ship_i->startShip[1]] = SHIP_BODY; // se asigna el valor 2 para el cuerpo del barco.
+                    matriz[i][columnaInicio] = SHIP_BODY; // se asigna el valor 2 para el cuerpo del barco.
+                }
+                ship_i->status[idx][0] = i; // Guardar coordenadas x
+                ship_i->status[idx][1] = columnaInicio; // Guardar coordenadas y
+                if (idx == 0) {
+                    ship_i->status[idx][2] = SHIP_STER; // Estado de la punta del barco
+                } else {
+                    ship_i->status[idx][2] = SHIP_BODY; // Estado del cuerpo del barco
                 }
             }
         } else if (ship_i->direction == 'N') {
-            for (i = ship_i->startShip[0]; i >= ship_i->endShip[0]; i--) {
-                if (i == ship_i->startShip[0]) {
-                    matriz[i][ship_i->startShip[1]] = SHIP_STER; // se asigna el valor 1 para la popa del barco.
+            for (i = filaInicio; i >= filaFin; i--, idx++) {
+                if (idx == 0) {
+                    matriz[i][columnaInicio] = SHIP_STER; // se asigna el valor 1 para la popa del barco.
                 } else {
-                    matriz[i][ship_i->startShip[1]] = SHIP_BODY; // se asigna el valor 2 para el cuerpo del barco.
+                    matriz[i][columnaInicio] = SHIP_BODY; // se asigna el valor 2 para el cuerpo del barco.
+                }
+                ship_i->status[idx][0] = i; // Guardar coordenadas x
+                ship_i->status[idx][1] = columnaInicio; // Guardar coordenadas y
+                if (idx == 0) {
+                    ship_i->status[idx][2] = SHIP_STER; // Estado de la punta del barco
+                } else {
+                    ship_i->status[idx][2] = SHIP_BODY; // Estado del cuerpo del barco
                 }
             }
         }
     }
+
 }
 
 bool procesar_coordenadas(int matriz[BOARD_SIZE][BOARD_SIZE], struct ship *ship_i, 
                           int filaInicio, int filaFin, int columnaInicio, int columnaFin) {
     // Validar orientación (horizontal o vertical)
     if(!validar_orientacion(filaInicio, filaFin, columnaInicio, columnaFin)) {
-        cambiar_color_txt(ERROR_COLOR);
-        printf("Las coordenadas no son válidas. El barco debe ser horizontal o vertical.\n");
-        cambiar_color_txt(DEFAULT_COLOR);
+        color_txt(ERROR_COLOR);
+        printf("Las coordenadas no son validas. El barco debe ser horizontal o vertical.\n");
+        color_txt(DEFAULT_COLOR);
         return false;
     }
 
     // Validar que la dimensión del barco sea correcta
     if(!validar_dimension(filaInicio, filaFin, columnaInicio, columnaFin, ship_i->size)) {
-        cambiar_color_txt(ERROR_COLOR);
-        printf("Las coordenadas no son válidas. El barco debe tener exactamente %d celdas de longitud.\n", ship_i->size);
-        cambiar_color_txt(DEFAULT_COLOR);
+        color_txt(ERROR_COLOR);
+        printf("Las coordenadas no son validas. El barco debe tener exactamente %d celdas de longitud.\n", ship_i->size);
+        color_txt(DEFAULT_COLOR);
         return false;
     }
 
     // Validar que no haya solapamiento con otros barcos
     if(!validar_solapamiento(matriz, filaInicio, filaFin, columnaInicio, columnaFin, ship_i)) {
-        cambiar_color_txt(ERROR_COLOR);
-        printf("Las coordenadas no son válidas. Hay solapamiento con otro barco.\n");
-        cambiar_color_txt(DEFAULT_COLOR);
+        color_txt(ERROR_COLOR);
+        printf("Las coordenadas no son validas. Hay solapamiento con otro barco.\n");
+        color_txt(DEFAULT_COLOR);
         return false;
-    }
-
-    // Si todas las validaciones pasan, colocar el barco
-
-    // Guardar las coordenadas de inicio y fin del barco.
-    ship_i->startShip[0] = filaInicio;
-    ship_i->startShip[1] = columnaInicio;
-    ship_i->endShip[0] = filaFin;
-    ship_i->endShip[1] = columnaFin;
-    
+    }    
     return true;
+}
+
+int decidir_primer_turno(const struct player *p1, const struct player *p2) {
+    int primer_turno = (rand() % 2) + 1;
+    limpiar_pantalla();
+    printf("El numero aleatorio para decidir quien inicia es:"); color_txt(INFO_COLOR); printf(" %d\n", primer_turno); color_txt(DEFAULT_COLOR);
+    Sleep(1000);
+    if (primer_turno == 1) {
+        color_txt(INFO_COLOR); printf("¡%s ",p1->name); color_txt(DEFAULT_COLOR); printf(" ha sido elegido para comenzar la partida!\n");
+    } else {
+        color_txt(INFO_COLOR); printf("¡%s ",p2->name); color_txt(DEFAULT_COLOR); printf(" ha sido elegido para comenzar la partida!\n");
+    }
+    enter_continuar();
+    getchar();
+    return primer_turno;
 }
 
 // Función para limpiar el buffer de entrada
 void limpiar_buffer_entrada() {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
+}
+
+void liberar_status(struct ship *barco) {
+    for (int i = 0; i < barco->size; i++) {
+        free(barco->status[i]);
+    }
+    free(barco->status);
+    barco->status = NULL; // Evitar puntero colgante
+}
+
+void liberar_flota(struct player *player) {
+    for (int i = 0; i < NUM_SHIPS; i++) {
+        liberar_status(&player->ships[i]);
+    }
 }

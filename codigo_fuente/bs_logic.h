@@ -28,10 +28,17 @@ bool validar_dimension(int filaInicio, int filaFin, int columnaInicio, int colum
 bool validar_solapamiento(int matriz[BOARD_SIZE][BOARD_SIZE], int filaInicio, int filaFin, 
                           int columnaInicio, int columnaFin, struct ship *ship_i);
 
-void colocar_barco_en_tablero(int matriz[BOARD_SIZE][BOARD_SIZE], struct ship *ship_i);
+void colocar_barco_en_tablero(int matriz[BOARD_SIZE][BOARD_SIZE], struct ship *ship_i, int filaInicio, 
+                              int filaFin, int columnaInicio, int columnaFin);
 
 bool procesar_coordenadas(int matriz[BOARD_SIZE][BOARD_SIZE], struct ship *ship_i, 
                           int filaInicio, int filaFin, int columnaInicio, int columnaFin);
 
+int decidir_primer_turno(const struct player *p1, const struct player *p2);
+
 void limpiar_buffer_entrada();
+
+void liberar_status(struct ship *barco);
+
+void liberar_flota(struct player *player);
 #endif // BS_LOGIC_H

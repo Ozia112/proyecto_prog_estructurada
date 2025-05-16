@@ -33,7 +33,7 @@ static inline void limpiar_pantalla(){
 #define DEFAULT_COLOR    GRIS_CLARO
 #define SUCCCESS_COLOR   VERDE
 
-static inline void cambiar_color_txt(int color)
+static inline void color_txt(int color)
 {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
