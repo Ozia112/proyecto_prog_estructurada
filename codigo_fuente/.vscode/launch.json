@@ -5,7 +5,7 @@
       "name": "Ejecutar battleship",
       "type": "cppvsdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/battleship.exe",
+      "program": "${workspaceFolder}/battleship-beta_0.4.3.exe",
       "console": "externalTerminal",
       "preLaunchTask": "compilar y ejecutar",
       "stopAtEntry": false,
