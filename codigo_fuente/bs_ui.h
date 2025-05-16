@@ -13,7 +13,7 @@
 #define ship_tip 207 // Caracter "¤" para punta de barco 
 #define ship_body 254 // Carácter "■" para cuerpo de barco
 
-// Function prototypes
+// Prototipo de funciones
 void solicitar_nombre(char *nombre, int max_length);
 void imprimirTablero(int matriz[BOARD_SIZE][BOARD_SIZE]);
 void ponerBarcos(int matriz[BOARD_SIZE][BOARD_SIZE], struct ship *ship_i, struct player *player_i);

@@ -45,12 +45,12 @@ void imprimirTablero(int matriz[BOARD_SIZE][BOARD_SIZE]) {
                     break;
                 case 1:
                     cambiar_color_txt(SHIP_COLOR);
-                    printf("%c ", SHIP_BODY); // Carácter "×" para barco
+                    printf("%c ", '1'); // Carácter "×" para barco
                     cambiar_color_txt(DEFAULT_COLOR);
                     break;
                 case 2:
                     cambiar_color_txt(SHIP_COLOR);
-                    printf("%c ", SHIP_STER); // Carácter "¤" para barco
+                    printf("%c ", '2'); // Carácter "¤" para barco
                     cambiar_color_txt(DEFAULT_COLOR);
                     break;
                 default:
