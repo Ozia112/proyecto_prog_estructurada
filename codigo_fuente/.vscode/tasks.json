@@ -6,7 +6,7 @@
       "type": "shell",
       "command": "cmd",
       "args": [
-        "/c", "del /f /q battleship.exe & gcc main.c .\\bs_common.h .\\bs_logic.c .\\bs_ui.c -o .\\battleship.exe"
+        "/c", "del /f /q *.exe & gcc main.c .\\bs_common.h .\\bs_logic.c .\\bs_ui.c -o .\\battleship-beta_0.4.3.exe"
       ],
       "group": {
         "kind": "build",
