@@ -1,4 +1,5 @@
 
+- **6bd26e1 date: 16-05-2025** _type: **R**_ | Reestructuracion de documentos `TM-01`
 - **50e2dd3 date: 16-05-2025** _type: **R**_ | Update CHANGELOG.md `TM-01`
 - **ebca8df date: 16-05-2025** _type: **R/C**_ | Modificacion de task y launch, added changelog `TM-01`
 - **bdb5cfd date: 16-05-2025** _type: **C**_ | Mejoras generales y optimizacion de codigo 16d05a `TM-01`
