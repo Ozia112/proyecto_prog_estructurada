@@ -143,7 +143,7 @@ Verifica que el barco ocupe exactamente el número de celdas requeridas.
 
 **Código relevante:**
 ```c
-bool validar_dimension(int filaInicio, int filaFin, int columnaInicio, int columnaFin, int dimension_reuqerida) {
+bool validar_dimension(int filaInicio, int filaFin, int columnaInicio, int columnaFin, int dimension_requerida) {
     int dimension_actual;
 
     if (filaInicio == filaFin) {
@@ -154,7 +154,7 @@ bool validar_dimension(int filaInicio, int filaFin, int columnaInicio, int colum
         return false; // No es una línea recta
     }
     
-    return (dimension_actual == dimension_reuqerida);
+    return (dimension_actual == dimension_requerida);
     
 }
 ```
