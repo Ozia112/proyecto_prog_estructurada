@@ -1,4 +1,5 @@
 
+- **e3dd01d date: 17-05-2025** _type: **R**_ | Corrcion de escritura y changelog `TM-01`
 - **3039a87 date: 17-05-2025** _type: **R**_ | Add documentation for libraries and changelog tutorial `TM-01`
 - **6bd26e1 date: 16-05-2025** _type: **R**_ | Reestructuracion de documentos `TM-01`
 - **50e2dd3 date: 16-05-2025** _type: **R**_ | Update CHANGELOG.md `TM-01`
@@ -6,11 +7,11 @@
 - **bdb5cfd date: 16-05-2025** _type: **C**_ | Mejoras generales y optimizacion de codigo 16d05a `TM-01`
 - **2eb79cb date: 15-05-2025** _type: **C**_ | Implementar funciones de validaci├│n y colocaci├│n de barcos en el juego Batalla Naval `TM-01`
 - **f748b02 date: 15-05-2025** _type: **C**_ | Modificacion de console utils para vscode `TM-01`
-- **7bcaba6 date: 13-05-2025** _type: **R**_ | creacion de archivos `TM-01`
+- **bb3668f date: 15-05-2025** _type: **R/C**_ | Refactorizaci├│n de la Estructura del C├│digo del Juego Batalla Naval `TM-01`
 - **7bcaba6 date: 13-05-2025** _type: **R**_ | creacion de archivods `TM-01`
 - **42f7c8f date: 13-05-2025** _type: **R**_ | Actualizar el gitignore `TM-01`
 - **031f189 date: 13-05-2025** _type: **C**_ | Update battleship_librarie.h `TM-01`
-- **14ff6e4 date: 13-05-2025** _type: **C**_ | Eliminar las librerias duplicadas que se hicieron por error para compilar en zinjal `TM-01`
+- **14ff6e4 date: 13-05-2025** _type: **C**_ | Eliminar las librerias duplicadas que se hicieron por error para compliar en zinjal `TM-01`
 - **4bb3564 date: 13-05-2025** _type: **C**_ | Trabajo en la funcion de poner barcos(entorno vscode) `TM-01`
 - **e9a4527 date: 12-05-2025** _type: **R**_ | Merge branch 'main' of https://github.com/Ozia112/proyecto_prog_estructurada `TM-01`
 - **f7470dc date: 12-05-2025** _type: **R**_ | Update README.md `TM-02`
