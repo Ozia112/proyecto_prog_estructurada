@@ -26,7 +26,7 @@ void inicializar_jugador(struct player *player) {
 
     // Inicializar estado de jugador.
     player->placed_ships = 0;
-    player->sunked_enemy_ships = 0;
+    player->enemy_hit_parts = 0;
     player->sunked_ships = 0;
 
     // Inicializar barcos.
@@ -212,7 +212,7 @@ bool procesar_coordenadas(int matriz[BOARD_SIZE][BOARD_SIZE], struct ship *ship_
 
 int decidir_primer_turno(const struct player *p1, const struct player *p2) {
     int primer_turno = (rand() % 2) + 1;
-    limpiar_pantalla();
+    limpiar_pantalla(); 
     printf("El numero aleatorio para decidir quien inicia es:"); color_txt(INFO_COLOR); printf(" %d\n", primer_turno); color_txt(DEFAULT_COLOR);
     Sleep(1000);
     if (primer_turno == 1) {
@@ -243,4 +243,20 @@ void liberar_flota(struct player *player) {
     for (int i = 0; i < NUM_SHIPS; i++) {
         liberar_status(&player->ships[i]);
     }
+}
+
+void modificar_disparo(int matriz_enemigo[BOARD_SIZE][BOARD_SIZE], matriz_mostrada[BOARD_SIZE][BOARD_SIZE], int fila, int columna) {
+    if (matriz_enemigo[fila][columna] == SHIP_STER) {
+        matriz_mostrada[fila][columna] = 3; // Punta dañada
+        printf("El disparo dirigido a (%d, %d) ha dañado la punta de un barco enemigo!\n", fila + 1, columna + 1);
+    } else if (matriz_enemigo[fila][columna] == SHIP_BODY) {
+        matriz_mostrada[fila][columna] = 4; // Cuerpo dañado
+        printf("El disparo dirigido a (%d, %d) ha dañado un barco enemigo!\n", fila + 1, columna + 1);
+    } else if (matriz_enemigo[fila][columna] == 0) {
+        printf("El disparo dirigido a (%d, %d) ha caído en el agua!\n", fila + 1, columna + 1);
+    } else {
+        printf("El barco en las coordenadas (%d, %d) ya ha sido dañado antes. Dispara a un lugar diferente!\n", fila + 1, columna + 1);
+        capturar_disparo(matriz_enemigo, matriz_mostrada); // Volver a capturar disparo si la casilla ya fue disparada
+    }
+    enter_continuar();
 }

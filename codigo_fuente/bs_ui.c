@@ -96,6 +96,8 @@ void partida(){
     int primer_turno;
     int matriz_jug1[BOARD_SIZE][BOARD_SIZE] = {0}; // Matriz para el jugador 1.
     int matriz_jug2[BOARD_SIZE][BOARD_SIZE] = {0}; // Matriz para el jugador 2.
+    int matriz_enemigo_jug1 [BOARD_SIZE][BOARD_SIZE] = {0}; // Matriz para el enemigo del jugador 1.
+    int matriz_enemigo_jug2 [BOARD_SIZE][BOARD_SIZE] = {0}; // Matriz para el enemigo del jugador 2.
     int i, j;
 
     limpiar_buffer_entrada(); // Limpiar el buffer de entrada antes de solicitar el nombre.
@@ -127,6 +129,49 @@ void partida(){
 
     // Aquí puedes llamar a la función de turnos, pasando el jugador que inicia
     // turno(primer_jugador == 0 ? &player1 : &player2, primer_jugador == 0 ? &player2 : &player1, matriz_jug1, matriz_jug2);
+
+    if(primer_turno == 1){
+        while(player1.sunked_ships < NUM_SHIPS && player2.sunked_ships < NUM_SHIPS) {
+            // Lógica para el turno del jugador 1
+            printf("Turno de"); color_txt(INFO_COLOR); printf(" %s\n", player1.name); color_txt(DEFAULT_COLOR);
+            enter_continuar();
+            limpiar_pantalla();
+            capturar_disparo(matriz_jug2, matriz_enemigo_jug1);
+            imprimirTablero(matriz_enemigo_jug1);
+            enter_continuar();
+            limpiar_pantalla();
+
+
+            // Lógica para el turno del jugador 2
+            printf("Turno de"); color_txt(INFO_COLOR); printf(" %s\n", player2.name); color_txt(DEFAULT_COLOR);
+            enter_continuar();
+            limpiar_pantalla();
+            capturar_disparo(matriz_jug1, matriz_enemigo_jug2);
+            imprimirTablero(matriz_enemigo_jug2);
+            enter_continuar();
+            limpiar_pantalla();
+        }
+    } else {
+        while(player2.sunked_ships < NUM_SHIPS && player1.sunked_ships < NUM_SHIPS) {
+            // Lógica para el turno del jugador 2
+            printf("Turno de"); color_txt(INFO_COLOR); printf(" %s\n", player2.name); color_txt(DEFAULT_COLOR);
+            enter_continuar();
+            limpiar_pantalla();
+            capturar_disparo(matriz_jug1, matriz_enemigo_jug2);
+            imprimirTablero(matriz_enemigo_jug2);
+            enter_continuar();
+            limpiar_pantalla();
+
+            // Lógica para el turno del jugador 1
+            printf("Turno de"); color_txt(INFO_COLOR); printf(" %s\n", player1.name); color_txt(DEFAULT_COLOR);
+            enter_continuar();
+            limpiar_pantalla();
+            capturar_disparo(matriz_jug2, matriz_enemigo_jug1);
+            imprimirTablero(matriz_enemigo_jug1);
+            enter_continuar();
+            limpiar_pantalla();
+        }
+    }
 }
 
 void imprimirTablero(int matriz[BOARD_SIZE][BOARD_SIZE]) {
@@ -168,22 +213,22 @@ void imprimirTablero(int matriz[BOARD_SIZE][BOARD_SIZE]) {
                     break;
                 case 1:
                     color_txt(SHIP_COLOR);
-                    printf("%c ", SHIP_STER); // Carácter "×" para barco
+                    printf("%d ", SHIP_STER); // Carácter "×" para barco
                     color_txt(DEFAULT_COLOR);
                     break;
                 case 2:
                     color_txt(SHIP_COLOR);
-                    printf("%c ", SHIP_BODY); // Carácter "¤" para barco
+                    printf("%d ", SHIP_BODY); // Carácter "¤" para barco
                     color_txt(DEFAULT_COLOR);
                     break;
                 case 3:
                     color_txt(ERROR_COLOR);
-                    printf("%c ", SHIP_STER);
+                    printf("%d ", SHIP_STER);
                     color_txt(DEFAULT_COLOR);
                     break;
                 case 4:
                     color_txt(ERROR_COLOR);
-                    printf("%c ", SHIP_BODY);
+                    printf("%d ", SHIP_BODY);
                     color_txt(DEFAULT_COLOR);
                     break;
                 default:
@@ -318,6 +363,32 @@ void reglas() {
 }
 
 void enter_continuar() {
-    printf("Presione enter para ");  color_txt(INFO_COLOR); printf(" continuar.\n"); color_txt(DEFAULT_COLOR);
+    printf("Presione enter para ");  color_txt(INFO_COLOR); printf("continuar.\n"); color_txt(DEFAULT_COLOR);
     getchar(); // Pausa antes de continuar.
+}
+
+void capturar_disparo(int matriz_enemigo[BOARD_SIZE][BOARD_SIZE], matriz_mostrada[BOARD_SIZE][BOARD_SIZE]){
+    int fila = 0;
+    char columna = ' ';
+    bool coordenadas_validadas = false;
+    printf("Para disparar, ingrese las coordenadas de la celda a la que desea disparar.\n");
+    printf("Recuerde que las coordenadas son de la forma (fila, columna).\n");
+    while(coordenadas_validadas == false){
+        scanf(" %d %c", &fila, &columna);
+        columna = toupper(columna); // Convertir a mayúscula para evitar problemas de comparación.
+        limpiar_buffer_entrada(); // Limpiar el buffer de entrada
+        // Validar que las coordenadas esten dentro del rango permitido.
+        if(columna >= 'A' && columna <= 'J' && fila >= 1 && fila <= 10) {
+            columna = columna - 'A';
+            fila--;
+            coordenadas_validadas = true; // Salir del bucle si las coordenadas son válidas.
+        } else {
+            color_txt(ERROR_COLOR);
+            printf("Coordenadas fuera de rango. Asegurese de establecerlas entre 1 y 10 para filas y A-J para columnas. Intente de nuevo.\n");
+            color_txt(DEFAULT_COLOR);
+        } 
+    }
+
+    // expresar los cambios hechos en la matriz del enemigo después de disparar.
+    modificar_disparo(matriz_enemigo, matriz_mostrada, fila, columna);
 }

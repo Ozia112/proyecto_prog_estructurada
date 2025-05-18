@@ -24,4 +24,5 @@ void ponerBarcos(int matriz[BOARD_SIZE][BOARD_SIZE], struct ship *ship_i, struct
 void colocar_barcos_jugador(struct player *player_i, int matriz[BOARD_SIZE][BOARD_SIZE]);
 void reglas();
 void enter_continuar();
+void capturar_disparo(int matriz_enemigo[BOARD_SIZE][BOARD_SIZE], int matriz_mostrada[BOARD_SIZE][BOARD_SIZE]);
 #endif // BS_UI_H

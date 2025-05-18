@@ -38,6 +38,8 @@ int decidir_primer_turno(const struct player *p1, const struct player *p2);
 
 void limpiar_buffer_entrada();
 
+void modificar_disparo(int matriz_enemigo[BOARD_SIZE][BOARD_SIZE], matriz_mostrada[BOARD_SIZE][BOARD_SIZE], int fila, int columna);
+
 void liberar_status(struct ship *barco);
 
 void liberar_flota(struct player *player);

@@ -25,7 +25,7 @@ struct player
     char name[MAX_NAME_LENGTH];
     struct ship ships[NUM_SHIPS]; // Array of ships for the player
     int placed_ships;
-    int sunked_enemy_ships;
+    int enemy_hit_parts;
     int sunked_ships;
 };
 
