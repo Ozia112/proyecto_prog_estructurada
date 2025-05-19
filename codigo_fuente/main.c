@@ -6,9 +6,10 @@
 #include "bs_ui.h" // libreria para poder usar funciones de UI.
 #include <string.h> // libreria para poder usar la funcion strcspn.
 
-void partida(); // Prototipo de la funcion partida.
 int main() {
 	pantalla_bienvenida(); // Pantalla de bienvenida.
 	limpiar_pantalla(); // Limpiar la pantalla después de la bienvenida.
 	menu_principal(); // Menu principal.
+	
+	return 0; // Fin del programa.
 }

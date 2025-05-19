@@ -18,7 +18,7 @@ void pantalla_bienvenida() {
 	printf("| |_|   ||   _   |  |   |  |   _   ||       ||       ||   _   |  | | |   ||   _   | |     | |   _   ||       | \n");
 	printf("|_______||__| |__|  |___|  |__| |__||_______||_______||__| |__|  |_|  |__||__| |__|  |___|  |__| |__||_______| \n");
 	
-	printf("Presione cualquier \"enter\" para continuar");
+	enter_continuar(); // Pausa antes de continuar.
 
 	getchar();
 	limpiar_pantalla(); // Limpiar la pantalla después de mostrar el logo.
@@ -70,6 +70,7 @@ void menu_por_turno(struct player *player_i, struct player *enemy_i, struct cart
     printf("[C]: Reporte de barcos enemigos\n");
 
     scanf(" %c", &opc);
+    limpiar_buffer_entrada(); // Limpiar el buffer de entrada antes de procesar la opción.
     opc = toupper(opc); // Convertir a mayúscula para evitar problemas de comparación.
     switch(opc) {
         case 'A':
@@ -177,6 +178,8 @@ void partida(){
             break;
         }
     }while(player1.enemy_hit_parts < VICTORYCONDITION && player2.enemy_hit_parts < VICTORYCONDITION);
+    liberar_flota(&player1); // Liberar memoria de la flota del jugador 1.
+	liberar_flota(&player2); // Liberar memoria de la flota del jugador 2.
 }
 
 void capturar_coordenada(struct player *player_i, struct player *enemy_i) {
@@ -324,7 +327,7 @@ void imprimirTablero(struct player *player_i) {
     // Dibujar cada fila
     for (i = 0; i < BOARD_SIZE; i++) {
         printf("%*s%.2d ", relleno,"", i + 1); // // Encabezado de filas(1 2 3 4 5 6 7 8 9 10) con relleno para centrar
-        for (j = 0; j < 10; j++) {
+        for (j = 0; j < BOARD_SIZE; j++) {
             estado = WATER; // Por defecto el estado es agua
             for (s = 0; s < NUM_SHIPS && estado == WATER; s++) {
                 for (k = 0; k < player_i->ships[s].size; k++) {
@@ -510,36 +513,42 @@ void imprimirReporteBarcos(struct player *player_i, struct player *enemy_i, stru
 
     // Encabezado
     for (i = 0; i < NUM_SHIPS; i++) {
-        printf("Bote %02d%*s", i + 1, ancho_col - 6, ""); // "Bote 01" ocupa 8 caracteres, el resto es espacio
+        printf("%*sBote %02d", ancho_col / 2 - 4, "", i + 1);
+        printf("%*s", ancho_col - (ancho_col / 2 + 4), "");
     }
     printf("\n");
 
     // Dibujo de proa (/'\)
     for (i = 0; i < NUM_SHIPS; i++) {
         int estado = player_i->ships[i].status[0][2];
-        printf("%*s", ancho_col / 2 - 1, ""); // Centrar proa
+        if (i == 0) printf("%*s", ancho_col - 8, "");
         estado == SHIP_STER ? color_txt(SHIP_COLOR) : color_txt(ERROR_COLOR);
         printf("/'\\");
         color_txt(DEFAULT_COLOR);
-        printf("%*s", ancho_col - (ancho_col / 2 + 2), ""); // Relleno a la derecha
+        printf("%*s", ancho_col - 4, "");
     }
     printf("\n");
 
-    // Dibujo de casillas de cada barco, por filas (máximo tamaño de barco)
+    // Cuerpo del barco
     for (k = 1; k < dimension_maxima; k++) {
         for (i = 0; i < NUM_SHIPS; i++) {
             if (k < player_i->ships[i].size) {
                 int estado = player_i->ships[i].status[k][2];
-                printf("%*s", ancho_col / 2 - 1, "");
-                estado == SHIP_BODY ? color_txt(SHIP_COLOR) : color_txt(ERROR_COLOR);
-                estado == SHIP_BODY ? printf("[_]") : printf("[X]");
+                if (i == 0) printf("%*s", ancho_col - 8, "");
+                if (estado == SHIP_BODY) {
+                    color_txt(SHIP_COLOR);
+                    printf("[_]");
+                } else {
+                    color_txt(ERROR_COLOR);
+                    printf("[X]");
+                }
                 color_txt(DEFAULT_COLOR);
-                printf("%*s", ancho_col - (ancho_col / 2 + 2), "");
+                printf("%*s", ancho_col - 4, "");
             } else {
-                printf("%*s", ancho_col, ""); // Espacio vacío para barcos más cortos
+                printf("%*s", ancho_col, "");
             }
         }
-        printf("\n");
+    printf("\n");
     }
 
     printf("[Z]: Regresar al menu.\n");
@@ -562,7 +571,7 @@ void imprimirReporteBarcos(struct player *player_i, struct player *enemy_i, stru
 void ponerBarcos(struct ship *ship_i, struct player *player_i) {
     int filaInicio, filaFin, columnaInicio, columnaFin;
     char columnaInicio_c, columnaFin_c;
-    int i, j;
+    int i;
     bool coordenadas_validas = false;
 
     while(!coordenadas_validas) {
@@ -627,7 +636,7 @@ void ponerBarcos(struct ship *ship_i, struct player *player_i) {
         }
 
         // Procesar y validar las coordenadas del barco.
-        if(procesar_coordenadas(ship_i, filaInicio, filaFin, columnaInicio, columnaFin)) {
+        if(procesar_coordenadas(ship_i, filaInicio, filaFin, columnaInicio, columnaFin, player_i)) {
             // Si las coordenadas son validas, colocar el barco en el tablero.
             colocar_barco_en_tablero(ship_i, filaInicio, filaFin, columnaInicio, columnaFin);
         

@@ -31,7 +31,6 @@
 struct ship
 {
     int size; // alojar la dimension del barco
-    char orientation; // 'H' for horizontal, 'V' for vertical, 'U' for undefined
     char direction; // 'E' for east, 'W' for west, 'N' for north, 'S' for south, 'U' for undefined
     int **status; // status[size][3]: [fila][0]=x, [fila][1]=y, [fila][2]=estado (1=punta, 2=cuerpo, 3=punta dañada, 4=cuerpo dañado)
     bool vivo;

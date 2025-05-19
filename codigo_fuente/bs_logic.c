@@ -10,7 +10,6 @@
 
 void inicializar_barco(struct ship *barco, int size) {
     barco-> size = size;
-    barco->orientation = 'U'; // No definido
     barco->direction = 'U'; // No definido
     barco->vivo = true; // Barco está vivo al inicio
 
@@ -35,6 +34,7 @@ void hundido(struct player *player_i) {
         }
         player_i->ships[i].vivo = !todas_alcanzadas ? true : false;
     }
+
 }
 
 void inicializar_jugador(struct player *player) {
@@ -48,6 +48,8 @@ void inicializar_jugador(struct player *player) {
     player->sunked_ships = 0;
     player->enemy_hit_parts = 0;
     player->torres_acumuladas = 0;
+    player->salvo = false;
+    player->buff = false;
     
     // chequeo_fila y chequeo_columna inicializados a false.
     for (int i = 0; i < BOARD_SIZE; i++) {
@@ -176,56 +178,33 @@ bool validar_dimension(int filaInicio, int filaFin, int columnaInicio, int colum
     
 }
 
-bool validar_solapamiento(struct ship *ship_i, int filaInicio, int filaFin, int columnaInicio, int columnaFin) {
+bool validar_solapamiento(struct ship *ships, int num_ships_colocados, int filaInicio, int filaFin, int columnaInicio, int columnaFin, int size) {
     int i, x, y;
 
-    // Determinar la orientación y dirección del barco
+    // Recorre todas las posiciones que ocuparía el nuevo barco
     if (filaInicio == filaFin) {
-        ship_i->orientation = 'H'; // Horizontal
-        if (columnaInicio <= columnaFin) {
-            ship_i->direction = 'E'; // Este
-            for (i = columnaInicio; i <= columnaFin; i++) {
-                x = filaInicio;
-                y = i;
-                // Verificar si alguna parte del barco ya ocupa esta coordenada
-                for (int j = 0; j < ship_i->size; j++) {
-                    if (ship_i->status[j][0] == x && ship_i->status[j][1] == y) {
-                        return false; // Hay solapamiento
-                    }
-                }
-            }
-        } else {
-            ship_i->direction = 'O'; // Oeste
-            for (i = columnaInicio; i >= columnaFin; i--) {
-                x = filaInicio;
-                y = i;
-                for (int j = 0; j < ship_i->size; j++) {
-                    if (ship_i->status[j][0] == x && ship_i->status[j][1] == y) {
+        // Horizontal
+        for (i = columnaInicio; (columnaInicio <= columnaFin) ? (i <= columnaFin) : (i >= columnaFin); (columnaInicio <= columnaFin) ? i++ : i--) {
+            x = filaInicio;
+            y = i;
+            // Compara contra todos los barcos ya colocados
+            for (int s = 0; s < num_ships_colocados; s++) {
+                for (int j = 0; j < ships[s].size; j++) {
+                    // Solo compara si la casilla ya fue asignada (no -1)
+                    if (ships[s].status[j][0] == x && ships[s].status[j][1] == y && x != -1 && y != -1) {
                         return false; // Hay solapamiento
                     }
                 }
             }
         }
     } else if (columnaInicio == columnaFin) {
-        ship_i->orientation = 'V'; // Vertical
-        if (filaInicio <= filaFin) {
-            ship_i->direction = 'S'; // Sur
-            for (i = filaInicio; i <= filaFin; i++) {
-                x = i;
-                y = columnaInicio;
-                for (int j = 0; j < ship_i->size; j++) {
-                    if (ship_i->status[j][0] == x && ship_i->status[j][1] == y) {
-                        return false; // Hay solapamiento
-                    }
-                }
-            }
-        } else {
-            ship_i->direction = 'N'; // Norte
-            for (i = filaInicio; i >= filaFin; i--) {
-                x = i;
-                y = columnaInicio;
-                for (int j = 0; j < ship_i->size; j++) {
-                    if (ship_i->status[j][0] == x && ship_i->status[j][1] == y) {
+        // Vertical
+        for (i = filaInicio; (filaInicio <= filaFin) ? (i <= filaFin) : (i >= filaFin); (filaInicio <= filaFin) ? i++ : i--) {
+            x = i;
+            y = columnaInicio;
+            for (int s = 0; s < num_ships_colocados; s++) {
+                for (int j = 0; j < ships[s].size; j++) {
+                    if (ships[s].status[j][0] == x && ships[s].status[j][1] == y && x != -1 && y != -1) {
                         return false; // Hay solapamiento
                     }
                 }
@@ -240,52 +219,58 @@ bool validar_estado_casilla(struct player *player_i, int fila, int columna) {
         for (int j = 0; j < player_i->ships[i].size; j++) {
             if (player_i->ships[i].status[j][0] == fila && player_i->ships[i].status[j][1] == columna) {
                 if (player_i->ships[i].status[j][2] == SHIP_BODY_D || player_i->ships[i].status[j][2] == SHIP_STER_D) {
+                    color_txt(ERROR_COLOR);
+                    printf("Ya disparaste en"); color_txt(DEFAULT_COLOR); printf(" %d,%c!\n", fila + 1, columna + 'A');
                     return false; // Ya disparado
                 }
                 return true; // Casilla válida para disparar
             }
         }
     }
-    printf("Disparo fallido en %d,%c!\n", fila + 1, columna + 'A');
-    return false; // La casilla no es parte de un barco
+    color_txt(ERROR_COLOR);
+    printf("Disparo fallido"); color_txt(DEFAULT_COLOR); printf(" en %d,%c! Disparaste al", fila + 1, columna + 'A'); color_txt(WATER_COLOR); printf(" agua.\n");
+    color_txt(DEFAULT_COLOR);
+    return false; // La casilla no es parte de un barco (agua)
 }
 
 void colocar_barco_en_tablero(struct ship *ship_i, int filaInicio, int filaFin, int columnaInicio, int columnaFin) {
     int i, idx = 0;
 
     // Solo almacena la información en ship_i->status
-    if (ship_i->orientation == 'H') {
-        if (ship_i->direction == 'E') {
+    switch (ship_i->direction) {
+        case 'E':
             for (i = columnaInicio; i <= columnaFin; i++, idx++) {
                 ship_i->status[idx][0] = filaInicio;
                 ship_i->status[idx][1] = i;
                 ship_i->status[idx][2] = (idx == 0) ? SHIP_STER : SHIP_BODY;
             }
-        } else if (ship_i->direction == 'O') {
+            break;
+        case 'O':
             for (i = columnaInicio; i >= columnaFin; i--, idx++) {
                 ship_i->status[idx][0] = filaInicio;
                 ship_i->status[idx][1] = i;
                 ship_i->status[idx][2] = (idx == 0) ? SHIP_STER : SHIP_BODY;
             }
-        }
-    } else if (ship_i->orientation == 'V') {
-        if (ship_i->direction == 'S') {
+            break;
+        case 'S':
             for (i = filaInicio; i <= filaFin; i++, idx++) {
                 ship_i->status[idx][0] = i;
                 ship_i->status[idx][1] = columnaInicio;
                 ship_i->status[idx][2] = (idx == 0) ? SHIP_STER : SHIP_BODY;
             }
-        } else if (ship_i->direction == 'N') {
+            break;
+        case 'N':
             for (i = filaInicio; i >= filaFin; i--, idx++) {
                 ship_i->status[idx][0] = i;
                 ship_i->status[idx][1] = columnaInicio;
                 ship_i->status[idx][2] = (idx == 0) ? SHIP_STER : SHIP_BODY;
             }
-        }
+            break;
     }
 }
 
-bool procesar_coordenadas(struct ship *ship_i, int filaInicio, int filaFin, int columnaInicio, int columnaFin) {
+
+bool procesar_coordenadas(struct ship *ship_i, int filaInicio, int filaFin, int columnaInicio, int columnaFin, struct player *player_i) {
     // Validar orientación (horizontal o vertical)
     if(!validar_orientacion(filaInicio, filaFin, columnaInicio, columnaFin)) {
         color_txt(ERROR_COLOR);
@@ -303,7 +288,7 @@ bool procesar_coordenadas(struct ship *ship_i, int filaInicio, int filaFin, int 
     }
 
     // Validar que no haya solapamiento con otros barcos
-    if(!validar_solapamiento(ship_i, filaInicio, filaFin, columnaInicio, columnaFin)) {
+    if(!validar_solapamiento(player_i->ships, player_i->placed_ships, filaInicio, filaFin, columnaInicio, columnaFin, ship_i->size)) {
         color_txt(ERROR_COLOR);
         printf("Las coordenadas no son validas. Hay solapamiento con otro barco.\n");
         color_txt(DEFAULT_COLOR);

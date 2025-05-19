@@ -211,26 +211,33 @@ void tira_toma(struct player *player_i, struct player *enemy_i, struct cartas *c
 
 void mover_barco_adelante(struct player *player_i, int id_barco) {
     struct ship *ship_i = &player_i->ships[id_barco];
+    int prev_pos[ship_i->size][2];
     int i;
+
+    // Guardar la posición anterior del barco
+    for (i = 0; i < ship_i->size; i++) {
+        prev_pos[i][0] = ship_i->status[i][0];
+        prev_pos[i][1] = ship_i->status[i][1];
+    }
+
     if (ship_i->direction == 'E' && validar_movimiento(player_i, ship_i)) {
-        // Mover barco hacia el este
-        for(i = 0; i < ship_i->size - 1; i ++) {
-            ship_i->status[i][1] ++;
-        }
+        ship_i->status[0][1] ++;
     // Mover barco hacia el oeste
     } else if (ship_i->direction == 'O' && validar_movimiento(player_i, ship_i)) {
-        for(i = 0; i < ship_i->size - 1; i++) {
-            ship_i->status[i][1] --;
-        }
+        ship_i->status[0][1] --;
     // Mover barco hacia el sur
     } else if (ship_i->direction == 'S' && validar_movimiento(player_i, ship_i)) {
-        for(i = 0; i < ship_i->size - 1; i++) {
-            ship_i->status[i][0] ++;
-        }
+        ship_i->status[0][0] ++;
     // Mover barco hacia el norte
     } else if (ship_i->direction == 'N' && validar_movimiento(player_i, ship_i)) {
-        for(i = 0; i < ship_i->size - 1; i++) {
-            ship_i->status[i][0] --;
-        }
+        ship_i->status[0][0] --;
+    } else {
+        return; // No se puede mover el barco
+    }
+
+    // Mover el resto del barco
+    for (i = 1; i < ship_i->size; i++) {
+        ship_i->status[i][0] = prev_pos[i - 1][0];
+        ship_i->status[i][1] = prev_pos[i - 1][1];
     }
 }

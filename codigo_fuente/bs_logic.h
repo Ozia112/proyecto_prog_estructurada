@@ -23,13 +23,13 @@ bool validar_orientacion(int filaInicio, int filaFin, int columnaInicio, int col
 
 bool validar_dimension(int filaInicio, int filaFin, int columnaInicio, int columnaFin, int dimension_reuqerida);
 
-bool validar_solapamiento(struct ship *ship_i, int filaInicio, int filaFin, int columnaInicio, int columnaFin);
+bool validar_solapamiento(struct ship *ships, int num_ships_colocados, int filaInicio, int filaFin, int columnaInicio, int columnaFin, int size);
 
 bool validar_estado_casilla(struct player *player_i, int fila, int columna);
 
 void colocar_barco_en_tablero(struct ship *ship_i, int filaInicio, int filaFin, int columnaInicio, int columnaFin);
 
-bool procesar_coordenadas(struct ship *ship_i, int filaInicio, int filaFin, int columnaInicio, int columnaFin);
+bool procesar_coordenadas(struct ship *ship_i, int filaInicio, int filaFin, int columnaInicio, int columnaFin, struct player *player_i);
 
 bool validar_movimiento(struct player *player_i, struct ship *ship_i);
 
