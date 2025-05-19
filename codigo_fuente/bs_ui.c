@@ -637,6 +637,14 @@ void ponerBarcos(struct ship *ship_i, struct player *player_i) {
 
         // Procesar y validar las coordenadas del barco.
         if(procesar_coordenadas(ship_i, filaInicio, filaFin, columnaInicio, columnaFin, player_i)) {
+            // Asignar direccion del barco.
+            if (filaInicio == filaFin) {
+                ship_i->direction = (columnaInicio < columnaFin) ? 'E' : 'O';
+            } else if (columnaInicio == columnaFin) {
+                ship_i->direction = (filaInicio < filaFin) ? 'S' : 'N';
+            } else {
+                ship_i->direction = 'U'; // No debería ocurrir si las validaciones son correctas
+            }
             // Si las coordenadas son validas, colocar el barco en el tablero.
             colocar_barco_en_tablero(ship_i, filaInicio, filaFin, columnaInicio, columnaFin);
         
