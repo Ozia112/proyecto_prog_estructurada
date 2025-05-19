@@ -1,8 +1,9 @@
 
+- **19a02fc date: 18-05-2025** _type: **R/C**_ | Refactor game logic and UI components `TM-01`
 - **04f728e date: 17-05-2025** _type: **R**_ | Correcion de errores en el archivo CHANGELOG.md `TM-01`
 - **4476061 date: 17-05-2025** _type: **R**_ | Correcion de escritura changelog `TM-01`
 - **e3a7db1 date: 17-05-2025** _type: **R**_ | Update changelog `TM-01`
-- **e3dd01d date: 17-05-2025** _type: **R**_ | Corrcion de escritura y changelog `TM-01`
+- **e3dd01d date: 17-05-2025** _type: **R**_ | Correcion de escritura y changelog `TM-01`
 - **3039a87 date: 17-05-2025** _type: **R**_ | Add documentation for libraries and changelog tutorial `TM-01`
 - **6bd26e1 date: 16-05-2025** _type: **R**_ | Reestructuracion de documentos `TM-01`
 - **50e2dd3 date: 16-05-2025** _type: **R**_ | Update CHANGELOG.md `TM-01`

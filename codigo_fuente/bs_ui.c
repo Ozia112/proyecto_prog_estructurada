@@ -99,11 +99,9 @@ void partida(){
     struct player player1, player2;
     struct cartas cartas[NUM_CARTAS];
     int alternancia_turno = 1; // Variable de alternancia de turnos.
-    int matriz_jug1[BOARD_SIZE][BOARD_SIZE] = {0}; // Matriz para el jugador 1.
-    int matriz_jug2[BOARD_SIZE][BOARD_SIZE] = {0}; // Matriz para el jugador 2.
     int i, j;
+
     inicializar_cartas(cartas);
-    
 
     limpiar_buffer_entrada(); // Limpiar el buffer de entrada antes de solicitar el nombre.
     printf("Jugador 1:\n");
@@ -680,6 +678,6 @@ void reglas() {
 }
 
 void enter_continuar() {
-    printf("Presione enter para ");  color_txt(INFO_COLOR); printf(" continuar.\n"); color_txt(DEFAULT_COLOR);
+    printf("Presione enter para ");  color_txt(INFO_COLOR); printf("continuar.\n"); color_txt(DEFAULT_COLOR);
     getchar(); // Pausa antes de continuar.
 }
