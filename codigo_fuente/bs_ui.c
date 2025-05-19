@@ -77,7 +77,7 @@ void menu_por_turno(struct player *player_i, struct player *enemy_i, struct cart
             opc = 'Z'; // Cambiar la opcion para salir del menu.
             break;
         case 'B':
-            imprimirReporteBarcos(player_i);
+            imprimirReporteBarcos(player_i, enemy_i, cartas);
             break;
         case 'C':
             // Logica reporte barcos enemigos
@@ -347,12 +347,12 @@ void imprimirTablero(struct player *player_i) {
                     printf("%c ", BODY_PRINT);
                     color_txt(DEFAULT_COLOR);
                     break;
-                case SHIP_STER + 2:
+                case SHIP_STER_D:
                     color_txt(ERROR_COLOR);
                     printf("%c ", STER_PRINT);
                     color_txt(DEFAULT_COLOR);
                     break;
-                case SHIP_BODY + 2:
+                case SHIP_BODY_D:
                     color_txt(ERROR_COLOR);
                     printf("%c ", BODY_PRINT);
                     color_txt(DEFAULT_COLOR);
@@ -432,22 +432,22 @@ void imprimirTableroGuerra(struct player *enemy_i, struct player *player_i) {
                 for (k = 0; k < enemy_i->ships[s].size; k++) {
                     if (enemy_i->ships[s].status[k][0] == i && enemy_i->ships[s].status[k][1] == j) {
                         // Solo mostrar si está dañado (status == SHIP_BODY+2 o SHIP_STER+2)
-                        if (enemy_i->ships[s].status[k][2] == SHIP_BODY + 2) {
-                            estado = SHIP_BODY + 2;
-                        } else if (enemy_i->ships[s].status[k][2] == SHIP_STER + 2) {
-                            estado = SHIP_STER + 2;
+                        if (enemy_i->ships[s].status[k][2] == SHIP_BODY_D) {
+                            estado = SHIP_BODY_D;
+                        } else if (enemy_i->ships[s].status[k][2] == SHIP_STER_D) {
+                            estado = SHIP_STER_D;
                         }
                         break;
                     }
                 }
             }
             switch (estado) {
-                case SHIP_STER + 2:
+                case SHIP_STER_D:
                     color_txt(ERROR_COLOR);
                     printf("%c ", STER_PRINT);
                     color_txt(DEFAULT_COLOR);
                     break;
-                case SHIP_BODY + 2:
+                case SHIP_BODY_D:
                     color_txt(ERROR_COLOR);
                     printf("%c ", BODY_PRINT);
                     color_txt(DEFAULT_COLOR);
@@ -490,9 +490,16 @@ void imprimirTableroGuerra(struct player *enemy_i, struct player *player_i) {
     }
 }
 
-void imprimirReporteBarcos(struct player *player_i) {
+void imprimirReporteBarcos(struct player *player_i, struct player *enemy_i, struct cartas *cartas) {
     int i, k;
     int dimension_maxima = 0;
+    int ancho_col = 12; // Ancho fijo para cada barco
+
+    limpiar_pantalla();
+    printf("Turno de"); color_txt(INFO_COLOR); printf(" %s\n", player_i->name); color_txt(DEFAULT_COLOR);
+    imprimirTableroGuerra(enemy_i, player_i);
+    printf("\n");
+    printf("Reporte de barcos:\n");
 
     // Encontrar el tamaño máximo de los barcos
     for (i = 0; i < NUM_SHIPS; i++) {
@@ -503,40 +510,52 @@ void imprimirReporteBarcos(struct player *player_i) {
 
     // Encabezado
     for (i = 0; i < NUM_SHIPS; i++) {
-        printf("Bote %02d   ", i + 1);
+        printf("Bote %02d%*s", i + 1, ancho_col - 6, ""); // "Bote 01" ocupa 8 caracteres, el resto es espacio
     }
     printf("\n");
 
     // Dibujo de proa (/'\)
     for (i = 0; i < NUM_SHIPS; i++) {
         int estado = player_i->ships[i].status[0][2];
-        estado == SHIP_STER ? color_txt(SHIP_COLOR) : color_txt(ERROR_COLOR);    
-        i == 0 ? printf("  ") : printf("       "); // Espacio antes de la proa
+        printf("%*s", ancho_col / 2 - 1, ""); // Centrar proa
+        estado == SHIP_STER ? color_txt(SHIP_COLOR) : color_txt(ERROR_COLOR);
         printf("/'\\");
         color_txt(DEFAULT_COLOR);
+        printf("%*s", ancho_col - (ancho_col / 2 + 2), ""); // Relleno a la derecha
     }
     printf("\n");
 
     // Dibujo de casillas de cada barco, por filas (máximo tamaño de barco)
     for (k = 1; k < dimension_maxima; k++) {
         for (i = 0; i < NUM_SHIPS; i++) {
-            
             if (k < player_i->ships[i].size) {
-                
-                i == 0 ? printf("  ") : printf("       "); // Espacio antes del casillero
-
-                // Usar status para saber si fue alcanzado
-                int estado = player_i->ships[i].status[k][2]; 
-
-                estado == SHIP_BODY ? color_txt(SHIP_COLOR) : color_txt(ERROR_COLOR); // Detectar para color
-                
-                estado == SHIP_BODY ? printf("[_]") : printf("[X]"); // Detectar para impresion
-                
+                int estado = player_i->ships[i].status[k][2];
+                printf("%*s", ancho_col / 2 - 1, "");
+                estado == SHIP_BODY ? color_txt(SHIP_COLOR) : color_txt(ERROR_COLOR);
+                estado == SHIP_BODY ? printf("[_]") : printf("[X]");
+                color_txt(DEFAULT_COLOR);
+                printf("%*s", ancho_col - (ancho_col / 2 + 2), "");
             } else {
-                printf("         "); // Espacio para barcos más cortos
+                printf("%*s", ancho_col, ""); // Espacio vacío para barcos más cortos
             }
         }
         printf("\n");
+    }
+
+    printf("[Z]: Regresar al menu.\n");
+    char opc;
+    scanf(" %c", &opc);
+    opc = toupper(opc);
+    if (opc == 'Z') {
+        limpiar_pantalla();
+        printf("Turno de"); color_txt(INFO_COLOR); printf(" %s\n", player_i->name); color_txt(DEFAULT_COLOR);
+        imprimirTableroGuerra(enemy_i, player_i);
+        printf("\n");
+        menu_por_turno(player_i, enemy_i, cartas);
+    } else {
+        color_txt(ERROR_COLOR);
+        printf("¡Tecla invalida!\n");
+        color_txt(DEFAULT_COLOR);
     }
 }
 
@@ -656,7 +675,7 @@ void solicitar_barco(struct player *player_i) {
     printf("Barcos disponibles:\n");
     for (i = 0; i < NUM_SHIPS; i++) {
         for (int j = 0; j < player_i->ships[i].size; j++) {
-            if (player_i->ships[i].status[j][2] == SHIP_BODY + 2 || player_i->ships[i].status[j][2] == SHIP_STER + 2) {
+            if (player_i->ships[i].status[j][2] == SHIP_BODY_D || player_i->ships[i].status[j][2] == SHIP_STER_D) {
             break; // Si el barco ya fue alcanzado, no lo muestro
             }
             printf("Barco %d: %d celdas\n", i + 1, player_i->ships[i].size);   

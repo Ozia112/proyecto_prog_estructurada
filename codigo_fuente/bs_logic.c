@@ -1,3 +1,4 @@
+#include "bs_common.h" // libreria para poder usar definiciones comunes.
 #include "bs_logic.h" // libreria para poder usar funciones de logica.
 #include "bs_console_utils.h" // libreria para poder usar la funcion limpiar y cambio de color.
 #include "bs_ui.h" // libreria para poder usar funciones de UI.
@@ -238,10 +239,10 @@ bool validar_estado_casilla(struct player *player_i, int fila, int columna) {
     for (int i = 0; i < NUM_SHIPS; i++) {
         for (int j = 0; j < player_i->ships[i].size; j++) {
             if (player_i->ships[i].status[j][0] == fila && player_i->ships[i].status[j][1] == columna) {
-                if (player_i->ships[i].status[j][2] == SHIP_BODY + 2 || player_i->ships[i].status[j][2] == SHIP_STER + 2) {
+                if (player_i->ships[i].status[j][2] == SHIP_BODY_D || player_i->ships[i].status[j][2] == SHIP_STER_D) {
                     return false; // Ya disparado
                 }
-            return true; // Casilla válida para disparar
+                return true; // Casilla válida para disparar
             }
         }
     }
@@ -376,37 +377,19 @@ int obtener_id_aleatoria(struct cartas *cartas) {
 void sacar_carta(struct player *player_i, struct player *enemy_i, struct cartas *cartas) {
     int carta_id = obtener_id_aleatoria(cartas);
     
+    limpiar_pantalla();
     // Buscar y mostrar la información de la carta
     for (int i = 0; i < NUM_CARTAS; i++) {
         if (cartas[i].id == carta_id) {
-            printf("\n¡Has sacado la carta: %s!\n", cartas[i].nombre);
-            printf("Descripción: %s\n\n", cartas[i].descripcion);
+            printf("\nHas sacado la carta: %s\n", cartas[i].nombre);
+            printf("Descripcion: %s\n\n", cartas[i].descripcion);
             break;
         }
     }
-
+    imprimirTableroGuerra(enemy_i, player_i);
     switch (carta_id) {
     case 1:
-        if(player_i->salvo) {
-            printf("Tienes el modo Salvo activado, puedes disparar %d veces.\n", NUM_SHIPS - enemy_i->sunked_ships);
-            for (int i = 0; i < NUM_SHIPS - enemy_i->sunked_ships; i++) {
-                imprimirTableroGuerra(enemy_i, player_i);
-                capturar_coordenada(player_i, enemy_i);
-                Sleep(1000);
-                limpiar_pantalla();
-                printf("Dispara de nuevo.\n");
-                if (i < NUM_SHIPS - enemy_i->sunked_ships - 1) {
-                    printf("Dispara una vez mas.\n");
-                    imprimirTableroGuerra(enemy_i, player_i);
-                    capturar_coordenada(player_i, enemy_i);
-                    Sleep(1000);
-                    limpiar_pantalla();
-                }
-            }
-        } else {
-            printf("Dispara una vez.\n");
-            capturar_coordenada(player_i, enemy_i);
-        }
+        funcion_carta_1(player_i, enemy_i);
         break;
     case 2:
         capturar_coordenada(player_i, enemy_i);
@@ -436,7 +419,7 @@ void sacar_carta(struct player *player_i, struct player *enemy_i, struct cartas 
         capturar_fila_columna(cartas, player_i, enemy_i);
         break;
     case 6:
-        revela(player_i, enemy_i);
+        revela(enemy_i);
         break;
     case 7:
         capturar_fila_columna(cartas, player_i, enemy_i);
@@ -462,6 +445,38 @@ void sacar_carta(struct player *player_i, struct player *enemy_i, struct cartas 
     case 12:
         solicitar_barco(player_i);
         break;
+    }
+}
+
+void funcion_carta_1(struct player *player_i, struct player *enemy_i)
+{
+    if (player_i->salvo)
+    {
+        printf("Tienes el modo Salvo activado, puedes disparar %d veces.\n", NUM_SHIPS - enemy_i->sunked_ships);
+        for (int i = 0; i < NUM_SHIPS - enemy_i->sunked_ships; i++)
+        {
+            capturar_coordenada(player_i, enemy_i);
+            Sleep(1000);
+            limpiar_pantalla();
+            printf("Dispara de nuevo.\n");
+            imprimirTableroGuerra(enemy_i, player_i);
+            if (i < NUM_SHIPS - enemy_i->sunked_ships - 1)
+            {
+                printf("Dispara una vez mas.\n");
+                imprimirTableroGuerra(enemy_i, player_i);
+                capturar_coordenada(player_i, enemy_i);
+                Sleep(1000);
+                limpiar_pantalla();
+            }
+        }
+    }
+    else
+    {
+        printf("Dispara una vez.\n");
+        capturar_coordenada(player_i, enemy_i);
+        imprimirTableroGuerra(enemy_i, player_i);
+        enter_continuar();
+        limpiar_pantalla();
     }
 }
 

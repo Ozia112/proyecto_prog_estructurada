@@ -39,6 +39,8 @@ int obtener_id_aleatoria(struct cartas *cartas); // Función para obtener un ID 
 
 void sacar_carta(struct player *player_i, struct player *enemy_i, struct cartas *cartas); // Función para sacar una carta
 
+void funcion_carta_1(struct player *player_i, struct player *enemy_i);
+
 void limpiar_buffer_entrada(); // Función para limpiar el buffer de entrada
 
 void liberar_status(struct ship *barco);

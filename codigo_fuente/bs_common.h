@@ -10,11 +10,16 @@
 #define VICTORYCONDITION 17 // Número de partes de barco que se deben hundir para ganar
 #define MAX_ID_10 4
 #define NUM_CARTAS 12
+#define CC_STATUS 2 // Columna de estado en la matriz de barcos
+#define CC_FILA 0 // Columna de fila en la matriz de barcos
+#define CC_COLUMNA 1 // Columna de columna en la matriz de barcos
 
 // Valores numericos para interpretar el tablero
 #define WATER 0
 #define SHIP_STER 1
 #define SHIP_BODY 2
+#define SHIP_STER_D 3
+#define SHIP_BODY_D 4
 
 // Valores para interpretar los numeros como caracteres
 

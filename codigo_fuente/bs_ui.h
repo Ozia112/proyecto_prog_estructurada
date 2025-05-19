@@ -24,7 +24,7 @@ void imprimirTablero(struct player *player_i);
 
 void imprimirTableroGuerra(struct player *enemy_i, struct player *player_i);
 
-void imprimirReporteBarcos(struct player *player_i);
+void imprimirReporteBarcos(struct player *player_i, struct player *enemy_i, struct cartas *cartas);
 
 void ponerBarcos(struct ship *ship_i, struct player *player_i);
 
