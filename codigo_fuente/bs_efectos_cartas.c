@@ -194,3 +194,40 @@ void mover_barco_adelante(struct player *player_i, int id_barco) {
         }
     }
 }
+
+void revelar_casilla_barco(struct player *enemy_i) {
+    // 1. Guardar todas las partes de barco no dañadas
+    int posibles[NUM_SHIPS * 5][2]; // Máximo 5 partes por barco
+    int total = 0;
+    int s, p;
+
+    for (s = 0; s < NUM_SHIPS; s++) {
+        struct ship *barco = &enemy_i->ships[s];
+        for (p = 0; p < barco->size; p++) {
+            // Si la parte no está dañada (1 = punta, 2 = cuerpo)
+            if (barco->status[p][2] == 1 || barco->status[p][2] == 2) {
+                posibles[total][0] = barco->status[p][0]; // fila
+                posibles[total][1] = barco->status[p][1]; // columna
+                total++;
+            }
+        }
+    }
+
+    // 2. Elegir una coordenada aleatoria
+    srand((unsigned int)time(NULL));
+    int idx = rand() % total;
+    int fila = posibles[idx][0];
+    int columna = posibles[idx][1];
+
+    // 3. Mostrar la coordenada revelada
+    printf("Para revelar un barco enemigo, seleccione con el cursor el siguiente texto:\n");
+    color_txt(INFO_COLOR);
+    printf("---> ");
+    color_txt(INV_COLOR);
+    printf("(%d,%c)\n", fila + 1, columna + 'A');
+    color_txt(INFO_COLOR);
+    printf(" <---\n");
+    color_txt(DEFAULT_COLOR);
+
+    // Aquí debe estar la función de disparo.
+}

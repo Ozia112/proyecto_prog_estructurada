@@ -41,8 +41,6 @@ void sacar_carta(struct player *player_i, struct player *enemy_i, struct cartas 
 
 void limpiar_buffer_entrada(); // Función para limpiar el buffer de entrada
 
-void modificar_disparo(int matriz_enemigo[BOARD_SIZE][BOARD_SIZE], matriz_mostrada[BOARD_SIZE][BOARD_SIZE], int fila, int columna);
-
 void liberar_status(struct ship *barco);
 
 void liberar_flota(struct player *player);

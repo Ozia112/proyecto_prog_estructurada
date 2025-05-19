@@ -167,7 +167,14 @@ void partida(){
                 break;
             }
         }
-        
+        // Verificar si el jugador ha ganado
+        if(player1.enemy_hit_parts >= VICTORYCONDITION) {
+            printf("%s ha ganado!\n", player1.name);
+            break;
+        } else if(player2.enemy_hit_parts >= VICTORYCONDITION) {
+            printf("%s ha ganado!\n", player2.name);
+            break;
+        }
     }while(player1.enemy_hit_parts < VICTORYCONDITION && player2.enemy_hit_parts < VICTORYCONDITION);
 }
 
@@ -669,7 +676,19 @@ void solicitar_barco(struct player *player_i) {
 void reglas() {
 	printf("Las reglas para jugar al iconico juego \"Batalla Naval\" rezan lo siguiente:\n");
 	printf("1. Cada jugador contara con una flota de barcos, la cual ordenara en una distribucion que considere conveniente para ocultarla de su rival\n");
-	printf("2. El juego es por turnos, y en cada turno un jugador puede escoger...\n");
+	printf("2. El juego es por turnos. En cada turno se le proporcionará a cada jugador la posibilidad de usar una carta con diversos efectos sobre el tablero.\n");
+    printf("3. Las cartas disponibles son:\n");
+    printf("   - Disparo: Dispara a una coordenada del tablero enemigo.\n");
+    printf("   - Bombardeo de fila: Bombardea una fila del tablero enemigo.\n");
+    printf("   - Bombardeo de columna: Bombardea una columna del tablero enemigo.\n");
+    printf("   - Revelar: Revela el estado de los barcos enemigos.\n");
+    printf("   - Chequeo de fila: Revela el estado de una fila del tablero enemigo.\n");
+    printf("   - Chequeo de columna: Revela el estado de una columna del tablero enemigo.\n");
+    printf("   - Salvo: Permite disparar a una coordenada del tablero enemigo sin que el enemigo pueda defenderse.\n");
+    printf("   - Torre de ventaja: Permite disparar a una coordenada del tablero enemigo y revela el estado de la fila y columna del barco.\n");}
+    printf("   - Revelar casilla aleatoria: Permite revelar una casilla aleatoria en la que haya un barco enemigo.\n");
+    printf("4. El objetivo del juego es hundir todos los barcos del enemigo antes de que el enemigo hunda los tuyos.\n");
+    printf("5. Un barco se considera hundido cuando todas sus partes han sido alcanzadas.\n");
 	printf("Presione enter cuando haya terminado de leer las reglas\n");
 	
 	limpiar_buffer_entrada(); // Limpiar el buffer de entrada

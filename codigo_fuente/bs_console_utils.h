@@ -32,6 +32,7 @@ static inline void limpiar_pantalla(){
 #define SHIP_COLOR       BLANCO
 #define DEFAULT_COLOR    GRIS_CLARO
 #define SUCCESS_COLOR    VERDE
+#define INV_COLOR        NEGRO
 
 static inline void color_txt(int color)
 {
