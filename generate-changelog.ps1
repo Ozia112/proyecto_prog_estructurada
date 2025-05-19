@@ -27,8 +27,8 @@ git log --pretty=format:"%H|%ad|%an|%s" --date=format:"%d-%m-%Y" | ForEach-Objec
         $authorTag = "``TM-01``"
     } elseif ($author -eq "LicNico") {
         $authorTag = "``TM-02``"
-    } else {
-        $authorTag = "[$author]"
+    } elseif ($author -eq "alejandro-flores-vera1") {
+        $authorTag = "``TM-03``"
     }
 
     Add-Content $changelog "- **$hash date: $date** _type: **$type**_ | $msg $authorTag"
