@@ -25,4 +25,6 @@ void tira_toma(struct player *player_i, struct player *enemy_i, struct cartas *c
 
 void mover_barco_adelante(struct player *player_i, int id_barco);
 
+void revelar_casilla_barco(struct player *enemy_i);
+
 #endif // BS_EFECTOS_CARTAS_H
