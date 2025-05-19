@@ -1,7 +1,7 @@
 #ifndef BS_CONSOLE_UTILS_H
 #define BS_CONSOLE_UTILS_H
 
-#include <windows.h>
+#include <windows.h> // libreria para poder usar la funcion Sleep.
 
 static inline void limpiar_pantalla(){
 	system("cls");
@@ -31,7 +31,7 @@ static inline void limpiar_pantalla(){
 #define INFO_COLOR       AMARILLO
 #define SHIP_COLOR       BLANCO
 #define DEFAULT_COLOR    GRIS_CLARO
-#define SUCCCESS_COLOR   VERDE
+#define SUCCESS_COLOR    VERDE
 
 static inline void color_txt(int color)
 {

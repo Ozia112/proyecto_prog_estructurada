@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"bs_efectos_cartas.h": "c",
+			"time.h": "c",
+			"bs_logic.h": "c",
+			"bs_console_utils.h": "c",
+			"bs_ui.h": "c"
+		}
+	}
+}
