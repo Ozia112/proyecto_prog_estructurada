@@ -3,9 +3,6 @@
 
 #include "bs_common.h" // Incluye definiciones comunes
 
-// Caracteres para las partes del barco.
-#define ship_tip 207 // Caracter "¤" para punta de barco 
-#define ship_body 254 // Carácter "■" para cuerpo de barco
 
 // Function prototypes
 
@@ -39,5 +36,4 @@ void reglas();
 
 void enter_continuar();
 
-void capturar_disparo(int matriz_enemigo[BOARD_SIZE][BOARD_SIZE], int matriz_mostrada[BOARD_SIZE][BOARD_SIZE]);
 #endif // BS_UI_H

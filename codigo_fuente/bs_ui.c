@@ -690,7 +690,7 @@ void reglas() {
     printf("   - Chequeo de fila: Revela el estado de una fila del tablero enemigo.\n");
     printf("   - Chequeo de columna: Revela el estado de una columna del tablero enemigo.\n");
     printf("   - Salvo: Permite disparar a una coordenada del tablero enemigo sin que el enemigo pueda defenderse.\n");
-    printf("   - Torre de ventaja: Permite disparar a una coordenada del tablero enemigo y revela el estado de la fila y columna del barco.\n");}
+    printf("   - Torre de ventaja: Permite disparar a una coordenada del tablero enemigo y revela el estado de la fila y columna del barco.\n");
     printf("   - Revelar casilla aleatoria: Permite revelar una casilla aleatoria en la que haya un barco enemigo.\n");
     printf("4. El objetivo del juego es hundir todos los barcos del enemigo antes de que el enemigo hunda los tuyos.\n");
     printf("5. Un barco se considera hundido cuando todas sus partes han sido alcanzadas.\n");
