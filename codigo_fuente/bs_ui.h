@@ -38,4 +38,5 @@ void solicitar_barco(struct player *player_i);
 void reglas();
 
 void enter_continuar();
+void capturar_disparo(int matriz_enemigo[BOARD_SIZE][BOARD_SIZE], int matriz_mostrada[BOARD_SIZE][BOARD_SIZE]);
 #endif // BS_UI_H
