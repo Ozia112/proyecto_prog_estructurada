@@ -47,8 +47,12 @@ void inicializar_jugador(struct player *player) {
     player->sunked_ships = 0;
     player->enemy_hit_parts = 0;
     player->torres_acumuladas = 0;
-    player->chequeo_fila[0] = 0; // Inicializar chequeo fila
-    player->chequeo_columna[0] = 0; // Inicializar chequeo columna
+    
+    // chequeo_fila y chequeo_columna inicializados a false.
+    for (int i = 0; i < BOARD_SIZE; i++) {
+        player->chequeo_fila[i] = false;
+        player->chequeo_columna[i] = false;
+    }
 
     // Inicializar barcos.
     inicializar_flota(player);

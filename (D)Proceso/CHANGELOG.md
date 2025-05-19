@@ -1,27 +1,30 @@
-- **d00cdbc date: 18-05-2025** _type: **R/C**_ | Correcion de incompatibilidad y changelog `TM-01`
+
+- **172a063 date: 19-05-2025** _type: **R**_ | Actualizacion de imagenes y texto en RF03 `TM-01`
+- **91fd993 date: 19-05-2025** _type: **R**_ | Edicion de script changelog y actualizacion de changelog `TM-01`
+- **d00cdbc date: 18-05-2025** _type: **R/C**_ | Correccion de incompatibilidad y changelog `TM-01`
 - **5533c4c date: 18-05-2025** _type: **C**_ | Merge branch 'main' of https://github.com/Ozia112/proyecto_batalla_naval `TM-01`
-- **19a02fc fecha: 18-05-2025** _tipo: **R/C**_ | Refactorización de la lógica del juego y componentes de la interfaz de usuario `TM-01`
+- **19a02fc date: 18-05-2025** _type: **R/C**_ | Refactorizacion de la logica del juego y componentes de la interfaz `TM-01`
 - **2fc04ca date: 18-05-2025** _type: **C**_ | Implementacion parcial de funciones de disparo. `TM-03`
 - **a7f7dc2 date: 17-05-2025** _type: **R**_ | Merge branch 'main' of https://github.com/Ozia112/proyecto_batalla_naval `TM-03`
-- **04f728e date: 17-05-2025** _type: **R**_ | Correcion de errores en el archivo CHANGELOG.md `TM-01`
-- **4476061 date: 17-05-2025** _type: **R**_ | Correcion de escritura changelog `TM-01`
+- **04f728e date: 17-05-2025** _type: **R**_ | Correccion de errores en el archivo CHANGELOG.md `TM-01`
+- **4476061 date: 17-05-2025** _type: **R**_ | Correccion de escritura changelog `TM-01`
 - **e3a7db1 date: 17-05-2025** _type: **R**_ | Actualizacion changelog `TM-01`
-- **e3dd01d date: 17-05-2025** _type: **R**_ | Correcion de escritura y changelog `TM-01`
-- **3039a87 fecha: 17-05-2025** _tipo: **R**_ | Agregar documentacion para las librerias y tutorial del changelog `TM-01`
+- **e3dd01d date: 17-05-2025** _type: **R**_ | Correccion de escritura y changelog `TM-01`
+- **3039a87 date: 17-05-2025** _type: **R**_ | Agregar documentacion para librerias y tutorial de changelog `TM-01`
 - **6bd26e1 date: 16-05-2025** _type: **R**_ | Reestructuracion de documentos `TM-01`
 - **103751c date: 16-05-2025** _type: **R**_ | Merge branch 'main' of https://github.com/Ozia112/proyecto_prog_estructurada `TM-03`
 - **50e2dd3 date: 16-05-2025** _type: **R**_ | Actualizacion CHANGELOG.md `TM-01`
-- **ebca8df date: 16-05-2025** _type: **R/C**_ | Modificacion de task y launch, added changelog `TM-01`
+- **ebca8df date: 16-05-2025** _type: **R/C**_ | Modificacion de task y launch, agregado changelog `TM-01`
 - **bdb5cfd date: 16-05-2025** _type: **C**_ | Mejoras generales y optimizacion de codigo 16d05a `TM-01`
 - **31f12a3 date: 15-05-2025** _type: **C**_ | Implementacion parcial del sistema por turnos. `TM-03`
 - **2eb79cb date: 15-05-2025** _type: **C**_ | Implementar funciones de validacion y colocacion de barcos en el juego Batalla Naval `TM-01`
 - **f748b02 date: 15-05-2025** _type: **C**_ | Modificacion de console utils para vscode `TM-01`
-- **bb3668f date: 15-05-2025** _type: **R/C**_ | Refactorizacion de la Estructura del Codigo del Juego Batalla Naval `TM-01`
-- **7bcaba6 date: 13-05-2025** _type: **R**_ | Creacion de archivods `TM-01`
+- **bb3668f date: 15-05-2025** _type: **R/C**_ | Refactorizacion de la estructura del codigo del juego Batalla Naval `TM-01`
+- **7bcaba6 date: 13-05-2025** _type: **R**_ | Creacion de archivos `TM-01`
 - **42f7c8f date: 13-05-2025** _type: **R**_ | Actualizacion el gitignore `TM-01`
 - **031f189 date: 13-05-2025** _type: **C**_ | Actualizacion battleship_librarie.h `TM-01`
-- **14ff6e4 date: 13-05-2025** _type: **C**_ | Eliminar las librerias duplicadas que se hicieron por error para compliar en zinjal `TM-01`
-- **4bb3564 date: 13-05-2025** _type: **C**_ | Trabajo en la funcion de poner barcos(entorno vscode) `TM-01`
+- **14ff6e4 date: 13-05-2025** _type: **C**_ | Eliminar las librerias duplicadas que se hicieron por error para compilar en zinjal `TM-01`
+- **4bb3564 date: 13-05-2025** _type: **C**_ | Trabajo en la funcion de poner barcos (entorno vscode) `TM-01`
 - **e9a4527 date: 12-05-2025** _type: **R**_ | Merge branch 'main' of https://github.com/Ozia112/proyecto_prog_estructurada `TM-01`
 - **f7470dc date: 12-05-2025** _type: **R**_ | Actualizacion README.md `TM-02`
 - **3f6896d date: 12-05-2025** _type: **C**_ | Reestructuracion de variables a variables tipo struct para almacenamiento general de la informacion de la partida `TM-01`
@@ -34,7 +37,8 @@
 - **f3d7770 date: 02-05-2025** _type: **R**_ | Actualizacion propuesta_2.md `TM-02`
 - **502e415 date: 29-04-2025** _type: **R**_ | Redaccion de la propuesta 1 (Battleship) `TM-01`
 - **6a5d4e2 date: 28-04-2025** _type: **R**_ | Creacion de apartado: Informacion administrativa `TM-01`
-- **2bab209 date: 28-04-2025** _type: **R**_ | Correcion rapida `TM-01`
+- **2bab209 date: 28-04-2025** _type: **R**_ | Correccion rapida `TM-01`
 - **6a44857 date: 28-04-2025** _type: **R**_ | Modificaciones generales en el main `TM-01`
 - **39b56d2 date: 28-04-2025** _type: **R**_ | Actualizacion README.md `TM-02`
-- **2d1c37e date: 23-04-2025** _type: **R**_ | Initial commit `TM-01`
+- **2d1c37e date: 23-04-2025** _type: **R**_ | Commit inicial `TM-01`
+

@@ -74,6 +74,7 @@ void menu_por_turno(struct player *player_i, struct player *enemy_i, struct cart
     switch(opc) {
         case 'A':
             sacar_carta(player_i, enemy_i, cartas);
+            opc = 'Z'; // Cambiar la opcion para salir del menu.
             break;
         case 'B':
             imprimirReporteBarcos(player_i);
@@ -86,7 +87,7 @@ void menu_por_turno(struct player *player_i, struct player *enemy_i, struct cart
             printf("¡Tecla invalida!\n");
             color_txt(DEFAULT_COLOR);
     }
-    }while(opc != 'C' && opc != 'c');
+    }while(opc != 'Z' && opc != 'z');
 }
 
 void solicitar_nombre(char *nombre, int max_length) {
@@ -371,24 +372,27 @@ void imprimirTableroGuerra(struct player *enemy_i, struct player *player_i) {
 
     // Inicializar chequeo_fila y chequeo_columna y contadores
     for (i = 0; i < BOARD_SIZE; i++) {
+        // Chequeo de fila: contar solo si está activado
         if (player_i->chequeo_fila[i]) {
             for (j = 0; j < BOARD_SIZE; j++) {
-               for (s = 0; s < NUM_SHIPS; s++) {
+                for (s = 0; s < NUM_SHIPS; s++) {
                     for (k = 0; k < enemy_i->ships[s].size; k++) {
                         if (enemy_i->ships[s].status[k][0] == i && enemy_i->ships[s].status[k][1] == j && (enemy_i->ships[s].status[k][2] == SHIP_BODY || enemy_i->ships[s].status[k][2] == SHIP_STER)) {
                             chequeo_fila[i]++;
                         }
                     }
-               }
-           }
-       }
-       if (player_i->chequeo_columna[i]) {
-           for (j = 0; j < BOARD_SIZE; j++) {
-            for (s = 0; s < NUM_SHIPS; s++) {
-               for (k = 0; k < enemy_i->ships[s].size; k++) {
-                   if (enemy_i->ships[s].status[k][0] == i && (enemy_i->ships[s].status[k][2] == SHIP_BODY || enemy_i->ships[s].status[k][2] == SHIP_STER)) {
-                       chequeo_columna[i]++;
-                   }
+                }
+            }
+        }
+        // Chequeo de columna: contar solo si está activado
+        if (player_i->chequeo_columna[i]) {
+            for (j = 0; j < BOARD_SIZE; j++) {
+                for (s = 0; s < NUM_SHIPS; s++) {
+                    for (k = 0; k < enemy_i->ships[s].size; k++) {
+                        if (enemy_i->ships[s].status[k][1] == i && enemy_i->ships[s].status[k][0] == j && (enemy_i->ships[s].status[k][2] == SHIP_BODY || enemy_i->ships[s].status[k][2] == SHIP_STER)) {
+                            chequeo_columna[i]++;
+                        }
+                    }
                }
            }
        }
@@ -415,7 +419,7 @@ void imprimirTableroGuerra(struct player *enemy_i, struct player *player_i) {
     // Dibujar cada fila
     for (i = 0; i < BOARD_SIZE; i++) {
         printf("%*s%.2d ", relleno,"", i + 1); // Encabezado de filas
-        for (j = 0; j < 10; j++) {
+        for (j = 0; j < BOARD_SIZE; j++) {
             estado = WATER; // Por defecto el estado es agua
             for (s = 0; s < NUM_SHIPS && estado == WATER; s++) {
                 for (k = 0; k < enemy_i->ships[s].size; k++) {
@@ -448,33 +452,34 @@ void imprimirTableroGuerra(struct player *enemy_i, struct player *player_i) {
                     break;
             }
         }
+        // Mostrar chequeo de fila al final de la fila solo si está activado
+        if (player_i->chequeo_fila[i]) {
+            color_txt(SUCCESS_COLOR);
+            printf(" %d", chequeo_fila[i]);
+            color_txt(DEFAULT_COLOR);
+        }
         printf("\n");
     }
-    // Mostrar chequeo de fila
-    if (player_i->chequeo_fila[i]) {
-        color_txt(SUCCESS_COLOR);
-        printf(" %d", chequeo_fila[i]);
-        color_txt(DEFAULT_COLOR);
+
+    // Mostrar chequeo de columna (una sola línea debajo del tablero)
+    for (i = 0; i < BOARD_SIZE; i++) {
+        if (player_i->chequeo_columna[i]) {
+            hay_chequeo_columna = true;
+            break;
+        }
     }
-    printf("\n");
-    
-}
-// Mostrar chequeo de columna
-for (i = 0; i < BOARD_SIZE; i++) {
-    if (player_i->chequeo_columna[i]) {
-        hay_chequeo_columna = true;
-    }
-    if(hay_chequeo_columna) {
-        printf("%*s", relleno,"");
-        color_txt(SUCCESS_COLOR);
-        for(j = 0; j < BOARD_SIZE; j++) {
+    if (hay_chequeo_columna) {
+        printf("%*s   ", relleno, "");
+        for (j = 0; j < BOARD_SIZE; j++) {
             if (player_i->chequeo_columna[j]) {
-                printf(" %d", chequeo_columna[j]);
+                color_txt(SUCCESS_COLOR);
+                printf("%d ", chequeo_columna[j]);
+                color_txt(DEFAULT_COLOR);
             } else {
                 printf("  ");
-                }
             }
         }
+        printf("\n");
     }
 }
 
