@@ -36,6 +36,15 @@ struct ship
     bool vivo;
 };
 
+struct cartas
+{
+    int id;
+    char nombre[20];
+    float probabilidad;
+    char descripcion[100];
+    int peso;
+};
+
 struct player
 {
     char name[MAX_NAME_LENGTH];
@@ -44,6 +53,7 @@ struct player
     int placed_ships; 
     int enemy_hit_parts; // Numero de partes de barco enemigo alcanzadas
     int sunked_ships; // Numero de barcos enemigos hundidos
+    struct cartas cartas[NUM_CARTAS]; // Array de cartas
     int torres_acumuladas; // Numero de torres acumuladas
     bool chequeo_fila[BOARD_SIZE]; // Variable para guardar la fila seleccionada por el jugador
     bool chequeo_columna[BOARD_SIZE]; // Variable para guardar la columna seleccionada por el jugador
@@ -51,12 +61,6 @@ struct player
     bool buff;
 };
 
-struct cartas
-{
-    int id;
-    char nombre[20];
-    float probabilidad;
-    char descripcion[100];
-};
+
 
 #endif // BS_COMMON_H

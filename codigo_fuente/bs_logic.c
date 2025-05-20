@@ -7,6 +7,7 @@
 #include <stdio.h> // libreria para poder usar la funcion printf.
 #include <stdlib.h> // libreria para poder usar la funcion system.
 #include <string.h> // libreria para poder usar la funcion strcspn.
+#include <windows.h> // libreria para poder usar la funcion Sleep.s
 
 void inicializar_barco(struct ship *barco, int size) {
     barco-> size = size;
@@ -23,24 +24,34 @@ void inicializar_barco(struct ship *barco, int size) {
     }
 }
 
-void hundido(struct player *player_i) {
+void hundido(struct player *enemy_i, struct player *player_i) {
     for (int i = 0; i < NUM_SHIPS; i++) {
-        bool todas_alcanzadas = true;
-        for (int j = 0; j < player_i->ships[i].size; j++) {
-            if (player_i->ships[i].status[j][2] != 3 && player_i->ships[i].status[j][2] != 4) {
-                todas_alcanzadas = false; // Si alguna parte no está dañada, no se hunde
-                break;
+        if (enemy_i->ships[i].vivo) {
+            bool hundido = true;
+            for (int j = 0; j < enemy_i->ships[i].size; j++) {
+                if (enemy_i->ships[i].status[j][2] != 3 && enemy_i->ships[i].status[j][2] != 4) {
+                    hundido = false; // Si alguna parte no está dañada, no se hunde
+                    break;
+                }
+            }
+            if (hundido) {
+                enemy_i->ships[i].vivo = false; // Barco hundido
+                enemy_i->sunked_ships++;
+                printf("El barco %d ha sido hundido.\n", i + 1);
+                // Desactivar salvo si estaba activo
+                if (enemy_i->salvo) {
+                    enemy_i->salvo = false;
+                    printf("El barco %d ha sido hundido, el modo Salvo se desactiva.\n", i + 1);
+                }
             }
         }
-        player_i->ships[i].vivo = !todas_alcanzadas ? true : false;
     }
-
 }
 
 void inicializar_jugador(struct player *player) {
 
-    // Asignar el nombre al jugador.
-    solicitar_nombre(player->name, sizeof(player->name));
+    // Asignar el nombre al jugador, validando que no sea vacío y no exceda 20 caracteres.
+    solicitar_nombre(player);
 
     // Inicializar estado de jugador.
     player->placed_ships = 0;
@@ -59,6 +70,7 @@ void inicializar_jugador(struct player *player) {
 
     // Inicializar barcos.
     inicializar_flota(player);
+    inicializar_cartas(player);
 }
 
 void inicializar_flota(struct player *player) {
@@ -70,86 +82,100 @@ void inicializar_flota(struct player *player) {
     inicializar_barco(&player->ships[4], 2); // 2 cells
 }
 
-void inicializar_cartas(struct cartas *cartas) {
+void inicializar_cartas(struct player *player) {
     // Inicializar cartas con sus IDs, nombres, probabilidades y descripciones
     for (int i = 0; i < NUM_CARTAS; i++) {
-        cartas[i].id = i + 1;
+        player->cartas[i].id = i + 1;
 
         switch (i + 1) {
             case 1:
-                strcpy(cartas[i].nombre, "Dispara 1 tiro");
-                strcpy(cartas[i].descripcion, "Inserta coordenadas donde desees disparar.");
-                cartas[i].probabilidad = 26.92;
+                strcpy(player->cartas[i].nombre, "Dispara 1 tiro");
+                strcpy(player->cartas[i].descripcion, "Inserta coordenadas donde desees disparar.");
+                player->cartas[i].peso = 7;
                 break;
             case 2:
-                strcpy(cartas[i].nombre, "Dispara 2 tiros");
-                strcpy(cartas[i].descripcion, "Inserta coordenadas donde desees disparar. Hazlo de nuevo.");
-                cartas[i].probabilidad = 19.23;
+                strcpy(player->cartas[i].nombre, "Dispara 2 tiros");
+                strcpy(player->cartas[i].descripcion, "Inserta coordenadas donde desees disparar. Hazlo de nuevo.");
+                player->cartas[i].peso = 5;
                 break;
             case 3:
-                strcpy(cartas[i].nombre, "Dispara 3 tiros");
-                strcpy(cartas[i].descripcion, "Inserta coordenadas donde desees disparar. Hazlo dos veces mas.");
-                cartas[i].probabilidad = 7.69;
+                strcpy(player->cartas[i].nombre, "Dispara 3 tiros");
+                strcpy(player->cartas[i].descripcion, "Inserta coordenadas donde desees disparar. Hazlo dos veces mas.");
+                player->cartas[i].peso = 2;
                 break;
             case 4:
-                strcpy(cartas[i].nombre, "Bombardea una fila");
-                strcpy(cartas[i].descripcion, "Si tienes tu buque de 4 casillas a flote, elige un numero y bombardea esa fila entera.");
-                cartas[i].probabilidad = 3.85;
+                strcpy(player->cartas[i].nombre, "Bombardea una fila");
+                strcpy(player->cartas[i].descripcion, "Si tienes tu buque de 4 casillas a flote, elige un numero y bombardea esa fila entera.");
+                player->cartas[i].peso = 1;
                 break;
             case 5:
-                strcpy(cartas[i].nombre, "Bombardea una columna");
-                strcpy(cartas[i].descripcion, "Si tienes tu buque de 5 casillas a flote, elige una letra y bombardea esa columna entera.");
-                cartas[i].probabilidad = 3.85;
+                strcpy(player->cartas[i].nombre, "Bombardea una columna");
+                strcpy(player->cartas[i].descripcion, "Si tienes tu buque de 5 casillas a flote, elige una letra y bombardea esa columna entera.");
+                player->cartas[i].peso = 1;
                 break;
             case 6:
-                strcpy(cartas[i].nombre, "Revela");
-                strcpy(cartas[i].descripcion, "Tu equipo de inteligencia logro descifrar la ubicacion de una parte de un barco, subraya para revelar.");
-                cartas[i].probabilidad = 3.85;
+                strcpy(player->cartas[i].nombre, "Revela");
+                strcpy(player->cartas[i].descripcion, "Tu equipo de inteligencia logro descifrar la ubicacion de una parte de un barco, subraya para revelar.");
+                player->cartas[i].peso = 1;
                 break;
             case 7:
-                strcpy(cartas[i].nombre, "Chequeo fila");
-                strcpy(cartas[i].descripcion, "Tu equipo logro activar el sonar. Elige un numero y podras ver el numero de coordenadas en esa fila.");
-                cartas[i].probabilidad = 3.85;
+                strcpy(player->cartas[i].nombre, "Chequeo fila");
+                strcpy(player->cartas[i].descripcion, "Tu equipo logro activar el sonar. Elige un numero y podras ver el numero de coordenadas en esa fila.");
+                player->cartas[i].peso = 1;
                 break;
             case 8:
-                strcpy(cartas[i].nombre, "Chequeo columna");
-                strcpy(cartas[i].descripcion, "Tu equipo logro activar el sonar. Elige una letra y podras ver el numero de coordenadas en esa columna.");
-                cartas[i].probabilidad = 3.85;
+                strcpy(player->cartas[i].nombre, "Chequeo columna");
+                strcpy(player->cartas[i].descripcion, "Tu equipo logro activar el sonar. Elige una letra y podras ver el numero de coordenadas en esa columna.");
+                player->cartas[i].peso = 1;
                 break;
             case 9:
-                strcpy(cartas[i].nombre, "Salvo");
-                strcpy(cartas[i].descripcion, "Esta carta activa el modo Salvo. Dispara los mismos tiros que tengas en flota.");
-                cartas[i].probabilidad = 3.85;
+                strcpy(player->cartas[i].nombre, "Salvo");
+                strcpy(player->cartas[i].descripcion, "Esta carta activa el modo Salvo. Dispara los mismos tiros que tengas en flota.");
+                player->cartas[i].peso = 1;
                 break;
             case 10:
-                strcpy(cartas[i].nombre, "Torre de ventaja");
-                strcpy(cartas[i].descripcion, "Acumula 4 tarjetas como esta para hundir instantaneamente los barcos.");
-                cartas[i].probabilidad = 15.38;
+                strcpy(player->cartas[i].nombre, "Torre de ventaja");
+                strcpy(player->cartas[i].descripcion, "Acumula 4 tarjetas como esta para hundir instantaneamente los barcos.");
+                player->cartas[i].peso = 4;
                 break;
             case 11:
-                strcpy(cartas[i].nombre, "Tira y toma");
-                strcpy(cartas[i].descripcion, "Inserta coordenadas donde desees disparar y vuelve a generar una carta.");
-                cartas[i].probabilidad = 3.85;
+                strcpy(player->cartas[i].nombre, "Tira y toma");
+                strcpy(player->cartas[i].descripcion, "Inserta coordenadas donde desees disparar y vuelve a generar una carta.");
+                player->cartas[i].peso = 1;
                 break;
             case 12:
-                strcpy(cartas[i].nombre, "Mover hacia adelante");
-                strcpy(cartas[i].descripcion, "Tu equipo logro obtener materiales para arreglar un motor momentaneamente.");
-                cartas[i].probabilidad = 3.85;
+                strcpy(player->cartas[i].nombre, "Mover hacia adelante");
+                strcpy(player->cartas[i].descripcion, "Tu equipo logro obtener materiales para arreglar un motor momentaneamente.");
+                player->cartas[i].peso = 1;
                 break;
         }
     }
 }
 
-void ajustar_probabilidades(struct cartas *cartas, struct player *player_1, struct player *player_2) {
+void calcular_probabilidades(struct player *player) {
+    int suma_pesos = 0;
+    for (int i = 0; i < NUM_CARTAS; i++) {
+        suma_pesos += player->cartas[i].peso;
+    }
+
+    for (int i = 0; i < NUM_CARTAS; i++) {
+        player->cartas[i].probabilidad = (float)player->cartas[i].peso / suma_pesos * 100.0; // Convertir a porcentaje
+    }
+}
+
+void ajustar_probabilidades(struct player *player_1, struct player *player_2) {
     if (player_1->torres_acumuladas >= 4 || player_2->torres_acumuladas >= 4) {
-        float total_redistribuir = cartas[9].probabilidad;  // Probabilidad de Torre de ventaja
-        cartas[9].probabilidad = 0.0;  // Establecer probabilidad de Torre de ventaja a 0
-        
+        float total_redistribuir = player_1->cartas[9].probabilidad;  // Probabilidad de Torre de ventaja
+        player_1->cartas[9].peso = 0;  // Establecer peso de Torre de ventaja a 0
+
+        calcular_probabilidades(player_1);  // Recalcular probabilidades
+        calcular_probabilidades(player_2);  // Recalcular probabilidades
+
         // Redistribuir la probabilidad entre las demás cartas proporcionalmente
         float factor = 1.0 + (total_redistribuir / (100.0 - total_redistribuir));
         for (int i = 0; i < NUM_CARTAS; i++) {
             if (i != 9) {  // No ajustar la probabilidad de Torre de ventaja
-                cartas[i].probabilidad *= factor;
+                player_1->cartas[i].probabilidad *= factor;
             }
         }
     }
@@ -170,7 +196,6 @@ bool validar_dimension(int filaInicio, int filaFin, int columnaInicio, int colum
         dimension_actual = abs(columnaFin - columnaInicio) + 1;
     } else if(columnaInicio == columnaFin) {
         dimension_actual = abs(filaFin - filaInicio) + 1;
-    } else {
         return false; // No es una línea recta
     }
     
@@ -308,8 +333,8 @@ bool validar_movimiento(struct player *player_i, struct ship *ship_i) {
         case 'S': dx = -1; break;
         default: return false;
     }
-    nx = ship_i->status[0][0] + dx;
-    ny = ship_i->status[0][1] + dy;
+    nx = ship_i->status[0][CC_FILA] + dx;
+    ny = ship_i->status[0][CC_COLUMNA] + dy;
 
     // Validar rango en la matriz
     if(nx < 0 || ny < 0 || nx >= BOARD_SIZE || ny >= BOARD_SIZE) {
@@ -319,12 +344,18 @@ bool validar_movimiento(struct player *player_i, struct ship *ship_i) {
     // Validar solapamiento con otro barco
     for(s = 0; s < NUM_SHIPS; s++){
         for(k = 0; k < player_i->ships[s].size; k++) {
-            if(player_i->ships[s].status[k][0] == nx && player_i->ships[s].status[k][1] == ny) {
+            if(player_i->ships[s].status[k][CC_FILA] == nx && player_i->ships[s].status[k][CC_COLUMNA] == ny) {
                 return false;
             }
         }
     }
 
+    // Validar salud del barco
+    for(int p = 0; p < ship_i->size; p++) {
+        if(ship_i->status[p][CC_STATUS] == SHIP_BODY_D || ship_i->status[p][CC_STATUS] == SHIP_STER_D) {
+            return false;
+        }
+    }
     return true;
 }
 
@@ -333,135 +364,155 @@ void decidir_primer_turno(struct player *p1, struct player *p2) {
     printf("Decidiendo quien sera el primer jugador de forma aleatoria...\n");
     Sleep(1000);
 
-    p1->turno = primer_turno;
-    if (p1->turno == 1) {
-        color_txt(INFO_COLOR); printf("%s ",p1->name); color_txt(DEFAULT_COLOR); printf(" ha sido elegido para comenzar la partida\n");
+    if (primer_turno == 1) {
+        p1->turno = 1;
         p2->turno = 2;
+        color_txt(INFO_COLOR); printf("%s ", p1->name); color_txt(DEFAULT_COLOR); printf("ha sido elegido para comenzar la partida\n");
+        color_txt(INFO_COLOR); printf("%s ", p2->name); color_txt(DEFAULT_COLOR); printf("sera el segundo en jugar\n");
     } else {
-        color_txt(INFO_COLOR); printf("%s ",p2->name); color_txt(DEFAULT_COLOR); printf(" ha sido elegido para comenzar la partida\n");
+        p1->turno = 2;
         p2->turno = 1;
+        color_txt(INFO_COLOR); printf("%s ", p2->name); color_txt(DEFAULT_COLOR); printf("ha sido elegido para comenzar la partida\n");
+        color_txt(INFO_COLOR); printf("%s ", p1->name); color_txt(DEFAULT_COLOR); printf("sera el segundo en jugar\n");
     }
+    Sleep(1000);
     enter_continuar();
     limpiar_pantalla();
 }
 
-int obtener_id_aleatoria(struct cartas *cartas) {
+int obtener_id_aleatoria(struct player *player_i) {
+    // Recalcular probabilidades antes de sacar una carta
+    calcular_probabilidades(player_i);
+
     float numero_rand = (float)(rand() % 10000) / 100.0f; // Número aleatorio entre 0 y 100
     float acumulado = 0.0f;
-    
+
     for (int i = 0; i < NUM_CARTAS; i++) {
-        acumulado += cartas[i].probabilidad;
-        if (numero_rand <= acumulado) {
-            return cartas[i].id;
+        acumulado += player_i->cartas[i].probabilidad;
+        if (numero_rand < acumulado) {
+            return i;
         }
     }
-    
-    return 0; // Valor por defecto si algo sale mal
+    // Si no cayó en ningún rango, devuelve la última carta
+    return NUM_CARTAS - 1;
 }
 
-void sacar_carta(struct player *player_i, struct player *enemy_i, struct cartas *cartas) {
-    int carta_id = obtener_id_aleatoria(cartas);
-    
+void sacar_carta(struct player *player_i, struct player *enemy_i) {
+    int carta_id = obtener_id_aleatoria(player_i);
+
     limpiar_pantalla();
-    // Buscar y mostrar la información de la carta
-    for (int i = 0; i < NUM_CARTAS; i++) {
-        if (cartas[i].id == carta_id) {
-            printf("\nHas sacado la carta: %s\n", cartas[i].nombre);
-            printf("Descripcion: %s\n\n", cartas[i].descripcion);
-            break;
-        }
-    }
-    imprimirTableroGuerra(enemy_i, player_i);
+    mostrar_turno_y_tablero(player_i, enemy_i);
+    mostrar_info_carta(&player_i->cartas[carta_id]);
     switch (carta_id) {
     case 1:
-        funcion_carta_1(player_i, enemy_i);
+        funcion_carta_1(player_i, enemy_i, carta_id);
         break;
     case 2:
-        capturar_coordenada(player_i, enemy_i);
-        Sleep(1000);
-        limpiar_pantalla();
-        printf("Dispara de nuevo.\n");
-        imprimirTableroGuerra(enemy_i, player_i);
-        capturar_coordenada(player_i, enemy_i);
+        funcion_carta_2(player_i, enemy_i, carta_id);
         break;
     case 3:
-        capturar_coordenada(player_i, enemy_i);
-        Sleep(1000);
-        limpiar_pantalla();
-        printf("Dispara de nuevo.\n");
-        imprimirTableroGuerra(enemy_i, player_i);
-        capturar_coordenada(player_i, enemy_i);
-        Sleep(1000);
-        limpiar_pantalla();
-        printf("Dispara una ultima vez.\n");
-        imprimirTableroGuerra(enemy_i, player_i);
-        capturar_coordenada(player_i, enemy_i);
-        break;
-    case 4:
-        capturar_fila_columna(cartas, player_i, enemy_i);
-        break;
-    case 5:
-        capturar_fila_columna(cartas, player_i, enemy_i);
+        funcion_carta_3(player_i, enemy_i, carta_id);
+    case 4: case 5: case 7: case 8:
+        capturar_fila_columna(carta_id, player_i, enemy_i);
+        if (carta_id == 7) {
+            printf("La fila ha sido revelada.\n");
+        } else if (carta_id == 8) {
+            printf("La columna ha sido revelada.\n");
+        }
+        mostrar_turno_y_tablero(player_i, enemy_i);
         break;
     case 6:
         revela(enemy_i);
         break;
-    case 7:
-        capturar_fila_columna(cartas, player_i, enemy_i);
-        break;
-    case 8:
-        capturar_fila_columna(cartas, player_i, enemy_i);
-        break;
     case 9:
         activar_salvo(player_i);
+        printf("\n¡Modo Salvo activado!\n");
+        printf("Durante este turno NO disparas. En tu próximo turno, podrás disparar múltiples veces.\n");
+        printf("Presiona enter para terminar el turno.\n");
+        enter_continuar();
+        limpiar_pantalla();
         break;
     case 10:
         if(player_i->torres_acumuladas < MAX_ID_10) {
             player_i->torres_acumuladas++;
             printf("Has acumulado una torre de ventaja. Acumula 4 para hundir instantaneamente los barcos enemigos.\n");
-            ajustar_probabilidades(cartas, player_i, enemy_i);
+            // Reducir el peso de la carta Torre de ventaja
+            if (player_i->cartas[9].peso > 0) player_i->cartas[9].peso--;
+            ajustar_probabilidades(player_i, enemy_i);
+
         } else {
             torre_ventaja(player_i);
         }
         break;
     case 11:
-        tira_toma(player_i, enemy_i, cartas);
+        tira_toma(player_i, enemy_i);
         break;
     case 12:
-        solicitar_barco(player_i);
+        solicitar_barco(player_i, enemy_i);
         break;
+    }
+
+    if (carta_id != 9 && carta_id != 11) {
+        printf("Presiona enter para continuar...\n");
+        limpiar_buffer_entrada();
+        getchar();
     }
 }
 
-void funcion_carta_1(struct player *player_i, struct player *enemy_i)
-{
-    if (player_i->salvo)
-    {
-        printf("Tienes el modo Salvo activado, puedes disparar %d veces.\n", NUM_SHIPS - enemy_i->sunked_ships);
-        for (int i = 0; i < NUM_SHIPS - enemy_i->sunked_ships; i++)
-        {
-            capturar_coordenada(player_i, enemy_i);
-            Sleep(1000);
-            limpiar_pantalla();
+void funcion_carta_1(struct player *player_i, struct player *enemy_i, int carta_id) {
+    mostrar_info_carta(&player_i->cartas[carta_id]);
+    int disparos = player_i->salvo ? (NUM_SHIPS - enemy_i->sunked_ships) : 1;
+    for (int i = 0; i < disparos; i++) {
+        if (i == 0) {
+            printf("Dispara una vez.\n");
+        } else {
             printf("Dispara de nuevo.\n");
-            imprimirTableroGuerra(enemy_i, player_i);
-            if (i < NUM_SHIPS - enemy_i->sunked_ships - 1)
-            {
-                printf("Dispara una vez mas.\n");
-                imprimirTableroGuerra(enemy_i, player_i);
-                capturar_coordenada(player_i, enemy_i);
-                Sleep(1000);
-                limpiar_pantalla();
-            }
         }
-    }
-    else
-    {
-        printf("Dispara una vez.\n");
+        Sleep(1000);
+        mostrar_turno_y_tablero(player_i, enemy_i);
         capturar_coordenada(player_i, enemy_i);
-        imprimirTableroGuerra(enemy_i, player_i);
-        enter_continuar();
         limpiar_pantalla();
+    }
+    enter_continuar();
+    limpiar_pantalla();
+}
+
+void funcion_carta_2(struct player *player_i, struct player *enemy_i, int carta_id) {
+    mostrar_info_carta(&player_i->cartas[carta_id]);
+    printf("Dispara una vez.\n");
+    Sleep(1000);
+    mostrar_turno_y_tablero(player_i, enemy_i);
+    capturar_coordenada(player_i, enemy_i);
+    Sleep(1000);
+    limpiar_pantalla();
+    printf("Dispara de nuevo.\n");
+    Sleep(1000);
+    mostrar_turno_y_tablero(player_i, enemy_i);
+    capturar_coordenada(player_i, enemy_i);
+    enter_continuar();
+    limpiar_pantalla();
+}
+
+void funcion_carta_3(struct player *player_i, struct player *enemy_i, int carta_id) {
+    mostrar_info_carta(&player_i->cartas[carta_id]);
+    for (int i = 0; i < 3; i++) {
+        if (i == 0) {
+            printf("Dispara una vez.\n");
+        } else if (i > 0 && i < 2) {
+            printf("Dispara de nuevo.\n");
+        }
+        Sleep(1000);
+        mostrar_turno_y_tablero(player_i, enemy_i);
+        capturar_coordenada(player_i, enemy_i);
+        limpiar_pantalla();
+        if (i == 2) {
+            printf("Dispara una vez mas.\n");
+            Sleep(1000);
+            mostrar_turno_y_tablero(player_i, enemy_i);
+            capturar_coordenada(player_i, enemy_i);
+            enter_continuar();
+            limpiar_pantalla();
+        }
     }
 }
 

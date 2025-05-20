@@ -19,8 +19,6 @@ void pantalla_bienvenida() {
 	printf("|_______||__| |__|  |___|  |__| |__||_______||_______||__| |__|  |_|  |__||__| |__|  |___|  |__| |__||_______| \n");
 	
 	enter_continuar(); // Pausa antes de continuar.
-
-	getchar();
 	limpiar_pantalla(); // Limpiar la pantalla después de mostrar el logo.
 }
 
@@ -28,7 +26,7 @@ void menu_principal() {
     char opc = ' ';
 
 	// Menu de opciones inicial.
-	while(opc != 'c' && opc != 'C'){
+	do{
 		printf("Presione la tecla correspondiente a su opcion.\n");
 		printf("Opciones:\n");
 		printf("[A]: Iniciar partida\n");
@@ -56,10 +54,10 @@ void menu_principal() {
                 limpiar_pantalla(); // Limpiar la pantalla.
                 break;
             }
-	};
+	}while(opc != 'c' && opc != 'C');
 }
 
-void menu_por_turno(struct player *player_i, struct player *enemy_i, struct cartas *cartas) {
+void menu_por_turno(struct player *player_i, struct player *enemy_i) {
     srand(time(NULL));
     char opc = ' ';
     do {
@@ -74,11 +72,11 @@ void menu_por_turno(struct player *player_i, struct player *enemy_i, struct cart
     opc = toupper(opc); // Convertir a mayúscula para evitar problemas de comparación.
     switch(opc) {
         case 'A':
-            sacar_carta(player_i, enemy_i, cartas);
+            sacar_carta(player_i, enemy_i);
             opc = 'Z'; // Cambiar la opcion para salir del menu.
             break;
         case 'B':
-            imprimirReporteBarcos(player_i, enemy_i, cartas);
+            imprimirReporteBarcos(player_i, enemy_i);
             break;
         case 'C':
             // Logica reporte barcos enemigos
@@ -89,21 +87,57 @@ void menu_por_turno(struct player *player_i, struct player *enemy_i, struct cart
             color_txt(DEFAULT_COLOR);
     }
     }while(opc != 'Z' && opc != 'z');
+    limpiar_pantalla(); // Limpiar la pantalla después de salir del menú.
 }
 
-void solicitar_nombre(char *nombre, int max_length) {
-    printf("Introduce el nombre del jugador (maximo %d caracteres): ", max_length - 1);
-    fgets(nombre, max_length, stdin);
-    nombre[strcspn(nombre, "\n")] = '\0'; // Eliminar el salto de línea al final del nombre
+void solicitar_nombre(struct player *player) {
+    do {
+        printf("Introduce el nombre del jugador (max 20 caracteres): ");
+        if (fgets(player->name, sizeof(player->name), stdin) == NULL) {
+            color_txt(ERROR_COLOR);
+            printf("Error de entrada. Intenta de nuevo.\n");
+            color_txt(DEFAULT_COLOR);
+            continue;
+        }
+
+        // Si no hay salto de línea, limpiar el buffer y repetir
+        if (strchr(player->name, '\n') == NULL) {
+            int c;
+            while ((c = getchar()) != '\n' && c != EOF); // Limpiar buffer completamente
+            color_txt(ERROR_COLOR);
+            printf("El nombre no puede tener mas de 20 caracteres. Intenta de nuevo.\n");
+            color_txt(DEFAULT_COLOR);
+            continue;
+        }
+
+        // Eliminar salto de línea
+        player->name[strcspn(player->name, "\n")] = '\0';
+
+        // Validar longitud
+        size_t len = strlen(player->name);
+        if (len == 0) {
+            color_txt(ERROR_COLOR);
+            printf("El nombre no puede estar vacio. Intenta de nuevo.\n");
+            color_txt(DEFAULT_COLOR);
+            continue;
+        }
+        if (len > 20) {
+            color_txt(ERROR_COLOR);
+            printf("El nombre no puede tener mas de 20 caracteres. Intenta de nuevo.\n");
+            color_txt(DEFAULT_COLOR);
+            continue;
+        }
+
+        // Si pasa todas las validaciones, salir del ciclo
+        break;
+    } while (1);
 }
 
-void partida(){
+void partida() {
     struct player player1, player2;
     struct cartas cartas[NUM_CARTAS];
     int alternancia_turno = 1; // Variable de alternancia de turnos.
     int i, j;
-
-    inicializar_cartas(cartas);
 
     limpiar_buffer_entrada(); // Limpiar el buffer de entrada antes de solicitar el nombre.
     printf("Jugador 1:\n");
@@ -132,54 +166,41 @@ void partida(){
     // Elegir aleatoriamente quién inicia
     decidir_primer_turno(&player1, &player2);
 
-    do {
-        struct player *jugador_en_turno;
-        if(alternancia_turno == 1) {
-            if(player1.turno == 1) {
-                jugador_en_turno = &player1;
-                printf("Turno de"); color_txt(INFO_COLOR); printf(" %s\n", player1.name); color_txt(DEFAULT_COLOR);
-                imprimirTableroGuerra(&player2, &player1);
-                menu_por_turno(&player1, &player2, cartas);
-            } else {
-                jugador_en_turno = &player2;
-                printf("Turno de"); color_txt(INFO_COLOR); printf(" %s\n", player2.name); color_txt(DEFAULT_COLOR);
-                imprimirTableroGuerra(&player1, &player2);
-                menu_por_turno(&player2, &player1, cartas);
-            }
-            alternancia_turno = 2; // Cambiar turno
-        } else {
-            if(player2.turno == 1) {
-                jugador_en_turno = &player2;
-                printf("Turno de"); color_txt(INFO_COLOR); printf(" %s\n", player2.name); color_txt(DEFAULT_COLOR);
-                imprimirTableroGuerra(&player1, &player2);
-                menu_por_turno(&player2, &player1, cartas);
-            } else {
-                jugador_en_turno = &player1;
-                printf("Turno de"); color_txt(INFO_COLOR); printf(" %s\n", player1.name); color_txt(DEFAULT_COLOR);
-                imprimirTableroGuerra(&player2, &player1);
-                menu_por_turno(&player1, &player2, cartas);
-            }
-            alternancia_turno = 1; // Cambiar turno
-        }
+    struct player *jugador_actual, *jugador_enemigo;
+    if(player1.turno == 1) {
+        jugador_actual = &player1;
+        jugador_enemigo = &player2;
+    } else {
+        jugador_actual = &player2;
+        jugador_enemigo = &player1;
+    }
 
-        // Verificar si algún barco ha sido hundido y luego desactivar salvo
-        for(int s = 0; s < NUM_SHIPS; s++) {
-            if(!jugador_en_turno->ships[s].vivo && jugador_en_turno->salvo) {
-                desactivar_salvo(jugador_en_turno);
-                break;
-            }
+    do {
+        printf("Turno de"); color_txt(INFO_COLOR); printf(" %s\n", jugador_actual->name); color_txt(DEFAULT_COLOR);
+        imprimirTableroGuerra(jugador_enemigo, jugador_actual);
+        menu_por_turno(jugador_actual, jugador_enemigo);
+    
+        // Mensaje de cambio de turno
+        printf("Ahora es turno de %s\n", jugador_enemigo->name);
+        enter_continuar();
+        limpiar_pantalla(); // Limpiar la pantalla después de mostrar el turno.
+
+        // Alternar punteros (esto es lo que realmente cambia el turno)
+        struct player *temp = jugador_actual;
+        jugador_actual = jugador_enemigo;
+        jugador_enemigo = temp;
+    
+    } while(jugador_actual->enemy_hit_parts < VICTORYCONDITION && jugador_enemigo->enemy_hit_parts < VICTORYCONDITION);
+
+    // Mensaje de victoria
+    if(jugador_actual->enemy_hit_parts >= VICTORYCONDITION) {
+            printf("%s ha ganado!\n", jugador_actual->name);
+        } else if(jugador_enemigo->enemy_hit_parts >= VICTORYCONDITION) {
+            printf("%s ha ganado!\n", jugador_enemigo->name);
         }
-        // Verificar si el jugador ha ganado
-        if(player1.enemy_hit_parts >= VICTORYCONDITION) {
-            printf("%s ha ganado!\n", player1.name);
-            break;
-        } else if(player2.enemy_hit_parts >= VICTORYCONDITION) {
-            printf("%s ha ganado!\n", player2.name);
-            break;
-        }
-    }while(player1.enemy_hit_parts < VICTORYCONDITION && player2.enemy_hit_parts < VICTORYCONDITION);
     liberar_flota(&player1); // Liberar memoria de la flota del jugador 1.
 	liberar_flota(&player2); // Liberar memoria de la flota del jugador 2.
+
 }
 
 void capturar_coordenada(struct player *player_i, struct player *enemy_i) {
@@ -231,14 +252,16 @@ void capturar_coordenada(struct player *player_i, struct player *enemy_i) {
     }
     // Llama a la función de disparo con fila y columna
     disparar(player_i, enemy_i, fila, columna);
+    Sleep(1000); // Pausa de 1 segundo para mostrar el resultado del disparo.
+    limpiar_pantalla(); // Limpiar la pantalla después de disparar.
 }
 
-void capturar_fila_columna(struct cartas *cartas, struct player *player_i, struct player *enemy_i) {
+void capturar_fila_columna(int carta_id, struct player *player_i, struct player *enemy_i) {
     char columna_c;
     int columna, fila;
 
     // Capturar fila o columna dependiendo de la carta
-    if (cartas->id == 4 || cartas->id == 7) {
+    if (carta_id == 4 || carta_id == 7) {
         // Capturar fila
         do {
             printf("Ingrese la fila a capturar (1-%d): ", BOARD_SIZE);
@@ -256,7 +279,7 @@ void capturar_fila_columna(struct cartas *cartas, struct player *player_i, struc
                 color_txt(DEFAULT_COLOR);
             }
         } while (fila < 1 || fila > BOARD_SIZE);
-    } else if (cartas->id == 5 || cartas->id == 8) {
+    } else if (carta_id == 5 || carta_id == 8) {
         // Capturar columna
         do {
             printf("Ingrese la columna a capturar (A-J): ");
@@ -278,7 +301,7 @@ void capturar_fila_columna(struct cartas *cartas, struct player *player_i, struc
         } while (columna < 0 || columna > 9);
     }
 
-    switch (cartas->id) {
+    switch (carta_id) {
         case 4:
             // Bombardea fila
             bombardea_fila(player_i, enemy_i, fila);
@@ -298,6 +321,7 @@ void capturar_fila_columna(struct cartas *cartas, struct player *player_i, struc
         default:
             break;
     }
+    imprimirTableroGuerra(enemy_i, player_i); // Imprimir el tablero del enemigo después de la acción.
 }
 
 void imprimirTablero(struct player *player_i) {
@@ -493,7 +517,7 @@ void imprimirTableroGuerra(struct player *enemy_i, struct player *player_i) {
     }
 }
 
-void imprimirReporteBarcos(struct player *player_i, struct player *enemy_i, struct cartas *cartas) {
+void imprimirReporteBarcos(struct player *player_i, struct player *enemy_i) {
     int i, k;
     int dimension_maxima = 0;
     int ancho_col = 12; // Ancho fijo para cada barco
@@ -560,7 +584,7 @@ void imprimirReporteBarcos(struct player *player_i, struct player *enemy_i, stru
         printf("Turno de"); color_txt(INFO_COLOR); printf(" %s\n", player_i->name); color_txt(DEFAULT_COLOR);
         imprimirTableroGuerra(enemy_i, player_i);
         printf("\n");
-        menu_por_turno(player_i, enemy_i, cartas);
+        menu_por_turno(player_i, enemy_i);
     } else {
         color_txt(ERROR_COLOR);
         printf("¡Tecla invalida!\n");
@@ -686,55 +710,144 @@ void colocar_barcos_jugador(struct player *player) {
     limpiar_pantalla();
 }
 
-void solicitar_barco(struct player *player_i) {
+void solicitar_barco(struct player *player_i, struct player *enemy_i) {
     int i, barco_seleccionado;
-    
-    printf("Barcos disponibles:\n");
-    for (i = 0; i < NUM_SHIPS; i++) {
-        for (int j = 0; j < player_i->ships[i].size; j++) {
-            if (player_i->ships[i].status[j][2] == SHIP_BODY_D || player_i->ships[i].status[j][2] == SHIP_STER_D) {
-            break; // Si el barco ya fue alcanzado, no lo muestro
-            }
-            printf("Barco %d: %d celdas\n", i + 1, player_i->ships[i].size);   
-        }
-    }
-    
+    char opc;
     do {
-        printf("Seleccione el barco que desea mover (1-%d): ", NUM_SHIPS);
-        scanf("%d", &barco_seleccionado);
-        barco_seleccionado--; // Convertir a base 0
-        if (barco_seleccionado < 0 || barco_seleccionado >= NUM_SHIPS) {
-            color_txt(ERROR_COLOR);
-            printf("Barco invalido. Intente de nuevo.\n");
-            color_txt(DEFAULT_COLOR);
+        limpiar_pantalla();
+        printf("Turno de"); color_txt(INFO_COLOR); printf(" %s\n", player_i->name); color_txt(DEFAULT_COLOR);
+        imprimirTablero(player_i);    
+        printf("Seleccione el barco que desea mover:\n");
+        for (i = 0; i < NUM_SHIPS; i++) {
+            if (validar_movimiento(player_i, &player_i->ships[i])) {
+                // Mostrar solo barcos que se pueden mover
+                printf("Barco %d: %d celdas\n", i + 1, player_i->ships[i].size);
+            }
         }
-    } while (barco_seleccionado < 0 || barco_seleccionado >= NUM_SHIPS || player_i->ships[barco_seleccionado].size == 0); // Validar rango y tamaño del barco
-
-    // Llamar a la función de mover barco
-    mover_barco_adelante(player_i, barco_seleccionado);
+        printf("[z]: No mover ningun barco.\n");
+        scanf(" %c", &opc);
+        opc = toupper(opc);
+        switch (opc) {
+            case 'Z':
+                printf("No se movera ningun barco. Recibes una carta de"); color_txt(INFO_COLOR); printf(" disparo.\n");
+                color_txt(DEFAULT_COLOR);
+                capturar_coordenada(player_i, enemy_i);
+                return;
+            case '1': case '2': case '3': case '4': case '5':
+                barco_seleccionado = opc - '1'; // Convertir a base 0
+                if (validar_movimiento(player_i, &player_i->ships[barco_seleccionado])) {       
+                    mover_barco_adelante(player_i, barco_seleccionado);
+                    return;
+                } else {
+                        color_txt(ERROR_COLOR);
+                    printf("No puedes mover ese barco.\n");
+                    color_txt(DEFAULT_COLOR);
+                    Sleep(2000); // Pausa para mostrar el mensaje de error.
+                    break; // Salir del bucle si el barco no se puede mover
+                }
+                break;
+            default:
+                color_txt(ERROR_COLOR);
+                printf("Opcion invalida. Intente de nuevo.\n");
+                color_txt(DEFAULT_COLOR);
+                Sleep(2000);
+            }
+        } while (1);
 }
 
 void reglas() {
-	printf("Las reglas para jugar al iconico juego \"Batalla Naval\" rezan lo siguiente:\n");
-	printf("1. Cada jugador contara con una flota de barcos, la cual ordenara en una distribucion que considere conveniente para ocultarla de su rival\n");
-	printf("2. El juego es por turnos. En cada turno se le proporcionará a cada jugador la posibilidad de usar una carta con diversos efectos sobre el tablero.\n");
-    printf("3. Las cartas disponibles son:\n");
-    printf("   - Disparo: Dispara a una coordenada del tablero enemigo.\n");
-    printf("   - Bombardeo de fila: Bombardea una fila del tablero enemigo.\n");
-    printf("   - Bombardeo de columna: Bombardea una columna del tablero enemigo.\n");
-    printf("   - Revelar: Revela el estado de los barcos enemigos.\n");
-    printf("   - Chequeo de fila: Revela el estado de una fila del tablero enemigo.\n");
-    printf("   - Chequeo de columna: Revela el estado de una columna del tablero enemigo.\n");
-    printf("   - Salvo: Permite disparar a una coordenada del tablero enemigo sin que el enemigo pueda defenderse.\n");
-    printf("   - Torre de ventaja: Permite disparar a una coordenada del tablero enemigo y revela el estado de la fila y columna del barco.\n");
-    printf("   - Revelar casilla aleatoria: Permite revelar una casilla aleatoria en la que haya un barco enemigo.\n");
-    printf("4. El objetivo del juego es hundir todos los barcos del enemigo antes de que el enemigo hunda los tuyos.\n");
-    printf("5. Un barco se considera hundido cuando todas sus partes han sido alcanzadas.\n");
-	printf("Presione enter cuando haya terminado de leer las reglas\n");
-	
-	limpiar_buffer_entrada(); // Limpiar el buffer de entrada
-	getchar(); // Esperar a que el usuario presione enter
-	limpiar_pantalla();
+    char opc;
+    do {
+        limpiar_pantalla();
+        color_txt(INFO_COLOR);
+        printf("=== REGLAS DEL JUEGO \"BATALLA NAVAL\" ===\n\n");
+        color_txt(DEFAULT_COLOR);
+
+        color_txt(SUCCESS_COLOR);
+        printf("1. Cada jugador contara con una flota de barcos,\n");
+        color_txt(DEFAULT_COLOR);
+        printf("   la cual ordenara en una distribucion que considere conveniente para ocultarla de su rival.\n\n");
+
+        color_txt(SUCCESS_COLOR);
+        printf("2. El juego es por turnos.\n");
+        color_txt(DEFAULT_COLOR);
+        printf("   En cada turno se le proporcionara a cada jugador la posibilidad de usar una ");
+        color_txt(INFO_COLOR); printf("carta"); color_txt(DEFAULT_COLOR);
+        printf(" con diversos efectos sobre el tablero.\n\n");
+
+        color_txt(SUCCESS_COLOR);
+        printf("3. Las cartas disponibles son:\n");
+        color_txt(DEFAULT_COLOR);
+        printf("   ");
+        color_txt(INFO_COLOR); printf("- Disparo: "); color_txt(DEFAULT_COLOR);
+        printf("Dispara a una coordenada del tablero enemigo.\n   ");
+        color_txt(INFO_COLOR); printf("- Bombardeo de fila: "); color_txt(DEFAULT_COLOR);
+        printf("Bombardea una fila del tablero enemigo.\n   ");
+        color_txt(INFO_COLOR); printf("- Bombardeo de columna: "); color_txt(DEFAULT_COLOR);
+        printf("Bombardea una columna del tablero enemigo.\n   ");
+        color_txt(INFO_COLOR); printf("- Revelar: "); color_txt(DEFAULT_COLOR);
+        printf("Revela el estado de los barcos enemigos.\n   ");
+        color_txt(INFO_COLOR); printf("- Chequeo de fila: "); color_txt(DEFAULT_COLOR);
+        printf("Revela el estado de una fila del tablero enemigo.\n   ");
+        color_txt(INFO_COLOR); printf("- Chequeo de columna: "); color_txt(DEFAULT_COLOR);
+        printf("Revela el estado de una columna del tablero enemigo.\n   ");
+        color_txt(INFO_COLOR); printf("- Salvo: "); color_txt(DEFAULT_COLOR);
+        printf("Permite disparar a una coordenada del tablero enemigo sin que el enemigo pueda defenderse.\n   ");
+        color_txt(INFO_COLOR); printf("- Torre de ventaja: "); color_txt(DEFAULT_COLOR);
+        printf("Permite disparar a una coordenada y revela el estado de la fila y columna del barco.\n   ");
+        color_txt(INFO_COLOR); printf("- Revelar casilla aleatoria: "); color_txt(DEFAULT_COLOR);
+        printf("Permite revelar una casilla aleatoria en la que haya un barco enemigo.\n\n");
+
+        color_txt(SUCCESS_COLOR);
+        printf("4. El objetivo del juego es ");
+        color_txt(INFO_COLOR); printf("hundir todos los barcos del enemigo"); color_txt(DEFAULT_COLOR);
+        printf(" antes de que el enemigo hunda los tuyos.\n\n");
+
+        color_txt(SUCCESS_COLOR);
+        printf("5. Un barco se considera hundido cuando ");
+        color_txt(INFO_COLOR); printf("todas sus partes han sido alcanzadas."); color_txt(DEFAULT_COLOR);
+        printf("\n\n");
+
+        color_txt(ERROR_COLOR);
+        printf(" PROHIBIDO\n");
+        color_txt(DEFAULT_COLOR);
+        printf("   ");
+        color_txt(ERROR_COLOR); printf("- No puedes colocar barcos fuera del tablero.\n"); color_txt(DEFAULT_COLOR);
+        printf("   ");
+        color_txt(ERROR_COLOR); printf("- No puedes sobreponer barcos.\n"); color_txt(DEFAULT_COLOR);
+        printf("   ");
+        color_txt(ERROR_COLOR); printf("- No puedes disparar dos veces a la misma casilla.\n"); color_txt(DEFAULT_COLOR);
+        printf("   ");
+        color_txt(ERROR_COLOR); printf("- No puedes mover barcos una vez colocados.\n\n"); color_txt(DEFAULT_COLOR);
+
+        color_txt(INFO_COLOR);
+        printf("Consejos:\n");
+        color_txt(DEFAULT_COLOR);
+        printf("   - Piensa estrategicamente la ubicacion de tus barcos.\n");
+        printf("   - Aprovecha las cartas especiales para obtener ventaja.\n");
+        printf("   - Recuerda que la informacion revelada por cartas es temporal.\n\n");
+
+        color_txt(SUCCESS_COLOR);
+        printf("[Z]: Regresar al menu.\n");
+        color_txt(DEFAULT_COLOR);
+
+        scanf(" %c", &opc);
+        opc = toupper(opc);
+        limpiar_buffer_entrada();
+    } while (opc != 'Z');
+    limpiar_pantalla();
+    menu_principal();
+}
+
+void mostrar_turno_y_tablero(struct player *player_i, struct player *enemy_i) {
+    limpiar_pantalla(); // Limpiar la pantalla antes de mostrar el turno y tablero.
+    printf("Turno de"); color_txt(INFO_COLOR); printf(" %s\n", player_i->name); color_txt(DEFAULT_COLOR);
+    imprimirTableroGuerra(enemy_i, player_i); // Imprimir el tablero del enemigo.
+}
+
+void mostrar_info_carta(struct cartas *carta) {
+    printf("Te ha salido la carta:"); color_txt(INFO_COLOR); printf(" %s\n", carta->nombre); color_txt(DEFAULT_COLOR);
+    printf("Descripcion: %s\n", carta->descripcion);
 }
 
 void enter_continuar() {

@@ -22,7 +22,9 @@ void disparar(struct player *player_i, struct player *enemy_i, int fila, int col
                             // Modifica todo el barco a hundido
                             enemy_i->ships[i].status[j][CC_STATUS] = SHIP_BODY_D;
                         }
+                        printf("Disparo exitoso en %d,%c!\n", fila + 1, columna + 'A');
                         player_i->enemy_hit_parts++;
+                        hundido(enemy_i, player_i); // Verifica si el barco está hundido
                     }
                 }
                 
@@ -30,7 +32,9 @@ void disparar(struct player *player_i, struct player *enemy_i, int fila, int col
                 if (enemy_i->ships[i].status[j][0] == fila && enemy_i->ships[i].status[j][1] == columna) {
                     // Modifica el estado de la parte del barco a dañada (sin validaciones)
                     enemy_i->ships[i].status[j][CC_STATUS] += 2;
+                    printf("Disparo exitoso en %d,%c!\n", fila + 1, columna + 'A');
                     player_i->enemy_hit_parts++;
+                    hundido(enemy_i, player_i); // Verifica si el barco está hundido
                 }
             }
             
@@ -162,6 +166,12 @@ void revela(struct player *enemy_i) {
         }
     }
 
+    if (total == 0) {
+        printf("No hay partes de barco enemigo sin dañar para revelar.\n");
+        Sleep(1500);
+        return;
+    }
+
     // 2. Elegir una coordenada aleatoria
     srand((unsigned int)time(NULL));
     int idx = rand() % total;
@@ -173,12 +183,14 @@ void revela(struct player *enemy_i) {
     color_txt(INFO_COLOR);
     printf("---> ");
     color_txt(INV_COLOR);
-    printf("(%d,%c)\n", fila + 1, columna + 'A');
+    printf("(%d,%c)", fila + 1, columna + 'A');
     color_txt(INFO_COLOR);
     printf(" <---\n");
     color_txt(DEFAULT_COLOR);
 
-    // Aquí debe estar la función de disparo.
+    printf("Presione enter para continuar...\n");
+    limpiar_buffer_entrada();
+    getchar();
 }
 
 void chequeo_fila(struct player *player_i, struct player *enemy_i, int fila) {
@@ -201,12 +213,12 @@ void torre_ventaja(struct player *player_i) {
     player_i->buff = true;
 }
 
-void tira_toma(struct player *player_i, struct player *enemy_i, struct cartas *cartas) {
+void tira_toma(struct player *player_i, struct player *enemy_i) {
     capturar_coordenada(enemy_i, player_i);
     Sleep(1000);
     limpiar_pantalla();
     printf("Toma otra carta.\n");
-    sacar_carta(player_i, enemy_i, cartas);
+    sacar_carta(player_i, enemy_i);
 }
 
 void mover_barco_adelante(struct player *player_i, int id_barco) {
@@ -220,16 +232,16 @@ void mover_barco_adelante(struct player *player_i, int id_barco) {
         prev_pos[i][1] = ship_i->status[i][1];
     }
 
-    if (ship_i->direction == 'E' && validar_movimiento(player_i, ship_i)) {
+    if (ship_i->direction == 'E') {
         ship_i->status[0][1] ++;
     // Mover barco hacia el oeste
-    } else if (ship_i->direction == 'O' && validar_movimiento(player_i, ship_i)) {
+    } else if (ship_i->direction == 'O') {
         ship_i->status[0][1] --;
     // Mover barco hacia el sur
-    } else if (ship_i->direction == 'S' && validar_movimiento(player_i, ship_i)) {
+    } else if (ship_i->direction == 'S') {
         ship_i->status[0][0] ++;
     // Mover barco hacia el norte
-    } else if (ship_i->direction == 'N' && validar_movimiento(player_i, ship_i)) {
+    } else if (ship_i->direction == 'N') {
         ship_i->status[0][0] --;
     } else {
         return; // No se puede mover el barco

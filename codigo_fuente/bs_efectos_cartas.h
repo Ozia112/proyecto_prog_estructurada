@@ -26,7 +26,7 @@ void desactivar_salvo(struct player *player_i);
 
 void torre_ventaja(struct player *player_i);
 
-void tira_toma(struct player *player_i, struct player *enemy_i, struct cartas *cartas);
+void tira_toma(struct player *player_i, struct player *enemy_i);
 
 void mover_barco_adelante(struct player *player_i, int id_barco);
 

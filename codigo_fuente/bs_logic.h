@@ -7,15 +7,17 @@
 // Function prototypes
 void inicializar_barco(struct ship *barco, int size);
 
-void hundido(struct player *player_i); // Verifica si un barco está hundido.
+void hundido(struct player *enemy_i, struct player *player_i); // Verifica si un barco está hundido.
 
 void inicializar_jugador(struct player *player); // Inicializar jugadores.
 
 void inicializar_flota(struct player *player); // Inicializa la flota de un jugador.
 
-void inicializar_cartas(struct cartas *cartas); // Inicializa las cartas de un jugador.
+void inicializar_cartas(struct player *player); // Inicializa las cartas de un jugador.
 
-void ajustar_probabilidades(struct cartas *cartas, struct player *player_1, struct player *player_2); // Ajusta las probabilidades de las cartas.
+void calcular_probabilidades(struct player *player); // Calcula las probabilidades de las cartas.
+
+void ajustar_probabilidades(struct player *player_1, struct player *player_2); // Ajusta las probabilidades de las cartas.
 
 bool validar_coordenadas_en_rango(int fila, int columna); // Funciones de validacion de colocacion de barcos
 
@@ -35,11 +37,15 @@ bool validar_movimiento(struct player *player_i, struct ship *ship_i);
 
 void decidir_primer_turno(struct player *p1, struct player *p2);
 
-int obtener_id_aleatoria(struct cartas *cartas); // Función para obtener un ID de carta aleatorio
+int obtener_id_aleatoria(struct player *player_i); // Función para obtener un ID de carta aleatorio
 
-void sacar_carta(struct player *player_i, struct player *enemy_i, struct cartas *cartas); // Función para sacar una carta
+void sacar_carta(struct player *player_i, struct player *enemy_i); // Función para sacar una carta
 
-void funcion_carta_1(struct player *player_i, struct player *enemy_i);
+void funcion_carta_1(struct player *player_i, struct player *enemy_i, int carta_id);
+
+void funcion_carta_2(struct player *player_i, struct player *enemy_i, int carta_id);
+
+void funcion_carta_3(struct player *player_i, struct player *enemy_i, int carta_id);
 
 void limpiar_buffer_entrada(); // Función para limpiar el buffer de entrada
 
