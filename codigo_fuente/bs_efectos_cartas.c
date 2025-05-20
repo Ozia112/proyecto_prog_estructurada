@@ -148,7 +148,7 @@ void bombardea_columna(struct player *player_i, struct player *enemy_i, int colu
     }
 }
 
-void revela(struct player *enemy_i) {
+void revela(struct player *enemy_i, struct player *player_i) {
     // 1. Guardar todas las partes de barco no dañadas
     int posibles[NUM_SHIPS * 5][2]; // Máximo 5 partes por barco
     int total = 0;
@@ -179,18 +179,34 @@ void revela(struct player *enemy_i) {
     int columna = posibles[idx][1];
 
     // 3. Mostrar la coordenada revelada
-    printf("Para revelar un barco enemigo, seleccione con el cursor el siguiente texto:\n");
+    printf("Para revelar un barco enemigo\n");
     color_txt(INFO_COLOR);
     printf("---> ");
-    color_txt(INV_COLOR);
+    color_txt(ERROR_COLOR);
     printf("(%d,%c)", fila + 1, columna + 'A');
     color_txt(INFO_COLOR);
     printf(" <---\n");
     color_txt(DEFAULT_COLOR);
-
-    printf("Presione enter para continuar...\n");
-    limpiar_buffer_entrada();
+    printf("Disparando...\n");
+    Sleep(1000);
+    // 4. Disparar a la coordenada revelada
+    
+    printf("Presione enter para disparar...\n");
     getchar();
+    for (s = 0; s < NUM_SHIPS; s++) {
+        for (p = 0; p < enemy_i->ships[s].size; p++) {
+            if (enemy_i->ships[s].status[p][CC_FILA] == fila && enemy_i->ships[s].status[p][CC_COLUMNA] == columna) {
+                // Modifica el estado de la parte del barco a dañada (sin validaciones)
+                enemy_i->ships[s].status[p][CC_STATUS] += 2;
+                break;
+            }
+        }
+    }
+    limpiar_pantalla();
+    mostrar_turno_y_tablero(player_i, enemy_i);
+    printf("Disparo exitoso en %d,%c!\n", fila + 1, columna + 'A');
+    player_i->enemy_hit_parts++;
+    hundido(enemy_i, player_i); // Verifica si el barco está hundido
 }
 
 void chequeo_fila(struct player *player_i, struct player *enemy_i, int fila) {

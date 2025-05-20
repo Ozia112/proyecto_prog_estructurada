@@ -115,7 +115,7 @@ void inicializar_cartas(struct player *player) {
                 break;
             case 6:
                 strcpy(player->cartas[i].nombre, "Revela");
-                strcpy(player->cartas[i].descripcion, "Tu equipo de inteligencia logro descifrar la ubicacion de una parte de un barco, subraya para revelar.");
+                strcpy(player->cartas[i].descripcion, "Tu equipo de inteligencia logro descifrar la ubicacion de una parte de un barco.");
                 player->cartas[i].peso = 1;
                 break;
             case 7:
@@ -404,27 +404,27 @@ void sacar_carta(struct player *player_i, struct player *enemy_i) {
     mostrar_turno_y_tablero(player_i, enemy_i);
     mostrar_info_carta(&player_i->cartas[carta_id]);
     switch (carta_id) {
-    case 1:
+    case 0:
         funcion_carta_1(player_i, enemy_i, carta_id);
         break;
-    case 2:
+    case 1:
         funcion_carta_2(player_i, enemy_i, carta_id);
         break;
-    case 3:
+    case 2:
         funcion_carta_3(player_i, enemy_i, carta_id);
-    case 4: case 5: case 7: case 8:
+    case 3: case 4: case 6: case 7:
         capturar_fila_columna(carta_id, player_i, enemy_i);
-        if (carta_id == 7) {
+        if (carta_id == 6) {
             printf("La fila ha sido revelada.\n");
-        } else if (carta_id == 8) {
+        } else if (carta_id == 7) {
             printf("La columna ha sido revelada.\n");
         }
         mostrar_turno_y_tablero(player_i, enemy_i);
         break;
-    case 6:
-        revela(enemy_i);
+    case 5:
+        revela(enemy_i, player_i);
         break;
-    case 9:
+    case 8:
         activar_salvo(player_i);
         printf("\n¡Modo Salvo activado!\n");
         printf("Durante este turno NO disparas. En tu próximo turno, podrás disparar múltiples veces.\n");
@@ -432,7 +432,7 @@ void sacar_carta(struct player *player_i, struct player *enemy_i) {
         enter_continuar();
         limpiar_pantalla();
         break;
-    case 10:
+    case 9:
         if(player_i->torres_acumuladas < MAX_ID_10) {
             player_i->torres_acumuladas++;
             printf("Has acumulado una torre de ventaja. Acumula 4 para hundir instantaneamente los barcos enemigos.\n");
@@ -444,23 +444,21 @@ void sacar_carta(struct player *player_i, struct player *enemy_i) {
             torre_ventaja(player_i);
         }
         break;
-    case 11:
+    case 10:
         tira_toma(player_i, enemy_i);
         break;
-    case 12:
+    case 11:
         solicitar_barco(player_i, enemy_i);
         break;
     }
 
     if (carta_id != 9 && carta_id != 11) {
-        printf("Presiona enter para continuar...\n");
-        limpiar_buffer_entrada();
-        getchar();
+        enter_continuar();
+        limpiar_pantalla();
     }
 }
 
 void funcion_carta_1(struct player *player_i, struct player *enemy_i, int carta_id) {
-    mostrar_info_carta(&player_i->cartas[carta_id]);
     int disparos = player_i->salvo ? (NUM_SHIPS - enemy_i->sunked_ships) : 1;
     for (int i = 0; i < disparos; i++) {
         if (i == 0) {
@@ -478,10 +476,10 @@ void funcion_carta_1(struct player *player_i, struct player *enemy_i, int carta_
 }
 
 void funcion_carta_2(struct player *player_i, struct player *enemy_i, int carta_id) {
-    mostrar_info_carta(&player_i->cartas[carta_id]);
     printf("Dispara una vez.\n");
     Sleep(1000);
     mostrar_turno_y_tablero(player_i, enemy_i);
+    mostrar_info_carta(&player_i->cartas[carta_id]);
     capturar_coordenada(player_i, enemy_i);
     Sleep(1000);
     limpiar_pantalla();
@@ -489,31 +487,23 @@ void funcion_carta_2(struct player *player_i, struct player *enemy_i, int carta_
     Sleep(1000);
     mostrar_turno_y_tablero(player_i, enemy_i);
     capturar_coordenada(player_i, enemy_i);
-    enter_continuar();
-    limpiar_pantalla();
 }
 
 void funcion_carta_3(struct player *player_i, struct player *enemy_i, int carta_id) {
-    mostrar_info_carta(&player_i->cartas[carta_id]);
     for (int i = 0; i < 3; i++) {
         if (i == 0) {
             printf("Dispara una vez.\n");
-        } else if (i > 0 && i < 2) {
+        } else if (i == 1) {
             printf("Dispara de nuevo.\n");
+        } else if (i == 2) {
+            printf("Dispara una vez mas.\n");
         }
         Sleep(1000);
         mostrar_turno_y_tablero(player_i, enemy_i);
         capturar_coordenada(player_i, enemy_i);
         limpiar_pantalla();
-        if (i == 2) {
-            printf("Dispara una vez mas.\n");
-            Sleep(1000);
-            mostrar_turno_y_tablero(player_i, enemy_i);
-            capturar_coordenada(player_i, enemy_i);
-            enter_continuar();
-            limpiar_pantalla();
-        }
     }
+    enter_continuar();
 }
 
 void limpiar_buffer_entrada() {

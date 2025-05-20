@@ -135,9 +135,6 @@ void solicitar_nombre(struct player *player) {
 
 void partida() {
     struct player player1, player2;
-    struct cartas cartas[NUM_CARTAS];
-    int alternancia_turno = 1; // Variable de alternancia de turnos.
-    int i, j;
 
     limpiar_buffer_entrada(); // Limpiar el buffer de entrada antes de solicitar el nombre.
     printf("Jugador 1:\n");
@@ -252,7 +249,9 @@ void capturar_coordenada(struct player *player_i, struct player *enemy_i) {
     }
     // Llama a la función de disparo con fila y columna
     disparar(player_i, enemy_i, fila, columna);
-    Sleep(1000); // Pausa de 1 segundo para mostrar el resultado del disparo.
+    mostrar_turno_y_tablero(player_i, enemy_i); // Mostrar el tablero después de disparar.
+    printf("Disparaste en %d,%c!\n", fila + 1, columna_c);
+    enter_continuar(); // Pausa antes de continuar.
     limpiar_pantalla(); // Limpiar la pantalla después de disparar.
 }
 
@@ -595,7 +594,6 @@ void imprimirReporteBarcos(struct player *player_i, struct player *enemy_i) {
 void ponerBarcos(struct ship *ship_i, struct player *player_i) {
     int filaInicio, filaFin, columnaInicio, columnaFin;
     char columnaInicio_c, columnaFin_c;
-    int i;
     bool coordenadas_validas = false;
 
     while(!coordenadas_validas) {

@@ -14,7 +14,7 @@ bool barco_cinco_aflote(struct player *player_i);
 
 void bombardea_columna(struct player *player_i, struct player *enemy_i, int columna);
 
-void revela(struct player *enemy_i);
+void revela(struct player *enemy_i, struct player *player_i);
 
 void chequeo_fila(struct player *player_i, struct player *enemy_i, int fila);
 
