@@ -5,11 +5,12 @@
       "name": "Ejecutar battleship",
       "type": "cppvsdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/battleship-beta_0.4.3.exe",
-      "console": "externalTerminal",
+      "program": "${workspaceFolder}\\battleship.exe",
+      "args": [],
+      "cwd": "${workspaceFolder}",
       "preLaunchTask": "compilar y ejecutar",
       "stopAtEntry": false,
-      "cwd": "${workspaceFolder}"
+      "console": "externalTerminal"
     }
   ]
 }

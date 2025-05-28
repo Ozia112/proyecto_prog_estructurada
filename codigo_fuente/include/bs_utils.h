@@ -1,11 +1,9 @@
 #ifndef BS_CONSOLE_UTILS_H
 #define BS_CONSOLE_UTILS_H
 
-#include <windows.h> // libreria para poder usar la funcion Sleep.
-
-static inline void limpiar_pantalla(){
-	system("cls");
-}
+#include "master.h" // Incluye todas las cabeceras del proyecto
+#include <windows.h> // Libreria para usar funciones de consola en Windows
+#include <stdio.h>    // Para usar getchar() y EOF
 
 /* Códigos ANSI básicos */
 #define NEGRO           0
@@ -34,9 +32,27 @@ static inline void limpiar_pantalla(){
 #define SUCCESS_COLOR    VERDE
 #define INV_COLOR        NEGRO
 
-static inline void color_txt(int color)
-{
+static inline void limpiar_pantalla(){
+	system("cls");
+}
+
+static inline void color_txt(int color) {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+}
+
+static inline void limpiar_buffer_entrada() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
+static inline void pausa_consola(float segundos) {
+    Sleep(segundos * 1000);
+}
+
+static inline void enter_continuar() {
+    printf("Presione enter para ");  color_txt(INFO_COLOR); printf("continuar.\n"); color_txt(DEFAULT_COLOR);
+    while (getchar() != '\n'); // Esperar a que el usuario presione enter.
+    limpiar_pantalla(); // Limpiar la pantalla después de mostrar el mensaje.
 }
 
 #endif

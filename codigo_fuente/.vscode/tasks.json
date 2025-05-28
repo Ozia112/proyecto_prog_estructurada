@@ -2,16 +2,33 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "limpiar",
+      "type": "shell",
+      "command": "cmd.exe",
+      "args": [
+        "/d", "/c", 
+        "pushd \"${workspaceFolder}\" && del /f /q *.exe && del /f /q *.o && pushd src && del /f /q *.o && popd && popd"
+      ],
+      "problemMatcher": []
+    },
+    {
       "label": "compilar y ejecutar",
       "type": "shell",
-      "command": "cmd",
+      "command": "cmd.exe",
       "args": [
-        "/c", "del /f /q *.exe & gcc main.c .\\bs_common.h .\\bs_logic.c .\\bs_ui.c .\\bs_efectos_cartas.c -o .\\battleship-beta_0.4.3.exe"
+        "/d",
+        "/c",
+        "pushd \"${workspaceFolder}\" && del /f /q *.exe && pushd src && gcc *.c -I\"${workspaceFolder}/include\" -o \"..\\battleship.exe\" && popd && popd"
       ],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      }
+      "options": {
+        "shell": {
+          "executable": "cmd.exe",
+          "args": ["/d", "/c"]
+        }
+      },
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": ["$gcc"],
+      "dependsOn": ["limpiar"]
     }
   ]
 }
