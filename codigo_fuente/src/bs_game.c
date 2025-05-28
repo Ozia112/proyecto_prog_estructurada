@@ -43,9 +43,15 @@ void partida() {
 
         menu_por_turno(jugador_actual, jugador_enemigo);
     
+        
         // Despues de acabar el turno, se muestra mensaje de que el turno ha terminado.
         printf("Tu turno ha terminado.\n");
         enter_continuar(); // Pausa antes de continuar.
+        
+        // Si el jugador actual ya ha ganado, saltar al final del ciclo.
+        if (jugador_actual->enemy_hit_parts >= VICTORYCONDITION) {
+
+        } 
         
         // Mensaje de cambio de turno
         printf("Ahora es turno de %s\n", jugador_enemigo->name);
@@ -63,14 +69,23 @@ void partida() {
     } while(jugador_actual->enemy_hit_parts < VICTORYCONDITION && jugador_enemigo->enemy_hit_parts < VICTORYCONDITION);
 
     // Mensaje de victoria
-    if(jugador_actual->enemy_hit_parts >= VICTORYCONDITION) {
-            printf("%s ha ganado!\n", jugador_actual->name);
-        } else if(jugador_enemigo->enemy_hit_parts >= VICTORYCONDITION) {
-            printf("%s ha ganado!\n", jugador_enemigo->name);
-        }
+    color_txt(INFO_COLOR);
+    if (player1.enemy_hit_parts >= VICTORYCONDITION) {
+        printf("¡%s ", player1.name); 
+    } else if (player2.enemy_hit_parts >= VICTORYCONDITION) {
+        printf("¡%s ", player2.name);
+    }
+    color_txt(SUCCESS_COLOR);
+        printf("ha ganado la partida!\n");
+    color_txt(DEFAULT_COLOR);
+
     liberar_flota(&player1); // Liberar memoria de la flota del jugador 1.
 	liberar_flota(&player2); // Liberar memoria de la flota del jugador 2.
 
+    printf("Gracias por jugar a Batalla Naval.\n");
+    printf("Presione enter para regresar al menu principal.\n");
+    limpiar_buffer_entrada(); // Limpiar el buffer de entrada antes de esperar la tecla.
+    limpiar_pantalla(); // Limpiar la pantalla al finalizar la partida.
 }
 
 void menu_por_turno(struct player *player, struct player *enemy) {

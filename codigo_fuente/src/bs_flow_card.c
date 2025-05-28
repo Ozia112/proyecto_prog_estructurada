@@ -14,7 +14,6 @@ void funcion_carta_0(struct player *player, struct player *enemy) {
         }
         pausa_consola(1.3);
         capturar_coordenada(player, enemy);
-        limpiar_buffer_entrada(); // Limpiar el buffer de entrada para evitar problemas con la entrada del usuario.
         enter_continuar();
         mostrar_turno_y_tablero_G(player, enemy); // Mostrar el tablero después de disparar.
         printf("Tablero de guerra actualizado:\n");
@@ -159,13 +158,13 @@ void funcion_carta_10(struct player *player, struct player *enemy) {
     printf("Puedes disparar una vez, luego podras agarrar otra carta.\n");
     pausa_consola(1.3);
     capturar_coordenada(player, enemy);
-    limpiar_buffer_entrada(); // Limpiar el buffer de entrada para evitar problemas con la entrada del usuario.
     enter_continuar();
     mostrar_turno_y_tablero_G(player, enemy);
     printf("Tablero de guerra actualizado:\n");
     mostrar_ultimo_disparo_exitoso(player);
     pausa_consola(1);
     printf("Presiona enter para sacar otra carta.\n");
+    
     sacar_carta(player, enemy);
 }
 

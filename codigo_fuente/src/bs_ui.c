@@ -453,11 +453,12 @@ void imprimirTableroGuerra(struct player *enemy, struct player *player) {
         // Mostrar chequeo de fila al final de la fila solo si está activado
         if (player->chequeo_fila[i]) {
             barcos_en_fila(player, enemy);
+            int barcosf = barcos_en_fila(player, enemy);
             color_txt(SUCCESS_COLOR);
-            if (player->contador_fila[i] > BOARD_SIZE - 1) {
-                printf(" %d", player->contador_fila[i]);
-            } else {
+            if (barcosf == BOARD_SIZE) {
                 printf("F "); // F = Full
+            } else {
+                printf("%d ", barcosf);
             }
             color_txt(DEFAULT_COLOR);
         }
@@ -468,12 +469,12 @@ void imprimirTableroGuerra(struct player *enemy, struct player *player) {
     printf("%*s   ", relleno, "");
         for (j = 0; j < BOARD_SIZE; j++) {
             if (player->chequeo_columna[j]) {
-                barcos_en_columna(player, enemy);
+                int barcosc = barcos_en_columna(player, enemy);
                 color_txt(SUCCESS_COLOR);
-                if (player->contador_columna[j] > BOARD_SIZE - 1) {
-                    printf("%d ", player->contador_columna[j]);    
-                } else {
+                if (barcosc == BOARD_SIZE) {
                     printf(" F "); // F = Full
+                } else {
+                    printf("%d ", barcosc);
                 }
                 color_txt(DEFAULT_COLOR);
             } else {

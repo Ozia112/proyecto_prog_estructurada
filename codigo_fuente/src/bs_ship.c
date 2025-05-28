@@ -88,7 +88,7 @@ void hundido(struct player *player, struct player *enemy) {
                 // Desactivar salvo si estaba activo
                 if (enemy->salvo) {
                     enemy->salvo = false;
-                    printf("El barco %d ha sido hundido, el modo Salvo enemigo se desactiva.\n", i + 1);
+                    printf("El modo Salvo enemigo se "); color_txt(INFO_COLOR); printf("desactiva.\n");
                 }
             }
         }
