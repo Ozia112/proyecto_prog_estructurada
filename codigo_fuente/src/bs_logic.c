@@ -1,18 +1,11 @@
 #include "bs_logic.h"
 
-bool procesar_coordenadas(struct player *player, int index, int filaInicio, int filaFin, int columnaInicio, int columnaFin) {
-    bool validacion = false;
-
-        // Validar orientación de las coordenadas
-        if (validar_orientacion(player, index, filaInicio, filaFin, columnaInicio, columnaFin)) validacion = true;
-
-        // Validar dimensión de las coordenadas
-        if (validar_dimension(player, index, filaInicio, filaFin, columnaInicio, columnaFin)) validacion = true;
-
-        // Validar solapamiento de las coordenadas
-        if (validar_solapamiento(player, index, filaInicio, filaFin, columnaInicio, columnaFin)) validacion = true;
-
-    return validacion;
+bool procesar_coordenadas(struct player *player, int index, int filaIn, int filaFin, int columnaIn, int columnaFin) {
+    if (!validar_cc_rango(filaFin, columnaFin)) return false;
+    if (!validar_orientacion(player, index, filaIn, filaFin, columnaIn, columnaFin)) return false;
+    if (!validar_dimension(player, index, filaIn, filaFin, columnaIn, columnaFin)) return false;
+    if (!validar_solapamiento(player, index, filaIn, filaFin, columnaIn, columnaFin)) return false;
+    return true;
 }
 
 void colocar_barco_en_tablero(struct player *player, int index, int filaInicio, int filaFin, int columnaInicio, int columnaFin) {

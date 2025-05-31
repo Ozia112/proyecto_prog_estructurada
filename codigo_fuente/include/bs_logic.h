@@ -5,7 +5,7 @@
 
 // Prototipos de funciones
 
-bool procesar_coordenadas(struct player *player_i, int index, int filaInicio, int filaFin, int columnaInicio, int columnaFin);
+bool procesar_coordenadas(struct player *player, int index, int filaInicio, int filaFin, int columnaInicio, int columnaFin);
 
 void colocar_barco_en_tablero(struct player *player, int index, int filaInicio, int filaFin, int columnaInicio, int columnaFin);
 

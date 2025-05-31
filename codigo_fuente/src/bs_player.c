@@ -96,7 +96,7 @@ void inicializar_cartas(struct player *player) {
                 break;
             case 10:
                 strcpy(player->cartas[i].nombre, "Tira y toma");
-                strcpy(player->cartas[i].descripcion, "Inserta coordenadas donde desees disparar y vuelve a generar una carta.");
+                strcpy(player->cartas[i].descripcion, "Inserta coordenadas donde desees disparar y vuelve a sacar una carta.");
                 player->cartas[i].peso = 1;
                 break;
             case 11:

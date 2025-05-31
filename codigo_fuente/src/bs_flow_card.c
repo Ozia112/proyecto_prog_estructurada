@@ -1,11 +1,9 @@
 #include "bs_flow_card.h"
-
-void funcion_carta_0(struct player *player, struct player *enemy) {
-    int disparos = player->salvo ? (NUM_SHIPS - enemy->sunked_ships) : 1;
-    for (int i = 0; i < disparos; i++) {
+static void shot_flow(struct player *player, struct player *enemy, int count) {
+    for (int i = 0; i < count; i++) {
         if (i == 0) {
             printf("Dispara una vez.\n");
-        } else if (i < disparos - 1) {
+        } else if (i < count - 1) {
             mostrar_turno_y_tablero_G(player, enemy);
             printf("Dispara de nuevo.\n");
         } else {
@@ -15,57 +13,38 @@ void funcion_carta_0(struct player *player, struct player *enemy) {
         pausa_consola(1.3);
         capturar_coordenada(player, enemy);
         enter_continuar();
-        mostrar_turno_y_tablero_G(player, enemy); // Mostrar el tablero después de disparar.
-        printf("Tablero de guerra actualizado:\n");
-        mostrar_ultimo_disparo_exitoso(player); // Mostrar el último disparo exitoso.
-        pausa_consola(1);
-        if(player->salvo) {
-            enter_continuar();
-        } else break; // Si no es modo Salvo, salir del bucle después de un disparo.
+        end_card_flow(player, enemy);
+        // if(!player->salvo) break; ← borrado, ya que el modo salvo se maneja en el conteo de funcion_carta_0
     }
+}
+
+static void end_card_flow(struct player *player, struct player *enemy) {
+    // Mostrar el tablero de guerra después de usar la carta.
+    mostrar_turno_y_tablero_G(player, enemy);
+    printf("Tablero de guerra actualizado:\n");
+    if (player->last_card_id == 3 || player->last_card_id == 4
+        || player->last_card_id == 6 || player->last_card_id == 7) {
+        mostrar_bomb_cheq_exitoso(player); // Mostrar el resultado del bombardeo.
+    } else {
+        mostrar_ultimo_disparo_exitoso(player); // Mostrar el último disparo exitoso.
+    }
+    pausa_consola(1);
     enter_continuar();
 }
 
+void funcion_carta_0(struct player *player, struct player *enemy) {
+    int disparos = player->salvo 
+    ? (NUM_SHIPS - enemy->sunked_ships) : 1;
+
+    shot_flow(player, enemy, disparos);
+}
+
 void funcion_carta_1(struct player *player, struct player *enemy) {
-    // Primer disparo
-    for(int i = 1; i <= 2; i++) {
-        if (i == 1) {
-            printf("Dispara una vez.\n");
-        } else {
-            mostrar_turno_y_tablero_G(player, enemy);
-            printf("Dispara de nuevo.\n");
-        }
-        pausa_consola(1.3);
-        capturar_coordenada(player, enemy);
-        enter_continuar();
-        mostrar_turno_y_tablero_G(player, enemy);
-        printf("Tablero de guerra actualizado:\n");
-        mostrar_ultimo_disparo_exitoso(player);
-        pausa_consola(1);
-        enter_continuar();
-    }
+    shot_flow(player, enemy, 2);
 }
 
 void funcion_carta_2(struct player *player, struct player *enemy) {
-    for(int i = 1; i <= 3; i++) {
-        if (i == 1) {
-            printf("Dispara una vez.\n");
-        } else if (i == 2) {
-            mostrar_turno_y_tablero_G(player, enemy);
-            printf("Dispara de nuevo.\n");
-        } else {
-            mostrar_turno_y_tablero_G(player, enemy);
-            printf("Dispara una vez mas.\n");
-        }
-        pausa_consola(1.3);
-        capturar_coordenada(player, enemy);
-        enter_continuar();
-        mostrar_turno_y_tablero_G(player, enemy);
-        printf("Tablero de guerra actualizado:\n");
-        mostrar_ultimo_disparo_exitoso(player);
-        pausa_consola(1);
-        enter_continuar();
-    }
+    shot_flow(player, enemy, 3);
 }
 
 void funcion_carta_3(struct player *player, struct player *enemy) {
@@ -79,11 +58,7 @@ void funcion_carta_3(struct player *player, struct player *enemy) {
 
     }
     enter_continuar();
-    mostrar_turno_y_tablero_G(player, enemy);
-    printf("Tablero de guerra actualizado:\n");
-    mostrar_bomb_cheq_exitoso(player);
-    pausa_consola(1);
-    enter_continuar();
+    end_card_flow(player, enemy);
 }
 
 void funcion_carta_4(struct player *player, struct player *enemy) {
@@ -95,50 +70,44 @@ void funcion_carta_4(struct player *player, struct player *enemy) {
         printf("Solo pudimos activar la carta de 1 disparo.\n");
         capturar_coordenada(player, enemy);
     }
-
-    limpiar_buffer_entrada(); // Limpiar el buffer de entrada para evitar problemas con la entrada del usuario.
     enter_continuar();
-    mostrar_turno_y_tablero_G(player, enemy);
-    printf("Tablero de guerra actualizado:\n");
-    mostrar_bomb_cheq_exitoso(player);
-    pausa_consola(1);
-    enter_continuar();
+    end_card_flow(player, enemy);
 }
 
 void funcion_carta_5(struct player *player, struct player *enemy) {
     printf("Inteligencia a decifrado con exito la ubicacion de una casilla enemiga.\n");
-    revela(enemy, player);
+    revela(player, enemy);
     enter_continuar();
+    end_card_flow(player, enemy);
 }
 
 void funcion_carta_6(struct player *player, struct player *enemy) {
     printf("Hemos logrado activar el radar de filas.\n");
     capturar_fila_columna(player, enemy);
-    limpiar_buffer_entrada(); // Limpiar el buffer de entrada para evitar problemas con la entrada del usuario.
     enter_continuar();
-    mostrar_turno_y_tablero_G(player, enemy);
-    printf("Tablero de guerra actualizado:\n");
-    mostrar_bomb_cheq_exitoso(player);
-    pausa_consola(1);
-    enter_continuar();
+    end_card_flow(player, enemy);
 }
 
 void funcion_carta_7(struct player *player, struct player *enemy) {
     printf("Hemos logrado activar el radar de columnas.\n");
     capturar_fila_columna(player, enemy);
-    limpiar_buffer_entrada(); // Limpiar el buffer de entrada para evitar problemas con la entrada del usuario.
     enter_continuar();
-    mostrar_turno_y_tablero_G(player, enemy);
-    printf("Tablero de guerra actualizado:\n");
-    mostrar_bomb_cheq_exitoso(player);
-    pausa_consola(1);
-    enter_continuar();
+    end_card_flow(player, enemy);
 }
 
-void funcion_carta_8(struct player *player) {
+void funcion_carta_8(struct player *player, struct player *enemy) {
     activar_salvo(player);
     printf("\nModo Salvo activado\n");
     printf("Durante este turno NO disparas. En tu proximo turno, podras disparar multiples veces.\n");
+    pausa_consola(1);
+    enter_continuar();
+
+    mostrar_turno_y_tablero_G(player, enemy);
+    printf("Modo");
+    color_txt(SUCCESS_COLOR);
+        printf(" salvo");
+    color_txt(DEFAULT_COLOR);
+    printf(" actualizado:\n");
     pausa_consola(1.3);
     enter_continuar();
 }
@@ -152,19 +121,26 @@ void funcion_carta_9(struct player *player, struct player *enemy) {
     } else torre_ventaja(player);
     printf("En este turno no disparas.\n");
     enter_continuar();
+
+    mostrar_turno_y_tablero_G(player, enemy);
+    printf("Torre de ");
+    color_txt(SUCCESS_COLOR);
+        printf("ventaja");
+    color_txt(DEFAULT_COLOR);
+    printf(" actualizada:\n");
+    pausa_consola(1.3);
+    enter_continuar();
 }
 
 void funcion_carta_10(struct player *player, struct player *enemy) {
-    printf("Puedes disparar una vez, luego podras agarrar otra carta.\n");
-    pausa_consola(1.3);
-    capturar_coordenada(player, enemy);
-    enter_continuar();
-    mostrar_turno_y_tablero_G(player, enemy);
-    printf("Tablero de guerra actualizado:\n");
-    mostrar_ultimo_disparo_exitoso(player);
-    pausa_consola(1);
-    printf("Presiona enter para sacar otra carta.\n");
-    
+    shot_flow(player, enemy, 1); // Dispara una vez con la carta 10
+    printf("Presiona");
+    color_txt(INFO_COLOR);
+        printf(" ENTER");
+    color_txt(DEFAULT_COLOR);
+    printf(" para sacar otra carta.\n");
+    limpiar_buffer_entrada(); // Limpiar el buffer de entrada para evitar problemas con la entrada del usuario.
+
     sacar_carta(player, enemy);
 }
 
@@ -172,7 +148,6 @@ void funcion_carta_11(struct player *player, struct player *enemy) {
     printf("Puedes mover un barco hacia adelante");
     pausa_consola(1.3);
     solicitar_barco(player, enemy);
-    limpiar_buffer_entrada(); // Limpiar el buffer de entrada para evitar problemas con la entrada del usuario.
     enter_continuar();
     mostrar_turno_y_tablero(player);
     printf("Posicion de barco actualizada:\n");

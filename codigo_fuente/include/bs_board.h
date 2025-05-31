@@ -7,6 +7,8 @@
 
 bool validar_cc_rango(int cc_fila, int cc_columna);
 
+bool validar_solapamiento_inicial(struct player *player, int index, int filaInicio, int columnaInicio);
+
 bool validar_orientacion(struct player *player, int index, int filaInicio, int filaFin, int columnaInicio, int columnaFin);
 
 bool validar_dimension(struct player *player, int index, int filaInicio, int filaFin, int columnaInicio, int columnaFin);

@@ -17,13 +17,39 @@ bool validar_cc_rango(int cc_fila, int cc_columna) {
     }
     color_txt(INFO_COLOR); printf(" CodeError: 1\n");
     color_txt(DEFAULT_COLOR);
+    color_txt(ERROR_COLOR);
+    printf("Intente de nuevo.\n");
+    color_txt(DEFAULT_COLOR);
     return false;
+}
+
+bool validar_solapamiento_inicial(struct player *player, int index, int filaInicio, int columnaInicio) {
+    int i, x, y, idx_ship, s_part;
+
+    for (idx_ship = 0; idx_ship < player->placed_ships; idx_ship++) {
+        for (s_part = 0; s_part < player->ships[idx_ship].size; s_part++) {
+            if (posicion_barco(player, idx_ship, s_part, filaInicio, columnaInicio)) {
+                color_txt(ERROR_COLOR);
+                printf("Solapamiento detectado en"); color_txt(INFO_COLOR); printf(" %d,%d", filaInicio, columnaInicio);
+                color_txt(DEFAULT_COLOR); printf(" con el barco %d", idx_ship + 1);
+                color_txt(INFO_COLOR); printf(" CodeError: 4\n"); color_txt(DEFAULT_COLOR);
+                color_txt(ERROR_COLOR);
+                printf("Intente de nuevo.\n");
+                color_txt(DEFAULT_COLOR);
+                return false; // Hay solapamiento
+            }
+        }
+    }
+    return true; // No hay solapamiento
 }
 
 bool validar_orientacion(struct player *player, int index, int filaInicio, int filaFin, int columnaInicio, int columnaFin) {
     if (!(filaInicio == filaFin || columnaInicio == columnaFin)) {
         color_txt(ERROR_COLOR);
         printf("Orientacion no permitida, el barco debe ser horizontal o vertical."); color_txt(INFO_COLOR); printf(" CodeError: 2\n");
+        color_txt(DEFAULT_COLOR);
+        color_txt(ERROR_COLOR);
+        printf("Intente de nuevo.\n");
         color_txt(DEFAULT_COLOR);
         return false;
     } else { // Si la orientación es válida, asignar la dirección.
@@ -51,6 +77,9 @@ bool validar_dimension( struct player *player, int index, int filaInicio, int fi
         printf("Las coordenadas no son validas. El barco debe tener"); color_txt(INFO_COLOR); printf(" %d", player->ships[index].size);
         color_txt(ERROR_COLOR); printf(" celdas de longitud.", player->ships[index].size); color_txt(INFO_COLOR); printf(" CodeError: 3\n");
         color_txt(DEFAULT_COLOR);
+        color_txt(ERROR_COLOR);
+        printf("Intente de nuevo.\n");
+        color_txt(DEFAULT_COLOR);
         return false;
     }
     return true; // Dimensión válida
@@ -58,41 +87,46 @@ bool validar_dimension( struct player *player, int index, int filaInicio, int fi
 
 bool validar_solapamiento(struct player *player, int index, int filaInicio, int filaFin, int columnaInicio, int columnaFin) {
     int i, x, y, idx_ship, s_part;
-
+    int b_f, b_c;
     // Recorre todas las posiciones que ocuparía el nuevo barco
     if (player->ships[index].direction == 'E' || player->ships[index].direction == 'O') {
         // Horizontal
-        for (i = columnaInicio; (player->ships[index].direction == 'E') ? (i <= columnaFin) : (i >= columnaFin); (player->ships[index].direction == 'E') ? i++ : i--) {
+        for (b_c = columnaInicio; (player->ships[index].direction == 'E') ? (b_c <= columnaFin) : (b_c >= columnaFin); (player->ships[index].direction == 'E') ? b_c++ : b_c--) {
             x = filaInicio;
-            y = i;
+            y = b_c;
             // Compara contra todos los barcos ya colocados
             for (idx_ship = 0; idx_ship < player->placed_ships; idx_ship++) {
                 for (s_part = 0; s_part < player->ships[idx_ship].size; s_part++) {
                     // Solo compara si la casilla ya fue asignada (no -1)
-                    if ((posicion_barco(player, idx_ship, s_part, x, y)) && x != -1 && y != -1) {
+                    if (posicion_barco(player, idx_ship, s_part, x, y)) {
                         color_txt(ERROR_COLOR);
                         printf("Solapamiento detectado en"); color_txt(INFO_COLOR); printf(" %d,%d", x, y); 
                         color_txt(DEFAULT_COLOR); printf(" con el barco %d", idx_ship + 1);
                         color_txt(INFO_COLOR); printf(" CodeError: 4\n"); color_txt(DEFAULT_COLOR);
+                        color_txt(ERROR_COLOR);
+                        printf("Intente de nuevo.\n");
+                        color_txt(DEFAULT_COLOR);
                         return false; // Hay solapamiento
                     }
                 }
             }
         }
     } 
+    else {
     // Vertical
-    else {    
-        for (i = filaInicio; (player->ships[index].direction == 'S') ? (i <= filaFin) : (i >= filaFin); (player->ships[index].direction == 'S') ? i++ : i--) {
-            x = i;
+        for (b_f = filaInicio; player->ships[index].direction == 'S' ? b_f <= filaFin : b_f >= filaFin; player->ships[index].direction == 'S' ? b_f++ : b_f--)
+        {
+            x = b_f;
             y = columnaInicio;
-            for (s_part = 0; s_part < player->ships[idx_ship].size; s_part++) {
-                // Solo compara si la casilla ya fue asignada (no -1)
-                if ((posicion_barco(player, idx_ship, s_part, x, y)) && x != -1 && y != -1) {
-                    color_txt(ERROR_COLOR);
-                    printf("Solapamiento detectado en"); color_txt(INFO_COLOR); printf(" %d,%d", x, y);
-                    color_txt(DEFAULT_COLOR); printf(" con el barco %d", idx_ship + 1);
-                    color_txt(INFO_COLOR); printf(" CodeError: 4\n"); color_txt(DEFAULT_COLOR);
-                    return false; // Hay solapamiento
+            for (int idx_ship = 0; idx_ship < player->placed_ships; idx_ship++) {
+                for (s_part = 0; s_part < player->ships[idx_ship].size; s_part++) {
+                    if (posicion_barco(player, idx_ship, s_part, x, y)) {
+                        color_txt(ERROR_COLOR);
+                        printf("Solapamiento detectado en"); color_txt(INFO_COLOR); printf(" %d,%d", x, y);
+                        color_txt(DEFAULT_COLOR); printf(" con el barco %d", idx_ship + 1);
+                        color_txt(INFO_COLOR); printf(" CodeError: 4\n"); color_txt(DEFAULT_COLOR);
+                        return false; // Hay solapamiento
+                    }
                 }
             }
         }

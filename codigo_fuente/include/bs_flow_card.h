@@ -4,6 +4,9 @@
 #include "master.h"
 
 // Prototipos de funciones
+static void shot_flow(struct player *player, struct player *enemy, int count);
+
+static void end_card_flow(struct player *player, struct player *enemy);
 
 void funcion_carta_0(struct player *player, struct player *enemy);
 
@@ -21,12 +24,12 @@ void funcion_carta_6(struct player *player, struct player *enemy);
 
 void funcion_carta_7(struct player *player, struct player *enemy);
 
-void funcion_carta_8(struct player *player);
+void funcion_carta_8(struct player *player, struct player *enemy);
 
-void funcion_carta_9(struct player *player_i, struct player *enemy_i);
+void funcion_carta_9(struct player *player, struct player *enemy);
 
-void funcion_carta_10(struct player *player_i, struct player *enemy_i);
+void funcion_carta_10(struct player *player, struct player *enemy);
 
-void funcion_carta_11(struct player *player_i, struct player *enemy_i);
+void funcion_carta_11(struct player *player, struct player *enemy);
 
 #endif // BS_FLOW_CARD_H

@@ -16,13 +16,13 @@ void partida() {
     enter_continuar(); // Pausa antes de continuar.
     
     // Colocar barcos para el jugador 1.
-    colocar_barcos_jugador(&player1); // Colocar barcos para el jugador 1.
+    flow_colocar_barcos(&player1); // Colocar barcos para el jugador 1.
 
     // Colocar barcos para el jugador 2.
     printf("Ahora es turno de"); color_txt(INFO_COLOR); printf(" %s\n", player2.name); color_txt(DEFAULT_COLOR);
     enter_continuar(); // Pausa antes de continuar.
 
-    colocar_barcos_jugador(&player2);
+    flow_colocar_barcos(&player2);
 
     // Elegir aleatoriamente quién inicia
     decidir_primer_turno(&player1, &player2);
@@ -161,7 +161,7 @@ void sacar_carta(struct player *player, struct player *enemy) {
         funcion_carta_7(player, enemy); // Carta 7: Revela una columna enemiga
         break;
     case 8:
-        funcion_carta_8(player); // Carta 8: Activa el modo salvo
+        funcion_carta_8(player, enemy); // Carta 8: Activa el modo salvo
         break;
     case 9:
         funcion_carta_9(player, enemy); // Carta 9: Activa la torre de ventaja al acumular 4 torres
