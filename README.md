@@ -32,11 +32,11 @@ Este proyecto implementa una versión digital del clásico juego de Batalla Nava
 
 ### (D)Proceso
 
-- [`historial_cambios/`](/(D)Proceso/historial_cambios/): Registro de cambios y versiones del proyecto.
-  - [`Registro de Cambios 22w25a.md`](/(D)Proceso/historial_cambios/Registro%20de%20Cambios%2022w25a.md): Changelog detallado de la versión 22w25a.
+- [`historial_cambios/`](/(D)Proceso/Historial%20de%20cambios/) Registro de cambios y versiones del proyecto.
+  - [`Registro de Cambios 22w25a.md`](/(D)Proceso/Historial%20de%20cambios/Registro%20de%20Cambios%2022w25a.md): Changelog detallado de la versión 22w25a.
 - [`Proceso Administrativo/`](/(D)Proceso/Proceso%20Administrativo/): Documentos y formatos administrativos del proceso de desarrollo.
 - [`QA/`](/(D)Proceso/QA/): Evidencias y reportes de aseguramiento de calidad.
-- [`Diffs/`](/(D)Proceso/historial_cambios/Diffs/): Diffs de commits relevantes para trazabilidad de cambios.
+- [`Diffs/`](/(D)Proceso/Historial%20de%20cambios/Diffs/): Diffs de commits relevantes para trazabilidad de cambios.
 
 ---
 
