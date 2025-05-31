@@ -1,6 +1,6 @@
 # Script para sobrescribir el CHANGELOG.md con el formato solicitado
 
-$changelog = "(D)Proceso\CHANGELOG.md"
+$changelog = "(D)Proceso\Proceso Administrativo\CHANGELOG.md"
 Set-Content $changelog ""
 
 git log --pretty=format:"%H|%ad|%an|%s" --date=format:"%d-%m-%Y" | ForEach-Object {
