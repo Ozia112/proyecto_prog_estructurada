@@ -1,73 +1,140 @@
-# 🚢 Batalla Naval - Registro de Cambios (Changelog) 🚢
+# 🛠️ **Changelog Técnico - 22w25a**
 
-¡Bienvenido al anuncio de actualización de **Batalla Naval**! Aquí encontrarás un resumen cronológico y estructurado de las mejoras, refactorizaciones y nuevas características implementadas en el proyecto. Solo se listan los cambios vigentes en la última versión, agrupados por fecha y commit. ¡Gracias por jugar y contribuir!
+## Registro de cambios realizados
+
+Durante la semana 22 de 2025, el proyecto Batalla Naval experimentó importantes mejoras en su estructura, documentación y robustez del código. Se implementaron diagramas de flujo para visualizar la lógica principal, se reorganizó la estructura del repositorio y se refactorizaron módulos clave para facilitar el mantenimiento. Además, se corrigieron bugs críticos y se mejoró la experiencia de usuario en consola, consolidando una base de código más limpia y profesional.
+
+## Cambios realizados
+
+### `ef9363c` (28-may-2025 02:00)  
+
+**Bug fixes and refactor of the Battleship codebase**
+
+#### **1. Documentación y Diagramas**
+
+- **Nuevo diagrama de flujo** en Mermaid para visualizar la lógica principal del juego.
+
+  ```mermaid
+  flowchart TD
+      A[Start - main.c] --> B["Initialize Game - partida()"]
+      B --> C[Initialize Players]
+      C --> D[Place Ships - colocar_barcos_jugador]
+      D --> E[Randomly Select First Turn]
+      E --> F[Main Game Loop]
+      F --> G{Player Turn}
+      G --> H[Display Turn Menu - menu_por_turno]
+      H --> I{Menu Options}
+      I -->|A: Draw Card| J[sacar_carta Function]
+      I -->|B: Fleet Report| K[Show Player Fleet Report]
+      I -->|C: Enemy Fleet Report| L[Show Enemy Fleet Report]
+      K --> H
+      L --> H
+      J --> M[Get Random Card ID]
+      M --> N[Display Board]
+      N --> O[Show Card Info]
+      O --> P{Card Type?}
+      P -->|Card 0| Q0[Single Shot or Salvo]
+      P -->|Card 1| Q1[Double Shot]
+      P -->|Card 2| Q2[Triple Shot]
+      P -->|Card 3| Q3[4-Block Ship Special Attack]
+      P -->|Card 4| Q4[5-Block Ship Special Attack]
+      P -->|Card 5| Q5[Reveal Enemy Position]
+      P -->|Card 6| Q6[Row Radar Attack]
+      P -->|Card 7| Q7[Column Radar Attack]
+      P -->|Card 8| Q8[Activate Salvo Mode]
+      P -->|Card 9| Q9[Tower Accumulation]
+      P -->|Card 10| Q10[Single Shot + Draw Another Card]
+      P -->|Card 11| Q11[Move Ship Position]
+      Q10 --> J
+      Q0 --> R[End Turn]
+      Q1 --> R
+      Q2 --> R
+      Q3 --> R
+      Q4 --> R
+      Q5 --> R
+      Q6 --> R
+      Q7 --> R
+      Q8 --> R
+      Q9 --> R
+      Q11 --> R
+      R --> S{Victory Condition Met?}
+      S -->|No| T[Switch Active Player]
+      T --> G
+      S -->|Yes| U[Display Winner]
+      U --> V[End Game]
+  ```
+
+- **Actualización de archivos de configuración de VSCode**:
+  - `launch.json` y `tasks.json` fueron adaptados para soportar el nuevo ejecutable y automatizar la limpieza y compilación.
+  - Ejemplo de tarea de limpieza:
+
+    ```json
+    {
+      "label": "limpiar",
+      "type": "shell",
+      "command": "cmd.exe",
+      "args": [
+        "/d", "/c", 
+        "pushd \"${workspaceFolder}\" && del /f /q *.exe && del /f /q *.o && pushd src && del /f /q *.o && popd && popd"
+      ],
+      "problemMatcher": []
+    }
+    ```
+
+#### **2. Refactorización y Limpieza**
+
+- **Eliminación de archivos obsoletos y binarios**:
+  - Archivos de ZinjaI, ejecutables y objetos antiguos fueron removidos para mantener el repositorio limpio.
+- **Reestructuración del código fuente**:
+  - Se eliminaron archivos y funciones duplicadas o innecesarias.
+  - Se mejoró la inicialización de la consola para soportar caracteres especiales.
+
+#### **3. Corrección de Bugs**
+
+- **Impresión de caracteres ASCII**:
+  - Se corrigieron errores en la función de impresión de la tabla ASCII y en la configuración de la consola.
+- **Robustez en la UI**:
+  - Mejoras en la función de impresión de la tabla ASCII y en la gestión de entradas del usuario.
 
 ---
 
-## 📅 28 de mayo de 2025
+### `4bae246` (31-may-2025 02:57)  
 
-### Refactorización de la lógica del juego y la interfaz de usuario
+**Add changelog and update repository structure**
 
-- **Separación y mejora de la lógica de juego y UI** para mayor claridad y mantenibilidad.
-- **Refactorización de la función `partida()`**:
-  - Ahora muestra mensajes claros al finalizar el turno y al detectar la victoria.
-  - Se mejoró el flujo de cambio de turno y la liberación de recursos.
-- **Mejoras visuales**:
-  - Mensajes de victoria con colores y agradecimientos al finalizar la partida.
-  - Limpieza de pantalla y buffer de entrada en los momentos adecuados.
-- **Actualización de la función `hundido()`**:
-  - Mensaje más claro al desactivar el modo Salvo cuando un barco es hundido.
-- **Chequeo de filas y columnas**:
-  - Ahora muestra correctamente la cantidad de barcos en filas/columnas chequeadas.
-  - Si una fila o columna está llena, muestra "F" (Full).
-- **Eliminación de archivos y binarios obsoletos** para mantener el repositorio limpio.
-- **Documentación**:
-  - Se agregó un diagrama de flujo en formato Mermaid para visualizar el flujo principal del juego.
+- **Documentación y estructura**:
+  - Se añadió un changelog detallado.
+  - Se reorganizó la estructura del repositorio, moviendo documentación y archivos de cambios a carpetas específicas.
+  - Se eliminó el archivo de flujo antiguo `flow_chart.md` para centralizar la documentación.
 
 ---
 
-## 📅 31 de mayo de 2025
+### `8c5083e` (31-may-2025 01:13)  
 
-### Configuración de VS Code y limpieza de artefactos
+**Refactor game logic and UI for improved player interactions**
 
-- Se añade `.vscode/flow_chart.md` con diagrama de flujo en Mermaid.
-- Se actualiza `launch.json` para ejecutar `battleship.exe` en terminal externa y ajustar cwd.
-- Se redefine `tasks.json`:
-  - Nueva tarea `limpiar` que elimina binarios y objetos (`*.exe`, `*.o`).
-  - Tarea de compilación en `src/` con dependencias de limpieza y matcher de GCC.
-- Se eliminan archivos obsoletos de `codigo_fuente/`:
-  - Proyecto ZinjaI (`Battleship.zpr`), binarios y objetos en `Debug/`, fuentes duplicadas y ZIP.
+- **Refactorización de lógica y UI**:
+  - Se añadieron nuevas validaciones para el solapamiento inicial de barcos:
 
-### Modularización e inclusión de cabeceras
+    ```c
+    bool validar_solapamiento_inicial(struct player *player, int index, int filaInicio, int columnaInicio);
+    ```
 
-- **Reorganización del código fuente**:
-  - Se crearon carpetas include y src para separar cabeceras y fuentes.
-  - Se modularizó el código en archivos como `bs_board.c`, `bs_cards.c`, `bs_flow_card.c`, `bs_game.c`, `bs_logic.c`, `bs_player.c`, `bs_ship.c`, `bs_ui.c`.
-  - Se creó el archivo maestro `master.h` para incluir todas las cabeceras relevantes.
-
-- Se crea `include/master.h` como punto único de inclusión.
-- Nueva jerarquía de módulos en `include/`:
-  - bs_board.h · bs_cards.h · bs_flow_card.h · bs_game.h · bs_logic.h · bs_player.h · bs_ship.h · bs_utils.h
-- En `src/`: implementaciones de cada módulo (p. ej. `bs_board.c`, `bs_cards.c`, `bs_flow_card.c`, `bs_game.c`, etc.).
-- Ajustes en `bs_common.h`: renombrado de macros, ampliación de estructuras `player` y `ship`.
-
-### Refinamiento de flujos y experiencia de usuario
-
-- En `bs_flow_card.c`: consolidación de repetición de disparos en funciones estáticas `shot_flow` y `end_card_flow`; firmas de cartas unificadas.
-- En `bs_game.c`: mensaje “Tu turno ha terminado”, agradecimiento tras victoria y retorno al menú principal.
-- En `bs_ui.c`:
-  - Corrección del orden de parámetros en `imprimirTableroGuerra`.
-  - Uso de `barcos_en_fila` / `barcos_en_columna` para mostrar recuentos y marcar “F” cuando están completos.
-  - Modularización de colocación de barcos con `flow_colocar_barcos` y `tablero_colocar_barcos`.
-- En `bs_logic.c`: simplificación de `procesar_coordenadas` encadenando rangos, orientación, dimensión y solapamiento.
+  - Se mejoró la robustez de la lógica de colocación de barcos y la interacción con el usuario.
+- **Mejoras en la robustez**:
+  - Ajuste de prototipos de funciones para mantener consistencia en los parámetros.
+  - Mejor validación de entradas y retroalimentación al usuario.
 
 ---
 
-## 🚀 Próximas Features
+## Resumen Ejecutivo
 
-- Pendiente a confirmar nuevas features...
+- **Documentación y visualización**: Se añadieron diagramas de flujo y changelogs para facilitar el seguimiento de cambios y la comprensión del proyecto.
+- **Refactorización y modularidad**: El código fue reorganizado en módulos más claros y robustos, facilitando el mantenimiento y la escalabilidad.
+- **Automatización**: Se mejoraron los scripts y tareas de desarrollo para una experiencia más fluida.
+- **Corrección de bugs y robustez**: Se corrigieron errores críticos y se mejoró la validación de entradas, haciendo el sistema más confiable.
+- **Mejoras visuales**: Se actualizaron y centralizaron los recursos de documentación y diagramas para una mejor experiencia de usuario y desarrollador.
 
 ---
 
-¡Sigue atento a las próximas actualizaciones y no dudes en sugerir nuevas ideas!  
-**Batalla Naval** sigue creciendo gracias a tu apoyo. 🚢✨
+> **El proyecto Batalla Naval, al cierre de la semana 22 de 2025, cuenta con una base de código más limpia, modular y profesional, con una experiencia de usuario y desarrollador significativamente mejorada.**

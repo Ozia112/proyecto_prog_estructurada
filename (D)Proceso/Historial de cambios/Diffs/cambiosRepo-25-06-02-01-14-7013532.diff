@@ -1,0 +1,462 @@
+commit 7013532028fc9cd3ca460025398a34080b0abe0b
+Author: Isaac Alejandro Ortiz Zaldivar <a24216345@alumnos.uady.mx>
+Date:   Mon Jun 2 01:14:25 2025 -0600
+
+    feat: Refactor project structure and enhance documentation
+    
+    - Introduced a detailed changelog for the "Batalla Naval" project, summarizing recent updates and features.
+    - Created a repository changelog to document structural changes and configurations.
+    - Added new files for diffs and updated README with project index and navigation.
+    - Refactored the changelog generation script to point to the correct location.
+    - Included visual assets and documentation in the project structure for better clarity and organization.
+    - Updated README to provide clearer descriptions and links to project components.
+    - Implemented new functions in the codebase for better handling of game logic and UI interactions.
+    - Enhanced console configuration for better character display compatibility.
+
+diff --git a/(D)Proceso/Historial de cambios/Diffs/cambios-4bae246.diff b/(D)Proceso/Historial de cambios/Diffs/cambios-4bae246.diff
+new file mode 100644
+index 0000000..e69de29
+diff --git a/(D)Proceso/Historial de cambios/Diffs/cambios-baa4fb2.diff b/(D)Proceso/Historial de cambios/Diffs/cambios-baa4fb2.diff
+new file mode 100644
+index 0000000..e69de29
+diff --git a/(D)Proceso/Historial de cambios/Diffs/cambios-c12adb7.diff b/(D)Proceso/Historial de cambios/Diffs/cambios-c12adb7.diff
+new file mode 100644
+index 0000000..e69de29
+diff --git a/(D)Proceso/Historial de cambios/Diffs/cambios-c67c5db.diff b/(D)Proceso/Historial de cambios/Diffs/cambios-c67c5db.diff
+new file mode 100644
+index 0000000..e69de29
+diff --git a/(D)Proceso/Historial de cambios/Diffs/cambiosRepo-4bae246.diff b/(D)Proceso/Historial de cambios/Diffs/cambiosRepo-4bae246.diff
+new file mode 100644
+index 0000000..4d5d2db
+--- /dev/null
++++ b/(D)Proceso/Historial de cambios/Diffs/cambiosRepo-4bae246.diff	
+@@ -0,0 +1,173 @@
++commit 4bae2468ddd53cf5cea9a2f38b87537c9ba2f0c3
++Author: Isaac Alejandro Ortiz Zaldivar <a24216345@alumnos.uady.mx>
++Date:   Sat May 31 02:57:26 2025 -0600
++
++    feat: Add changelog and update repository structure
++    
++    - Introduced detailed changelog for the "Batalla Naval" project, summarizing recent updates and features.
++    - Created a repository changelog to document structural changes and configurations.
++    - Added new files for diffs and updated README with project index and navigation.
++    - Refactored the changelog generation script to point to the correct location.
++    - Included visual assets and documentation in the project structure for better clarity and organization.
++
++diff --git a/Propuesta 1 casos de uso.png b/(C)Documentacion/Propuesta 1 casos de uso.png
++similarity index 100%
++rename from Propuesta 1 casos de uso.png
++rename to (C)Documentacion/Propuesta 1 casos de uso.png
++diff --git a/(C)Documentacion/flow_chart.md b/(C)Documentacion/flow_chart.md
++new file mode 100644
++index 0000000..283c3ab
++--- /dev/null
+++++ b/(C)Documentacion/flow_chart.md
++@@ -0,0 +1,31 @@
+++``` mermaid
+++flowchart TD
+++Pantalla_bienvenida --Limpiar pantalla()--> menu_principal 
+++menu_principal ---->partida(["partida()"])
+++menu_principal --limpiar_pantalla()-->Reglas(["reglas()"])
+++menu_principal--limpiar_pantalla()-->Mensaje_salida([Saliendo del programa])
+++
+++%% Reglas
+++Reglas-->Mostrar_reglas--> Opc{"Press z to return main"}
+++Opc --Any other than z--> Reglas
+++Opc --Pressing z-->menu_principal
+++
+++%% Partida
+++partida --limpiar_pantalla()-->mpt(["menu_por_turno()"])
+++
+++
+++%% Menu por turno
+++mpt ---->carta(["sacar_carta()"])
+++mpt -->rptB(["mostrar_reporte_barcos"])
+++mpt -->rptBE(["mostrar_reporte_barcos_enemigos"])
+++
+++%% reporte barcos
+++rptB -->OpcB{"Press z to return main"}
+++OpcB --Any other than z--> rptB
+++OpcB --Pressing z-->mpt
+++
+++%% Reporte barcos enemigos
+++rptBE -->OpcBE{"Press z to return main"}
+++OpcBE --Any other than z--> rptBE
+++OpcBE --Pressing z-->mpt
+++```
++diff --git a/(D)Proceso/AdministracionParticipativa.md b/(D)Proceso/Proceso Administrativo/AdministracionParticipativa.md
++similarity index 100%
++rename from (D)Proceso/AdministracionParticipativa.md
++rename to (D)Proceso/Proceso Administrativo/AdministracionParticipativa.md
++diff --git a/(D)Proceso/CHANGELOG.md b/(D)Proceso/Proceso Administrativo/CHANGELOG.md
++similarity index 100%
++rename from (D)Proceso/CHANGELOG.md
++rename to (D)Proceso/Proceso Administrativo/CHANGELOG.md
++diff --git a/(D)Proceso/ChangelogTutorial.md b/(D)Proceso/Proceso Administrativo/ChangelogTutorial.md
++similarity index 100%
++rename from (D)Proceso/ChangelogTutorial.md
++rename to (D)Proceso/Proceso Administrativo/ChangelogTutorial.md
++diff --git a/(D)Proceso/PlanDeAccion18-05.md b/(D)Proceso/QA/PlanDeAccion18-05.md
++similarity index 100%
++rename from (D)Proceso/PlanDeAccion18-05.md
++rename to (D)Proceso/QA/PlanDeAccion18-05.md
++diff --git a/(D)Proceso/Rerpote de posibles bgus.md b/(D)Proceso/QA/Rerpote de posibles bgus.md
++similarity index 100%
++rename from (D)Proceso/Rerpote de posibles bgus.md
++rename to (D)Proceso/QA/Rerpote de posibles bgus.md
++diff --git a/README.md b/README.md
++index 6e5e1a2..0301483 100644
++--- a/README.md
+++++ b/README.md
++@@ -1,7 +1,78 @@
++-## Proyecto tablero virtual de batalla naval
++-EL siguiente proyecto consiste
++-### Informacion administrativa:
++-[**Administracion participativa**](https://github.com/Ozia112/proyecto_prog_estructurada/blob/main/informacion_administrativa/administracion_participativa.md)
+++# Índice del Proyecto: Tablero Virtual de Batalla Naval
+++
+++## Raíz del Proyecto
+++
+++- [`README.md`](README.md) — Información general y administrativa del proyecto
+++
+++---
+++
+++## (B)Producto
+++
+++- [`DefinicionUsuarios.md`](/(B)Producto/DefinicionUsuarios.md)
+++- [`Innovacion.md`](/(B)Producto/Innovacion.md)
+++- [`ObjetivosEspecificos.md`](/(B)Producto/ObjetivosEspecificos.md)
+++- [`Producto.md`](/(B)Producto/Producto.md)
+++- [`README.md`](/(B)Producto/README.md)
+++
+++---
+++
+++## (C)Documentacion
+++
+++- [`flow_chart.md`](/(C)Documentacion/flow_chart.md)
+++- [`Propuesta 1 casos de uso.png`](/(C)Documentacion/Propuesta%201%20de%20uso.png)
+++- [`Bibliotecas/`](/(C)Documentacion/Bibliotecas/) — Carpeta de bibliotecas adicionales
+++
+++---
+++
+++## (D)Proceso
+++
+++- [`historial_cambios/`](/(D)Proceso/historial_cambios/)
+++  - [`Registro de Cambios 22w25a.md`](/(D)Proceso/historial_cambios/Registro%20de%20Cambios%2022w25a.md)
+++- [`Proceso Administrativo/`](/(D)Proceso/Proceso%20Administrativo/)
+++- [`QA/`](/(D)Proceso/QA/)
+++- [`Diffs/`](/(D)Proceso/historial_cambios/Diffs/)
++ 
++ ---
++-Escrito por TM-01
+++
+++## (E)Presentacion
+++
+++- [`Avances_LosCodiciosos_Presentacion.pdf`](/(E)%20Presentacion/Avances_LosCodiciosos_Presentacion.pdf)
+++- [`Avances_LosCodiciosos_Reporte.pdf`](/(E)%20Presentacion/Avances_LosCodiciosos_Reporte.pdf)
+++
+++---
+++
+++## assets
+++
+++- [`tabla_cartas.png`](/assets/tabla_cartas.png)
+++
+++---
+++
+++## codigo_fuente
+++
+++- [`battleship.exe`](codigo_fuente/battleship.exe)
+++- [`codigo_fuente.code-workspace`](codigo_fuente/codigo_fuente.code-workspace)
+++- [`.vscode/`](codigo_fuente/.vscode/) — Configuración de VS Code  
+++  • `flow_chart.md` (diagrama Mermaid)  
+++  • `launch.json` (ajustes de depuración)  
+++  • `tasks.json` (tareas de compilación y limpieza)
+++- [`include/`](codigo_fuente/include/) — Archivos de cabecera  
+++  • `master.h` (punto único de inclusión)  
+++  • `bs_board.h`, `bs_cards.h`, `bs_flow_card.h`, `bs_game.h`  
+++  • `bs_logic.h`, `bs_player.h`, `bs_ship.h`, `bs_utils.h`
+++- [`src/`](codigo_fuente/src/) — Código fuente principal (`.c`)  
+++  • `main.c`  
+++  • `bs_board.c` · `bs_cards.c` · `bs_flow_card.c`  
+++  • `bs_game.c` · `bs_logic.c` · `bs_player.c`  
+++  • `bs_ship.c` · `bs_ui.c`
+++- [`tests/`](codigo_fuente/tests/) — Pruebas y ejemplos de consola
+++
+++---
+++
+++## Scripts y Otros
+++
+++- [`generate-changelog.ps1`](generate-changelog.ps1) — Script para generar el changelog  
+++- [`.gitignore`](.gitignore) — Archivos y carpetas ignorados por Git
+++
+++---
+++
+++**Escrito por `TM-01`**
++diff --git a/generate-changelog.ps1 b/generate-changelog.ps1
++index 6600595..18ccafe 100644
++--- a/generate-changelog.ps1
+++++ b/generate-changelog.ps1
++@@ -1,6 +1,6 @@
++ # Script para sobrescribir el CHANGELOG.md con el formato solicitado
++ 
++-$changelog = "(D)Proceso\CHANGELOG.md"
+++$changelog = "(D)Proceso\Proceso Administrativo\CHANGELOG.md"
++ Set-Content $changelog ""
++ 
++ git log --pretty=format:"%H|%ad|%an|%s" --date=format:"%d-%m-%Y" | ForEach-Object {
+diff --git a/(D)Proceso/Historial de cambios/Diffs/cambiosRepo-baa4fb2.diff b/(D)Proceso/Historial de cambios/Diffs/cambiosRepo-baa4fb2.diff
+new file mode 100644
+index 0000000..3916e63
+--- /dev/null
++++ b/(D)Proceso/Historial de cambios/Diffs/cambiosRepo-baa4fb2.diff	
+@@ -0,0 +1,22 @@
++commit baa4fb25dd23409e327671d6e53a2e4bf923252b
++Author: Isaac Alejandro Ortiz Zaldivar <a24216345@alumnos.uady.mx>
++Date:   Sat May 31 03:20:34 2025 -0600
++
++    HotFix REAMDE
++
++diff --git a/README.md b/README.md
++index 5fec097..5a02874 100644
++--- a/README.md
+++++ b/README.md
++@@ -32,8 +32,11 @@ Este proyecto implementa una versión digital del clásico juego de Batalla Nava
++ 
++ ### (D)Proceso
++ 
+++(D)Proceso\Historial de cambios\
+++
++ - [`historial_cambios/`](/(D)Proceso/Historial%20de%20cambios/) Registro de cambios y versiones del proyecto.
++   - [`Registro de Cambios 22w25a.md`](/(D)Proceso/Historial%20de%20cambios/Registro%20de%20Cambios%2022w25a.md): Changelog detallado de la versión 22w25a.
+++  - [`Registro de Cambios del Repositorio 22w25a.md`](/(D)Proceso/Historial%20de%20cambios/Registro%20de%20Cambios%20del%20Repositorio%2022w25a.md)
++ - [`Proceso Administrativo/`](/(D)Proceso/Proceso%20Administrativo/): Documentos y formatos administrativos del proceso de desarrollo.
++ - [`QA/`](/(D)Proceso/QA/): Evidencias y reportes de aseguramiento de calidad.
++ - [`Diffs/`](/(D)Proceso/Historial%20de%20cambios/Diffs/): Diffs de commits relevantes para trazabilidad de cambios.
+diff --git a/(D)Proceso/Historial de cambios/Diffs/cambiosRepo-c12adb7.diff b/(D)Proceso/Historial de cambios/Diffs/cambiosRepo-c12adb7.diff
+new file mode 100644
+index 0000000..11b060f
+--- /dev/null
++++ b/(D)Proceso/Historial de cambios/Diffs/cambiosRepo-c12adb7.diff	
+@@ -0,0 +1,128 @@
++commit c12adb71cb68b4c3fcac0163446b525c716e103e
++Author: Isaac Alejandro Ortiz Zaldivar <a24216345@alumnos.uady.mx>
++Date:   Sat May 31 03:05:19 2025 -0600
++
++    Update README
++
++diff --git a/README.md b/README.md
++index 0301483..315dcc8 100644
++--- a/README.md
+++++ b/README.md
++@@ -1,77 +1,72 @@
++-# Índice del Proyecto: Tablero Virtual de Batalla Naval
+++# Tablero Virtual de Batalla Naval
++ 
++-## Raíz del Proyecto
+++Este proyecto implementa una versión digital del clásico juego de Batalla Naval, orientado a la práctica de programación estructurada y el trabajo colaborativo. El repositorio está organizado para facilitar el desarrollo, documentación, pruebas y presentación del producto, siguiendo buenas prácticas de ingeniería de software.
++ 
++-- [`README.md`](README.md) — Información general y administrativa del proyecto
+++---
+++
+++## Índice del Proyecto
+++
+++### Raíz del Proyecto
+++
+++- [`README.md`](README.md): Información general y administrativa del proyecto.
++ 
++ ---
++ 
++-## (B)Producto
+++### (B)Producto
++ 
++-- [`DefinicionUsuarios.md`](/(B)Producto/DefinicionUsuarios.md)
++-- [`Innovacion.md`](/(B)Producto/Innovacion.md)
++-- [`ObjetivosEspecificos.md`](/(B)Producto/ObjetivosEspecificos.md)
++-- [`Producto.md`](/(B)Producto/Producto.md)
++-- [`README.md`](/(B)Producto/README.md)
+++- [`DefinicionUsuarios.md`](/(B)Producto/DefinicionUsuarios.md): Descripción de los usuarios objetivo del sistema.
+++- [`Innovacion.md`](/(B)Producto/Innovacion.md): Aspectos innovadores y diferenciadores del producto.
+++- [`ObjetivosEspecificos.md`](/(B)Producto/ObjetivosEspecificos.md): Objetivos concretos que busca alcanzar el proyecto.
+++- [`Producto.md`](/(B)Producto/Producto.md): Descripción detallada del producto final.
+++- [`README.md`](/(B)Producto/README.md): Información y guía específica de la sección de producto.
++ 
++ ---
++ 
++-## (C)Documentacion
+++### (C)Documentacion
++ 
++-- [`flow_chart.md`](/(C)Documentacion/flow_chart.md)
++-- [`Propuesta 1 casos de uso.png`](/(C)Documentacion/Propuesta%201%20de%20uso.png)
++-- [`Bibliotecas/`](/(C)Documentacion/Bibliotecas/) — Carpeta de bibliotecas adicionales
+++- [`flow_chart.md`](/(C)Documentacion/flow_chart.md): Diagrama de flujo general del sistema.
+++- [`Propuesta 1 casos de uso.png`](/(C)Documentacion/Propuesta%201%20de%20uso.png): Imagen con la propuesta de casos de uso.
+++- [`Bibliotecas/`](/(C)Documentacion/Bibliotecas/): Carpeta con bibliotecas adicionales y dependencias documentadas.
++ 
++ ---
++ 
++-## (D)Proceso
+++### (D)Proceso
++ 
++-- [`historial_cambios/`](/(D)Proceso/historial_cambios/)
++-  - [`Registro de Cambios 22w25a.md`](/(D)Proceso/historial_cambios/Registro%20de%20Cambios%2022w25a.md)
++-- [`Proceso Administrativo/`](/(D)Proceso/Proceso%20Administrativo/)
++-- [`QA/`](/(D)Proceso/QA/)
++-- [`Diffs/`](/(D)Proceso/historial_cambios/Diffs/)
+++- [`historial_cambios/`](/(D)Proceso/historial_cambios/): Registro de cambios y versiones del proyecto.
+++  - [`Registro de Cambios 22w25a.md`](/(D)Proceso/historial_cambios/Registro%20de%20Cambios%2022w25a.md): Changelog detallado de la versión 22w25a.
+++- [`Proceso Administrativo/`](/(D)Proceso/Proceso%20Administrativo/): Documentos y formatos administrativos del proceso de desarrollo.
+++- [`QA/`](/(D)Proceso/QA/): Evidencias y reportes de aseguramiento de calidad.
+++- [`Diffs/`](/(D)Proceso/historial_cambios/Diffs/): Diffs de commits relevantes para trazabilidad de cambios.
++ 
++ ---
++ 
++-## (E)Presentacion
+++### (E)Presentacion
++ 
++-- [`Avances_LosCodiciosos_Presentacion.pdf`](/(E)%20Presentacion/Avances_LosCodiciosos_Presentacion.pdf)
++-- [`Avances_LosCodiciosos_Reporte.pdf`](/(E)%20Presentacion/Avances_LosCodiciosos_Reporte.pdf)
+++- [`Avances_LosCodiciosos_Presentacion.pdf`](/(E)%20Presentacion/Avances_LosCodiciosos_Presentacion.pdf): Presentación de avances del equipo.
+++- [`Avances_LosCodiciosos_Reporte.pdf`](/(E)%20Presentacion/Avances_LosCodiciosos_Reporte.pdf): Reporte escrito de avances y resultados.
++ 
++ ---
++ 
++-## assets
+++### assets
++ 
++-- [`tabla_cartas.png`](/assets/tabla_cartas.png)
+++- [`tabla_cartas.png`](/assets/tabla_cartas.png): Imagen con la tabla de cartas y sus efectos.
++ 
++ ---
++ 
++-## codigo_fuente
++-
++-- [`battleship.exe`](codigo_fuente/battleship.exe)
++-- [`codigo_fuente.code-workspace`](codigo_fuente/codigo_fuente.code-workspace)
++-- [`.vscode/`](codigo_fuente/.vscode/) — Configuración de VS Code  
++-  • `flow_chart.md` (diagrama Mermaid)  
++-  • `launch.json` (ajustes de depuración)  
++-  • `tasks.json` (tareas de compilación y limpieza)
++-- [`include/`](codigo_fuente/include/) — Archivos de cabecera  
++-  • `master.h` (punto único de inclusión)  
++-  • `bs_board.h`, `bs_cards.h`, `bs_flow_card.h`, `bs_game.h`  
++-  • `bs_logic.h`, `bs_player.h`, `bs_ship.h`, `bs_utils.h`
++-- [`src/`](codigo_fuente/src/) — Código fuente principal (`.c`)  
++-  • `main.c`  
++-  • `bs_board.c` · `bs_cards.c` · `bs_flow_card.c`  
++-  • `bs_game.c` · `bs_logic.c` · `bs_player.c`  
++-  • `bs_ship.c` · `bs_ui.c`
++-- [`tests/`](codigo_fuente/tests/) — Pruebas y ejemplos de consola
+++### codigo_fuente
+++
+++- `.vscode/`: Configuración de Visual Studio Code (tareas, depuración, diagramas).
+++- `include/`: Archivos de cabecera del proyecto (definiciones y prototipos).
+++- `src/`: Código fuente principal del juego.
+++- `tests/`: Pruebas y ejemplos de consola.
+++- Otros archivos binarios y de configuración para el entorno de desarrollo.
++ 
++ ---
++ 
++-## Scripts y Otros
+++### Scripts y Otros
++ 
++-- [`generate-changelog.ps1`](generate-changelog.ps1) — Script para generar el changelog  
++-- [`.gitignore`](.gitignore) — Archivos y carpetas ignorados por Git
+++- [`generate-changelog.ps1`](generate-changelog.ps1): Script para generar automáticamente el changelog.
+++- [`.gitignore`](.gitignore): Lista de archivos y carpetas ignorados por el control de versiones.
++ 
++ ---
++ 
+diff --git a/(D)Proceso/Historial de cambios/Diffs/cambiosRepo-c67c5db.diff b/(D)Proceso/Historial de cambios/Diffs/cambiosRepo-c67c5db.diff
+new file mode 100644
+index 0000000..81db20f
+--- /dev/null
++++ b/(D)Proceso/Historial de cambios/Diffs/cambiosRepo-c67c5db.diff	
+@@ -0,0 +1,33 @@
++commit c67c5dbc2a975ead5202f5d52a70272cfe0abd44
++Author: Isaac Alejandro Ortiz Zaldivar <a24216345@alumnos.uady.mx>
++Date:   Sat May 31 03:17:36 2025 -0600
++
++    Rename Historial de cambios and update readme
++
++diff --git a/(D)Proceso/historial_cambios/Registro de Cambios 22w25a.md b/(D)Proceso/Historial de cambios/Registro de Cambios 22w25a.md
++similarity index 100%
++rename from (D)Proceso/historial_cambios/Registro de Cambios 22w25a.md
++rename to (D)Proceso/Historial de cambios/Registro de Cambios 22w25a.md
++diff --git a/(D)Proceso/historial_cambios/Registro de Cambios del Repositorio 22w25a.md b/(D)Proceso/Historial de cambios/Registro de Cambios del Repositorio 22w25a.md
++similarity index 100%
++rename from (D)Proceso/historial_cambios/Registro de Cambios del Repositorio 22w25a.md
++rename to (D)Proceso/Historial de cambios/Registro de Cambios del Repositorio 22w25a.md
++diff --git a/README.md b/README.md
++index 315dcc8..5fec097 100644
++--- a/README.md
+++++ b/README.md
++@@ -32,11 +32,11 @@ Este proyecto implementa una versión digital del clásico juego de Batalla Nava
++ 
++ ### (D)Proceso
++ 
++-- [`historial_cambios/`](/(D)Proceso/historial_cambios/): Registro de cambios y versiones del proyecto.
++-  - [`Registro de Cambios 22w25a.md`](/(D)Proceso/historial_cambios/Registro%20de%20Cambios%2022w25a.md): Changelog detallado de la versión 22w25a.
+++- [`historial_cambios/`](/(D)Proceso/Historial%20de%20cambios/) Registro de cambios y versiones del proyecto.
+++  - [`Registro de Cambios 22w25a.md`](/(D)Proceso/Historial%20de%20cambios/Registro%20de%20Cambios%2022w25a.md): Changelog detallado de la versión 22w25a.
++ - [`Proceso Administrativo/`](/(D)Proceso/Proceso%20Administrativo/): Documentos y formatos administrativos del proceso de desarrollo.
++ - [`QA/`](/(D)Proceso/QA/): Evidencias y reportes de aseguramiento de calidad.
++-- [`Diffs/`](/(D)Proceso/historial_cambios/Diffs/): Diffs de commits relevantes para trazabilidad de cambios.
+++- [`Diffs/`](/(D)Proceso/Historial%20de%20cambios/Diffs/): Diffs de commits relevantes para trazabilidad de cambios.
++ 
++ ---
++ 
+diff --git a/(D)Proceso/Proceso Administrativo/ChangelogTutorial.md b/(D)Proceso/Proceso Administrativo/ChangelogTutorial.md
+index abd0f97..0f4c1b6 100644
+--- a/(D)Proceso/Proceso Administrativo/ChangelogTutorial.md	
++++ b/(D)Proceso/Proceso Administrativo/ChangelogTutorial.md	
+@@ -77,6 +77,50 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Restricted
+ 
+ ---
+ 
++## 📄 Diffs de Commits
++
++Para registrar en texto los cambios realizados en un commit específico, puede generar archivos `.diff` que contienen las diferencias introducidas por ese commit. Esto es útil para la trazabilidad y revisión de cambios.
++
++### 1. Obtener el hash del commit
++
++Para ver el historial de commits y obtener el hash (identificador) de un commit, use:
++
++```powershell
++git log --oneline
++```
++
++El hash es la cadena alfanumérica que aparece al inicio de cada línea (por ejemplo, `4bae246`).
++
++### 2. Generar un diff solo de la carpeta `codigo_fuente`
++
++Este comando guarda en un archivo solo los cambios realizados en la carpeta `codigo_fuente` para el commit seleccionado:
++
++```powershell
++git show <hash> -- codigo_fuente/** > "(D)Proceso/Historial de cambios/Diffs/cambios-<hash>.diff"
++```
++
++Reemplace `<hash>` por el identificador del commit correspondiente.
++
++### 3. Generar un diff de todo el repositorio excepto `codigo_fuente` y `Diffs`
++
++Este comando guarda en un archivo los cambios realizados en todo el repositorio, excluyendo la carpeta `codigo_fuente` y la subcarpeta `Diffs`:
++
++```powershell
++git show <hash> `
++  -- . `
++  ':(exclude)codigo_fuente/**' `
++  ':(exclude)**/Diffs/**' `
++  > "(D)Proceso/Historial de cambios/Diffs/cambiosRepo-<hash>.diff"
++```
++
++> **Nota:** En PowerShell, use la comilla invertida `` ` `` para dividir líneas largas. En Bash, use `\` en su lugar.
++
++### 4. Ubicación de los archivos generados
++
++Los archivos `.diff` se guardarán en la carpeta `(D)Proceso/Historial de cambios/Diffs/` y pueden ser consultados o compartidos para auditoría y revisión.
++
++---
++
+ ## 📝 Notas Finales
+ 
+ - Asegúrese de tener todos los cambios guardados y el repositorio actualizado antes de ejecutar el script.

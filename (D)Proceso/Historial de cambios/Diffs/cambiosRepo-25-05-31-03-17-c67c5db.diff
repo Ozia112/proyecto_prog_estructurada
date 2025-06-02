@@ -4,6 +4,30 @@ Date:   Sat May 31 03:17:36 2025 -0600
 
     Rename Historial de cambios and update readme
 
+diff --git a/(D)Proceso/historial_cambios/Diffs/cambios-8c5083e.diff b/(D)Proceso/Historial de cambios/Diffs/cambios-8c5083e.diff
+similarity index 100%
+rename from (D)Proceso/historial_cambios/Diffs/cambios-8c5083e.diff
+rename to (D)Proceso/Historial de cambios/Diffs/cambios-8c5083e.diff
+diff --git a/(D)Proceso/historial_cambios/Diffs/cambios-da6cc1e.diff b/(D)Proceso/Historial de cambios/Diffs/cambios-da6cc1e.diff
+similarity index 100%
+rename from (D)Proceso/historial_cambios/Diffs/cambios-da6cc1e.diff
+rename to (D)Proceso/Historial de cambios/Diffs/cambios-da6cc1e.diff
+diff --git a/(D)Proceso/historial_cambios/Diffs/cambios-ef9363c.diff b/(D)Proceso/Historial de cambios/Diffs/cambios-ef9363c.diff
+similarity index 100%
+rename from (D)Proceso/historial_cambios/Diffs/cambios-ef9363c.diff
+rename to (D)Proceso/Historial de cambios/Diffs/cambios-ef9363c.diff
+diff --git a/(D)Proceso/historial_cambios/Diffs/cambiosRepo-8c5083e.diff b/(D)Proceso/Historial de cambios/Diffs/cambiosRepo-8c5083e.diff
+similarity index 100%
+rename from (D)Proceso/historial_cambios/Diffs/cambiosRepo-8c5083e.diff
+rename to (D)Proceso/Historial de cambios/Diffs/cambiosRepo-8c5083e.diff
+diff --git a/(D)Proceso/historial_cambios/Diffs/cambiosRepo-da6cc1e.diff b/(D)Proceso/Historial de cambios/Diffs/cambiosRepo-da6cc1e.diff
+similarity index 100%
+rename from (D)Proceso/historial_cambios/Diffs/cambiosRepo-da6cc1e.diff
+rename to (D)Proceso/Historial de cambios/Diffs/cambiosRepo-da6cc1e.diff
+diff --git a/(D)Proceso/historial_cambios/Diffs/cambiosRepo-ef9363c.diff b/(D)Proceso/Historial de cambios/Diffs/cambiosRepo-ef9363c.diff
+similarity index 100%
+rename from (D)Proceso/historial_cambios/Diffs/cambiosRepo-ef9363c.diff
+rename to (D)Proceso/Historial de cambios/Diffs/cambiosRepo-ef9363c.diff
 diff --git a/(D)Proceso/historial_cambios/Registro de Cambios 22w25a.md b/(D)Proceso/Historial de cambios/Registro de Cambios 22w25a.md
 similarity index 100%
 rename from (D)Proceso/historial_cambios/Registro de Cambios 22w25a.md
