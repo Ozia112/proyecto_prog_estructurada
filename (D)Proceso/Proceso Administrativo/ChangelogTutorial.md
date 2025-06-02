@@ -19,9 +19,10 @@ Este tutorial describe el procedimiento paso a paso para ejecutar correctamente 
 1. Presione `Windows + S` y escriba `PowerShell`.
 2. Haga clic derecho sobre **Windows PowerShell** y seleccione **Ejecutar como administrador**.
 3. Se abrirá una ventana en la ruta predeterminada:  
-   ```
+
+  ```powershell
    C:\Windows\System32
-   ```
+  ```
 
 ---
 
@@ -30,7 +31,7 @@ Este tutorial describe el procedimiento paso a paso para ejecutar correctamente 
 Utilice el comando `cd` para llegar a la carpeta donde se encuentra su repositorio.  
 Por ejemplo, si su repositorio está en:
 
-```
+```powershell
 C:\Users\HP\Documents\GitHub\Repositorio
 ```
 
@@ -128,4 +129,4 @@ Los archivos `.diff` se guardarán en la carpeta `(D)Proceso/Historial de cambio
 - Si tiene dudas, consulte con el área de soporte técnico o desarrollo.
 
 ---
-Documento escrito por: ``TM-01``
+Documento escrito por: `TM-01`

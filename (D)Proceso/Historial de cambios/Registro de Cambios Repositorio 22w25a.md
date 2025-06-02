@@ -14,9 +14,9 @@ Durante la semana 22 de 2025, el repositorio del proyecto Batalla Naval fue some
 
 **Bug fixes and refactor of the Battleship codebase**
 
-- **Creación de recursos de documentación:**
-  - Se añadió el archivo `Propuesta 1 casos de uso.png` como recurso gráfico para la documentación de casos de uso.
-- **Mejoras en la estructura de documentación interna:**
+- **(C)Documentacion/Propuesta 1 casos de uso.png**
+  - Se añadió el archivo como recurso gráfico para la documentación de casos de uso.
+- **(C)Documentacion/diagramas de flujo y archivos de configuración**
   - Se agregaron diagramas de flujo y archivos de configuración para Visual Studio Code, facilitando la comprensión y el desarrollo colaborativo.
 
 ---
@@ -25,7 +25,7 @@ Durante la semana 22 de 2025, el repositorio del proyecto Batalla Naval fue some
 
 **Refactor game and UI logic for improved clarity and functionality**
 
-- **No hubo cambios estructurales en el repositorio, solo en el código fuente.**
+- No hubo cambios estructurales en el repositorio, solo en el código fuente.
 
 ---
 
@@ -44,21 +44,21 @@ Durante la semana 22 de 2025, el repositorio del proyecto Batalla Naval fue some
     - `Rerpote de posibles bgus.md` → `(D)Proceso/QA/Rerpote de posibles bgus.md`
 - **Consolidación de historial de cambios:**
   - Se renombraron y movieron todos los archivos de diffs y changelogs de la carpeta `(D)Proceso/historial_cambios/` a `(D)Proceso/Historial de cambios/`.
-  - Ejemplo de cambio:
+    - Ejemplo:
 
-    ```diff
-    rename from (D)Proceso/historial_cambios/Diffs/cambios-8c5083e.diff
-    rename to (D)Proceso/Historial de cambios/Diffs/cambios-8c5083e.diff
-    ```
+      ```diff
+      rename from (D)Proceso/historial_cambios/Diffs/cambios-8c5083e.diff
+      rename to (D)Proceso/Historial de cambios/Diffs/cambios-8c5083e.diff
+      ```
 
 - **Actualización de rutas en el README:**
   - Se corrigieron todas las referencias a carpetas y archivos renombrados para reflejar la nueva estructura.
-  - Ejemplo:
+    - Ejemplo:
 
-    ```diff
-    - [`historial_cambios/`](/(D)Proceso/historial_cambios/): Registro de cambios y versiones del proyecto.
-    + [`historial_cambios/`](/(D)Proceso/Historial%20de%20cambios/) Registro de cambios y versiones del proyecto.
-    ```
+      ```diff
+      - [`historial_cambios/`](/(D)Proceso/historial_cambios/): Registro de cambios y versiones del proyecto.
+      + [`Historial de cambios/`](/(D)Proceso/Historial%20de%20cambios/): Registro de cambios y versiones del proyecto.
+      ```
 
   - Se actualizaron las rutas de la carpeta `Diffs` y los changelogs para mantener la coherencia.
 
@@ -69,7 +69,7 @@ Durante la semana 22 de 2025, el repositorio del proyecto Batalla Naval fue some
 **HotFix README y ajustes menores de estructura**
 
 - **Correcciones rápidas y mejoras en la documentación:**
-  - Se actualizaron y corrigieron entradas en el [README.md](http://_vscodecontentref_/0) para reflejar la nueva estructura de carpetas y archivos.
+  - Se actualizaron y corrigieron entradas en el README.md para reflejar la nueva estructura de carpetas y archivos.
   - Se añadieron referencias a nuevos formatos de changelog:
 
     ```diff
@@ -86,7 +86,7 @@ Durante la semana 22 de 2025, el repositorio del proyecto Batalla Naval fue some
 - **Reestructuración y renombramiento:**  
   Se consolidaron y renombraron carpetas y archivos clave para mejorar la organización y trazabilidad del repositorio.
 - **Actualización de rutas y referencias:**  
-  El [README.md](http://_vscodecontentref_/1) y otros documentos fueron actualizados para reflejar la nueva estructura, evitando enlaces rotos y facilitando la navegación.
+  El README.md y otros documentos fueron actualizados para reflejar la nueva estructura, evitando enlaces rotos y facilitando la navegación.
 - **Creación de nuevos formatos:**  
   Se añadieron nuevos changelogs y formatos de registro para documentar los cambios tanto en el código como en la estructura del repositorio.
 - **Centralización de historial de cambios:**  
@@ -94,4 +94,4 @@ Durante la semana 22 de 2025, el repositorio del proyecto Batalla Naval fue some
 
 ---
 
-> **Con estos cambios, el repositorio del proyecto Batalla Naval es ahora más claro, ordenado y fácil de mantener, permitiendo una mejor trazabilidad y colaboración entre los miembros del equipo.**
+> **El proyecto Batalla Naval, al cierre de la semana 22 de 2025, cuenta con una estructura más clara, ordenada y fácil de mantener, permitiendo una mejor trazabilidad y colaboración entre los miembros del equipo.**
