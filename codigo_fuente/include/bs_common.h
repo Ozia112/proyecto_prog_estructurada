@@ -23,9 +23,9 @@
 
 // Valores para interpretar los numeros como caracteres
 
-#define STER_PRINT 49 // '1'
-#define BODY_PRINT 50 // '2'
-#define WATER_PRINT '~' 
+#define STER_PRINT 207 // '¤'
+#define BODY_PRINT 254 // '■'
+#define WATER_PRINT 126 // '~' 
 
 // Common structure definitions
 struct ship

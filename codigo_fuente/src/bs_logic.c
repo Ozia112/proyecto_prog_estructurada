@@ -8,10 +8,16 @@ bool procesar_coordenadas(struct player *player, int index, int filaIn, int fila
     return true;
 }
 
+void colocar_casilla_inicial_en_tablero(struct player *player, int index, int filaIn, int columnaIn) {
+    player->ships[index].status[0][CC_FILA] = filaIn;
+    player->ships[index].status[0][CC_COLUMNA] = columnaIn;
+    player->ships[index].status[0][CC_STATUS] = SHIP_STER; // Marca la proa del barco
+}
+
 void colocar_barco_en_tablero(struct player *player, int index, int filaInicio, int filaFin, int columnaInicio, int columnaFin) {
     int i, idx = 0;
 
-    // Solo almacena la informaciÃ³n en ship_i->status
+    // Solo almacena la información en ship_i->status
     switch (player->ships[index].direction) {
         case 'E':
             for (i = columnaInicio; i <= columnaFin; i++, idx++) {
@@ -79,7 +85,7 @@ int obtener_id_aleatoria(struct player *player) {
             return i;
         }
     }
-    return -1; // No se encontrÃ³ una carta vÃ¡lida
+    return -1; // No se encontró una carta válida
 }
 
 int calcular_peso_total(struct player *player) {
@@ -126,4 +132,3 @@ bool validar_movimiento(struct player *player_i, struct ship *ship_i) {
     }
     return true;
 }
-

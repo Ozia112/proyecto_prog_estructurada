@@ -77,6 +77,50 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Restricted
 
 ---
 
+## 📄 Diffs de Commits
+
+Para registrar en texto los cambios realizados en un commit específico, puede generar archivos `.diff` que contienen las diferencias introducidas por ese commit. Esto es útil para la trazabilidad y revisión de cambios.
+
+### 1. Obtener el hash del commit
+
+Para ver el historial de commits y obtener el hash (identificador) de un commit, use:
+
+```powershell
+git log --oneline
+```
+
+El hash es la cadena alfanumérica que aparece al inicio de cada línea (por ejemplo, `4bae246`).
+
+### 2. Generar un diff solo de la carpeta `codigo_fuente`
+
+Este comando guarda en un archivo solo los cambios realizados en la carpeta `codigo_fuente` para el commit seleccionado:
+
+```powershell
+git show <hash> -- codigo_fuente/** > "(D)Proceso/Historial de cambios/Diffs/cambios-<hash>.diff"
+```
+
+Reemplace `<hash>` por el identificador del commit correspondiente.
+
+### 3. Generar un diff de todo el repositorio excepto `codigo_fuente` y `Diffs`
+
+Este comando guarda en un archivo los cambios realizados en todo el repositorio, excluyendo la carpeta `codigo_fuente` y la subcarpeta `Diffs`:
+
+```powershell
+git show <hash> `
+  -- . `
+  ':(exclude)codigo_fuente/**' `
+  ':(exclude)**/Diffs/**' `
+  > "(D)Proceso/Historial de cambios/Diffs/cambiosRepo-<hash>.diff"
+```
+
+> **Nota:** En PowerShell, use la comilla invertida `` ` `` para dividir líneas largas. En Bash, use `\` en su lugar.
+
+### 4. Ubicación de los archivos generados
+
+Los archivos `.diff` se guardarán en la carpeta `(D)Proceso/Historial de cambios/Diffs/` y pueden ser consultados o compartidos para auditoría y revisión.
+
+---
+
 ## 📝 Notas Finales
 
 - Asegúrese de tener todos los cambios guardados y el repositorio actualizado antes de ejecutar el script.

@@ -1,0 +1,173 @@
+commit 4bae2468ddd53cf5cea9a2f38b87537c9ba2f0c3
+Author: Isaac Alejandro Ortiz Zaldivar <a24216345@alumnos.uady.mx>
+Date:   Sat May 31 02:57:26 2025 -0600
+
+    feat: Add changelog and update repository structure
+    
+    - Introduced detailed changelog for the "Batalla Naval" project, summarizing recent updates and features.
+    - Created a repository changelog to document structural changes and configurations.
+    - Added new files for diffs and updated README with project index and navigation.
+    - Refactored the changelog generation script to point to the correct location.
+    - Included visual assets and documentation in the project structure for better clarity and organization.
+
+diff --git a/Propuesta 1 casos de uso.png b/(C)Documentacion/Propuesta 1 casos de uso.png
+similarity index 100%
+rename from Propuesta 1 casos de uso.png
+rename to (C)Documentacion/Propuesta 1 casos de uso.png
+diff --git a/(C)Documentacion/flow_chart.md b/(C)Documentacion/flow_chart.md
+new file mode 100644
+index 0000000..283c3ab
+--- /dev/null
++++ b/(C)Documentacion/flow_chart.md
+@@ -0,0 +1,31 @@
++``` mermaid
++flowchart TD
++Pantalla_bienvenida --Limpiar pantalla()--> menu_principal 
++menu_principal ---->partida(["partida()"])
++menu_principal --limpiar_pantalla()-->Reglas(["reglas()"])
++menu_principal--limpiar_pantalla()-->Mensaje_salida([Saliendo del programa])
++
++%% Reglas
++Reglas-->Mostrar_reglas--> Opc{"Press z to return main"}
++Opc --Any other than z--> Reglas
++Opc --Pressing z-->menu_principal
++
++%% Partida
++partida --limpiar_pantalla()-->mpt(["menu_por_turno()"])
++
++
++%% Menu por turno
++mpt ---->carta(["sacar_carta()"])
++mpt -->rptB(["mostrar_reporte_barcos"])
++mpt -->rptBE(["mostrar_reporte_barcos_enemigos"])
++
++%% reporte barcos
++rptB -->OpcB{"Press z to return main"}
++OpcB --Any other than z--> rptB
++OpcB --Pressing z-->mpt
++
++%% Reporte barcos enemigos
++rptBE -->OpcBE{"Press z to return main"}
++OpcBE --Any other than z--> rptBE
++OpcBE --Pressing z-->mpt
++```
+diff --git a/(D)Proceso/AdministracionParticipativa.md b/(D)Proceso/Proceso Administrativo/AdministracionParticipativa.md
+similarity index 100%
+rename from (D)Proceso/AdministracionParticipativa.md
+rename to (D)Proceso/Proceso Administrativo/AdministracionParticipativa.md
+diff --git a/(D)Proceso/CHANGELOG.md b/(D)Proceso/Proceso Administrativo/CHANGELOG.md
+similarity index 100%
+rename from (D)Proceso/CHANGELOG.md
+rename to (D)Proceso/Proceso Administrativo/CHANGELOG.md
+diff --git a/(D)Proceso/ChangelogTutorial.md b/(D)Proceso/Proceso Administrativo/ChangelogTutorial.md
+similarity index 100%
+rename from (D)Proceso/ChangelogTutorial.md
+rename to (D)Proceso/Proceso Administrativo/ChangelogTutorial.md
+diff --git a/(D)Proceso/PlanDeAccion18-05.md b/(D)Proceso/QA/PlanDeAccion18-05.md
+similarity index 100%
+rename from (D)Proceso/PlanDeAccion18-05.md
+rename to (D)Proceso/QA/PlanDeAccion18-05.md
+diff --git a/(D)Proceso/Rerpote de posibles bgus.md b/(D)Proceso/QA/Rerpote de posibles bgus.md
+similarity index 100%
+rename from (D)Proceso/Rerpote de posibles bgus.md
+rename to (D)Proceso/QA/Rerpote de posibles bgus.md
+diff --git a/README.md b/README.md
+index 6e5e1a2..0301483 100644
+--- a/README.md
++++ b/README.md
+@@ -1,7 +1,78 @@
+-## Proyecto tablero virtual de batalla naval
+-EL siguiente proyecto consiste
+-### Informacion administrativa:
+-[**Administracion participativa**](https://github.com/Ozia112/proyecto_prog_estructurada/blob/main/informacion_administrativa/administracion_participativa.md)
++# Índice del Proyecto: Tablero Virtual de Batalla Naval
++
++## Raíz del Proyecto
++
++- [`README.md`](README.md) — Información general y administrativa del proyecto
++
++---
++
++## (B)Producto
++
++- [`DefinicionUsuarios.md`](/(B)Producto/DefinicionUsuarios.md)
++- [`Innovacion.md`](/(B)Producto/Innovacion.md)
++- [`ObjetivosEspecificos.md`](/(B)Producto/ObjetivosEspecificos.md)
++- [`Producto.md`](/(B)Producto/Producto.md)
++- [`README.md`](/(B)Producto/README.md)
++
++---
++
++## (C)Documentacion
++
++- [`flow_chart.md`](/(C)Documentacion/flow_chart.md)
++- [`Propuesta 1 casos de uso.png`](/(C)Documentacion/Propuesta%201%20de%20uso.png)
++- [`Bibliotecas/`](/(C)Documentacion/Bibliotecas/) — Carpeta de bibliotecas adicionales
++
++---
++
++## (D)Proceso
++
++- [`historial_cambios/`](/(D)Proceso/historial_cambios/)
++  - [`Registro de Cambios 22w25a.md`](/(D)Proceso/historial_cambios/Registro%20de%20Cambios%2022w25a.md)
++- [`Proceso Administrativo/`](/(D)Proceso/Proceso%20Administrativo/)
++- [`QA/`](/(D)Proceso/QA/)
++- [`Diffs/`](/(D)Proceso/historial_cambios/Diffs/)
+ 
+ ---
+-Escrito por TM-01
++
++## (E)Presentacion
++
++- [`Avances_LosCodiciosos_Presentacion.pdf`](/(E)%20Presentacion/Avances_LosCodiciosos_Presentacion.pdf)
++- [`Avances_LosCodiciosos_Reporte.pdf`](/(E)%20Presentacion/Avances_LosCodiciosos_Reporte.pdf)
++
++---
++
++## assets
++
++- [`tabla_cartas.png`](/assets/tabla_cartas.png)
++
++---
++
++## codigo_fuente
++
++- [`battleship.exe`](codigo_fuente/battleship.exe)
++- [`codigo_fuente.code-workspace`](codigo_fuente/codigo_fuente.code-workspace)
++- [`.vscode/`](codigo_fuente/.vscode/) — Configuración de VS Code  
++  • `flow_chart.md` (diagrama Mermaid)  
++  • `launch.json` (ajustes de depuración)  
++  • `tasks.json` (tareas de compilación y limpieza)
++- [`include/`](codigo_fuente/include/) — Archivos de cabecera  
++  • `master.h` (punto único de inclusión)  
++  • `bs_board.h`, `bs_cards.h`, `bs_flow_card.h`, `bs_game.h`  
++  • `bs_logic.h`, `bs_player.h`, `bs_ship.h`, `bs_utils.h`
++- [`src/`](codigo_fuente/src/) — Código fuente principal (`.c`)  
++  • `main.c`  
++  • `bs_board.c` · `bs_cards.c` · `bs_flow_card.c`  
++  • `bs_game.c` · `bs_logic.c` · `bs_player.c`  
++  • `bs_ship.c` · `bs_ui.c`
++- [`tests/`](codigo_fuente/tests/) — Pruebas y ejemplos de consola
++
++---
++
++## Scripts y Otros
++
++- [`generate-changelog.ps1`](generate-changelog.ps1) — Script para generar el changelog  
++- [`.gitignore`](.gitignore) — Archivos y carpetas ignorados por Git
++
++---
++
++**Escrito por `TM-01`**
+diff --git a/generate-changelog.ps1 b/generate-changelog.ps1
+index 6600595..18ccafe 100644
+--- a/generate-changelog.ps1
++++ b/generate-changelog.ps1
+@@ -1,6 +1,6 @@
+ # Script para sobrescribir el CHANGELOG.md con el formato solicitado
+ 
+-$changelog = "(D)Proceso\CHANGELOG.md"
++$changelog = "(D)Proceso\Proceso Administrativo\CHANGELOG.md"
+ Set-Content $changelog ""
+ 
+ git log --pretty=format:"%H|%ad|%an|%s" --date=format:"%d-%m-%Y" | ForEach-Object {

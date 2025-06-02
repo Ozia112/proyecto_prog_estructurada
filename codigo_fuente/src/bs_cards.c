@@ -9,9 +9,9 @@ void disparar(struct player *player, struct player *enemy) {
                                 player->last_input_fila, 
                                 player->last_input_columna)) {
                 disparo_exitoso = true;
-                
+
                 // Guarda la última coordenada de disparo exitosa
-                player->last_successful_shot_fila = player->last_input_fila; 
+                player->last_successful_shot_fila = player->last_input_fila;
                 player->last_successful_shot_columna = player->last_input_columna;
 
                 if (player->buff) {

@@ -32,6 +32,13 @@
 #define SUCCESS_COLOR    VERDE
 #define INV_COLOR        NEGRO
 
+static inline void configurar_consola_CP(int page) {
+
+    system("chcp page > nul"); // Cambia la codificación de la consola a page para evitar problemas con caracteres especiales.
+    SetConsoleCP(page);
+    SetConsoleOutputCP(page);
+}
+
 static inline void limpiar_pantalla(){
 	system("cls");
 }

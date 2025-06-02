@@ -7,6 +7,8 @@
 
 bool procesar_coordenadas(struct player *player, int index, int filaInicio, int filaFin, int columnaInicio, int columnaFin);
 
+void colocar_casilla_inicial_en_tablero(struct player *player, int index, int filaIn, int columnaIn);
+
 void colocar_barco_en_tablero(struct player *player, int index, int filaInicio, int filaFin, int columnaInicio, int columnaFin);
 
 void decidir_primer_turno(struct player *player1, struct player *player2);
