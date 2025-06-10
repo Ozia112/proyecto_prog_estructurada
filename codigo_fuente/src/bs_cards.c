@@ -40,6 +40,8 @@ void disparar(struct player *player, struct player *enemy) {
                     player->last_input_fila + 'A',
                     player->last_input_columna + 1);
             color_txt(WATER_COLOR); printf(" agua.\n"); color_txt(DEFAULT_COLOR);
+            // Marca la coordenada como disparo fallido
+            player->failed_shooted_coordinates[player->last_input_fila][player->last_input_columna] = FAILED_SHOT;
     }
 }
 
@@ -149,12 +151,12 @@ void revela(struct player *player, struct player *enemy) {
 
 void chequeo_fila(struct player *player, struct player *enemy) {
     player->chequeo_fila[player->last_input_fila] = true;
-    player->contador_fila[player->last_input_fila] = barcos_en_fila(player, enemy);
+    player->contador_fila[player->last_input_fila] = barcos_en_fila(player, enemy, player->last_input_fila);
 }
 
 void chequeo_columna(struct player *player, struct player *enemy) {
     player->chequeo_columna[player->last_input_columna] = true;
-    player->contador_columna[player->last_input_columna] = barcos_en_columna(player, enemy);
+    player->contador_columna[player->last_input_columna] = barcos_en_columna(player, enemy, player->last_input_columna);
 }
 
 void activar_salvo(struct player *player) {
@@ -167,37 +169,4 @@ void desactivar_salvo(struct player *player) {
 
 void torre_ventaja(struct player *player) {
     player->buff = true;
-}
-
-void mover_barco_adelante(struct player *player, int id_barco) {
-    struct ship *ship_i = &player->ships[id_barco];
-    int prev_pos[ship_i->size][2];
-    int i;
-
-    // Guardar la posición anterior del barco
-    for (i = 0; i < ship_i->size; i++) {
-        prev_pos[i][0] = ship_i->status[i][0];
-        prev_pos[i][1] = ship_i->status[i][1];
-    }
-
-    if (ship_i->direction == 'E') {
-        ship_i->status[0][1] ++;
-    // Mover barco hacia el oeste
-    } else if (ship_i->direction == 'O') {
-        ship_i->status[0][1] --;
-    // Mover barco hacia el sur
-    } else if (ship_i->direction == 'S') {
-        ship_i->status[0][0] ++;
-    // Mover barco hacia el norte
-    } else if (ship_i->direction == 'N') {
-        ship_i->status[0][0] --;
-    } else {
-        return; // No se puede mover el barco
-    }
-
-    // Mover el resto del barco
-    for (i = 1; i < ship_i->size; i++) {
-        ship_i->status[i][0] = prev_pos[i - 1][0];
-        ship_i->status[i][1] = prev_pos[i - 1][1];
-    }
 }

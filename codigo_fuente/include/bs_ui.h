@@ -40,7 +40,4 @@ void mostrar_ultimo_disparo_exitoso(struct player *player);
 void mostrar_bomb_cheq_exitoso(struct player *player);
 
 void capturar_fila_columna(struct player *player, struct player *enemy);
-
-void solicitar_barco(struct player *player, struct player *enemy);
-
 #endif // BS_UI_H

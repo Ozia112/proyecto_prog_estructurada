@@ -7,7 +7,7 @@ int main() {
     srand((unsigned int)time(NULL)); // Inicializa la semilla para números aleatorios.
     limpiar_pantalla(); // Limpia la pantalla al inicio del programa.
     
-	//impresion_ascii(); // Imprime la tabla de caracteres ASCII.
+	impresion_ascii(); // Imprime la tabla de caracteres ASCII.
 	pantalla_bienvenida(); // Pantalla de bienvenida.
 	menu_principal(); // Menu principal.
 	

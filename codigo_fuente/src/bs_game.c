@@ -130,8 +130,7 @@ void sacar_carta(struct player *player, struct player *enemy) {
     int carta_id = obtener_id_aleatoria(player);
     player->last_card_id = carta_id; // Guardar el ID de la carta utilizada
 
-    if (carta_id != 11) mostrar_turno_y_tablero_G(player, enemy); // Mostrar el tablero de guerra si la carta no es la 11
-    else mostrar_turno_y_tablero(player); // Mostrar el tablero normal si la carta es la 11
+    mostrar_turno_y_tablero_G(player, enemy); // Mostrar el tablero de guerra si la carta no es la 11
     
     mostrar_info_carta(&player->cartas[carta_id]);
 
@@ -168,9 +167,6 @@ void sacar_carta(struct player *player, struct player *enemy) {
         break;
     case 10:
         funcion_carta_10(player, enemy); // Carta 10: Dipara 1 tiro y toma otra carta
-        break;
-    case 11:
-        funcion_carta_11(player, enemy); // Carta 11: Mueve un barco hacia adelante
         break;
     }
 }

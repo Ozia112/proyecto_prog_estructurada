@@ -30,6 +30,4 @@ void funcion_carta_9(struct player *player, struct player *enemy);
 
 void funcion_carta_10(struct player *player, struct player *enemy);
 
-void funcion_carta_11(struct player *player, struct player *enemy);
-
 #endif // BS_FLOW_CARD_H

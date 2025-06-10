@@ -17,7 +17,7 @@ void colocar_casilla_inicial_en_tablero(struct player *player, int index, int fi
 void colocar_barco_en_tablero(struct player *player, int index, int filaInicio, int filaFin, int columnaInicio, int columnaFin) {
     int i, idx = 0;
 
-    // Solo almacena la información en ship_i->status
+    // Solo almacena la informaciÃ³n en ship_i->status
     switch (player->ships[index].direction) {
         case 'E':
             for (i = columnaInicio; i <= columnaFin; i++, idx++) {
@@ -85,7 +85,7 @@ int obtener_id_aleatoria(struct player *player) {
             return i;
         }
     }
-    return -1; // No se encontró una carta válida
+    return -1; // No se encontrï¿½ una carta vï¿½lida
 }
 
 int calcular_peso_total(struct player *player) {

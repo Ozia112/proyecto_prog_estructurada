@@ -19,9 +19,9 @@ bool validar_solapamiento(struct player *player, int index, int filaInicio, int 
 
 bool validar_ataque_cc_rango(struct player *player);
 
-int barcos_en_fila(struct player *player, struct player *enemy);
+int barcos_en_fila(struct player *player, struct player *enemy, int cc_fila);
 
-int barcos_en_columna(struct player *player, struct player *enemy);
+int barcos_en_columna(struct player *player, struct player *enemy, int cc_columna);
 
 bool validar_estado_casilla(struct player *player, struct player *enemy);
 

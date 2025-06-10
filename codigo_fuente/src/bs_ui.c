@@ -18,7 +18,7 @@ void menu_principal() {
     char opc;
     bool loop = true;
 
-    limpiar_pantalla(); // Limpiar la pantalla antes de mostrar el men£.
+    limpiar_pantalla(); // Limpiar la pantalla antes de mostrar el menï¿½.
 	// Menu de opciones inicial.
 	do{
 		printf("Ingrese la opcion que desee realizar.\n");
@@ -28,9 +28,9 @@ void menu_principal() {
         printf("[C]: Salir\n");
 		scanf(" %c", &opc);
         limpiar_buffer_entrada(); // Limpiar el buffer de entrada
-        opc = toupper(opc); // Convertir a may£scula para evitar problemas de comparaci¢n.
+        opc = toupper(opc); // Convertir a mayï¿½scula para evitar problemas de comparaciï¿½n.
         if (opc == 'A' || opc == 'B' || opc == 'C') {
-            limpiar_pantalla(); // Limpiar la pantalla antes de mostrar el men£.
+            limpiar_pantalla(); // Limpiar la pantalla antes de mostrar el menï¿½.
         }
 		switch(opc) {
 		    // Caso en el que el usuario quiere iniciar partida.
@@ -47,7 +47,7 @@ void menu_principal() {
                 loop = false;
                 break;
             default:
-                puts("­Tecla invalida!");
+                puts("ï¿½Tecla invalida!");
                 Sleep(1000); // funcion para tener demora en la ejecucion de la limpieza de la terminal.
                 limpiar_pantalla(); // Limpiar la pantalla.
                 break;
@@ -147,7 +147,7 @@ void solicitar_nombre(struct player *player) {
             continue;
         }
 
-        // Si no hay salto de l¡nea, limpiar el buffer y repetir
+        // Si no hay salto de lï¿½nea, limpiar el buffer y repetir
         if (strchr(player->name, '\n') == NULL) {
             int c;
             while ((c = getchar()) != '\n' && c != EOF); // Limpiar buffer completamente
@@ -157,7 +157,7 @@ void solicitar_nombre(struct player *player) {
             continue;
         }
 
-        // Eliminar salto de l¡nea
+        // Eliminar salto de lï¿½nea
         player->name[strcspn(player->name, "\n")] = '\0';
 
         // Validar longitud
@@ -195,7 +195,7 @@ void flow_colocar_barcos(struct player *player) {
     printf("Colocando barcos de"); color_txt(INFO_COLOR); printf(" %s\n", player->name); color_txt(DEFAULT_COLOR);
     imprimirTablero(player);
     printf("Barcos colocados correctamente. \n");
-    Sleep(1000);
+    Sleep(100);
     enter_continuar();
 }
 
@@ -221,7 +221,7 @@ void imprimirTablero(struct player *player) {
     printf("%*s", relleno,""); // Imprime relleno con espacios para centrar
     printf("  ");
     for (int num = 1; num <= BOARD_SIZE; num++) {
-        num < BOARD_SIZE ? printf("%2d", num) : printf(" F");
+        num < BOARD_SIZE ? printf("%2d", num) : printf(" J");
     }
     printf("\n");
 
@@ -240,7 +240,7 @@ void imprimirTablero(struct player *player) {
                 // Recorrer cada parte del barco
                 for (s_part = 0; s_part < player->ships[idx_ship].size; s_part++) {
 
-                    // Comprobar si la parte del barco coincide con la posici¢n actual(i, j).
+                    // Comprobar si la parte del barco coincide con la posiciï¿½n actual(i, j).
                     if (posicion_barco(player, idx_ship, s_part, i, j)) {
 
                         // Si coincide, asignar el estado correspondiente
@@ -250,7 +250,7 @@ void imprimirTablero(struct player *player) {
                 }
             }
 
-            // Imprimir el resultado seg£n el estado
+            // Imprimir el resultado segï¿½n el estado
             switch (estado) {
                 case SHIP_STER:
                     color_txt(SHIP_COLOR);
@@ -296,22 +296,39 @@ void ponerBarcos(struct player *player, int index) {
         printf("Ejemplo:"); color_txt(INFO_COLOR); printf("A 1"); color_txt(DEFAULT_COLOR);
         printf("\n> ");
 
-        if(!fgets(input, sizeof(input), stdin)) continue; // Si falla la lectura, repetir
-        if (sscanf(input, " %c %d", &filaIn_c, &columnaIn) != 2) {
-            limpiar_buffer_entrada(); // Limpiar el buffer de entrada
+        if (!fgets(input, sizeof(input), stdin)) continue;
+
+        // Intentamos primero letra+letra (e.j. "JJ" o "J J")
+        char colLetra;
+        if ((sscanf(input, " %c %c", &filaIn_c, &colLetra) == 2
+            || sscanf(input, " %c%c", &filaIn_c, &colLetra) == 2)
+            && isalpha((unsigned char)colLetra)) {
+            // "JJ" â†’ fila=J, col=J
+            filaIn_c = toupper((unsigned char)filaIn_c);
+            filaIn = filaIn_c - 'A';
+            columnaIn = toupper((unsigned char)colLetra) - 'A';
+        }
+        // Si no, letra+nÃºmero (e.j. "J10" o "J 10")
+        else if (sscanf(input, " %c %d", &filaIn_c, &columnaIn) == 2
+            || sscanf(input, " %c%d", &filaIn_c, &columnaIn) == 2) {
+            filaIn_c = toupper((unsigned char)filaIn_c);
+            filaIn = filaIn_c - 'A';
+            columnaIn--;  // convertir a base 0
+        }
+        else {
+            limpiar_buffer_entrada();
             color_txt(ERROR_COLOR);
             printf("Formato de entrada invalido.");
-            color_txt(INFO_COLOR); printf("CodeError: 0\n"); color_txt(DEFAULT_COLOR);
+            color_txt(INFO_COLOR); printf(" CodeError: 0\n");
+            color_txt(DEFAULT_COLOR);
             color_txt(ERROR_COLOR);
             printf("Intente de nuevo.\n");
             color_txt(DEFAULT_COLOR);
-            enter_continuar(); // Esperar a que el usuario presione ENTER
-            continue; // Saltar al final del bucle para pedir de nuevo las coordenadas
+            enter_continuar();
+            continue;
         }
-        filaIn_c = toupper((unsigned char)filaIn_c); // Convertir a may£scula para evitar problemas de comparaci¢n
-        filaIn = filaIn_c - 'A'; // Convertir letra a ¡ndice (A=0, B=1, ..., J=9)
-        columnaIn--; // Ajustar columna a base 0
-        
+
+        // Ahora filaIn âˆˆ [0..9], columnaIn âˆˆ [0..9] y acepta "JJ", "J10", etc. 
         if (!validar_cc_rango(filaIn, columnaIn)) {
             enter_continuar(); // Esperar a que el usuario presione ENTER
             continue; // Validar rango de coordenadas
@@ -335,7 +352,7 @@ void ponerBarcos(struct player *player, int index) {
             color_txt(ERROR_COLOR); printf("Opcion invalida. Intente de nuevo\n");
             color_txt(DEFAULT_COLOR);
         }
-        limpiar_pantalla(); // Limpiar la pantalla despu‚s de confirmar coordenadas
+        limpiar_pantalla(); // Limpiar la pantalla despuï¿½s de confirmar coordenadas
         break;
     }
 
@@ -351,21 +368,35 @@ REFINAL:
         printf("> ");
 
         if (!fgets(input, sizeof(input), stdin)) continue;
-        if (toupper((unsigned char)input[0]) == 'Z') {
-            limpiar_pantalla(); // Limpiar la pantalla antes de reingresar coordenada inicial
-            goto REINICIAL;
-        } // Si el usuario quiere reingresar coordenada inicial
-        
-        if (sscanf(input, " %c %d", &filaFin_c, &columnaFin) != 2) {
-            color_txt(ERROR_COLOR); printf("Formato de entrada invalido.");
+
+        // Intento letra+letra (e.j. "JJ" o "J J")
+        char colLetraF;
+        if ((sscanf(input, " %c %c", &filaFin_c, &colLetraF) == 2
+                || sscanf(input, " %c%c",  &filaFin_c, &colLetraF) == 2)
+            && isalpha((unsigned char)colLetraF)) {
+            filaFin_c = toupper((unsigned char)filaFin_c);
+            filaFin   = filaFin_c - 'A';
+            columnaFin= toupper((unsigned char)colLetraF) - 'A';
+        }
+        // Si no, letra+nÃºmero (e.j. "J10" o "J 10")
+        else if (sscanf(input, " %c %d", &filaFin_c, &columnaFin) == 2
+                || sscanf(input, " %c%d",  &filaFin_c, &columnaFin) == 2) {
+            filaFin_c = toupper((unsigned char)filaFin_c);
+            filaFin   = filaFin_c - 'A';
+            columnaFin--;  // convertir a base 0
+        }
+        else {
+            limpiar_buffer_entrada();
+            color_txt(ERROR_COLOR);
+            printf("Formato de entrada invalido.");
             color_txt(INFO_COLOR); printf("CodeError: 0\n");
-            color_txt(ERROR_COLOR); printf("Intente de nuevo.\n"); color_txt(DEFAULT_COLOR);
-            enter_continuar(); // Esperar a que el usuario presione ENTER
+            color_txt(DEFAULT_COLOR);
+            color_txt(ERROR_COLOR);
+            printf("Intente de nuevo.\n");
+            color_txt(DEFAULT_COLOR);
+            enter_continuar();
             continue;
         }
-        filaFin_c = toupper(filaFin_c); // Convertir a may£scula para evitar problemas de comparaci¢n
-        filaFin = filaFin_c - 'A'; // Convertir letra a ¡ndice (A=0, B=1, ..., J=9)
-        columnaFin--; // Ajustar columna a base 0
 
         //validaciones
         if (!procesar_coordenadas(player, index, filaIn, filaFin, columnaIn, columnaFin)) {
@@ -394,11 +425,11 @@ REFINAL:
         color_txt(INFO_COLOR); printf(" (%c, %d) ", filaIn_c, columnaIn + 1);
         color_txt(DEFAULT_COLOR); printf("a");
         color_txt(INFO_COLOR); printf(" (%c, %d)\n", filaFin_c, columnaFin + 1); color_txt(DEFAULT_COLOR);
-        pausa_consola(1.5); // Pausa para mostrar el mensaje de ‚xito.
+        pausa_consola(.1); // Pausa para mostrar el mensaje de ï¿½xito.
         break;
     }
 
-    limpiar_pantalla(); // Limpiar la pantalla despu‚s de colocar el barco.
+    limpiar_pantalla(); // Limpiar la pantalla despuï¿½s de colocar el barco.
 }
 
 void mostrar_turno_y_tablero_G(struct player *player, struct player *enemy) {
@@ -454,7 +485,7 @@ void imprimirTableroGuerra(struct player *player, struct player *enemy) {
     printf("%*s", relleno,""); // Imprime relleno con espacios para centrar
     printf("  ");
     for (int num = 1; num <= BOARD_SIZE; num++) {
-        num < BOARD_SIZE ? printf("%2d", num) : printf(" F");
+        num < BOARD_SIZE ? printf("%2d", num) : printf(" J");
     }
     printf("\n");
 
@@ -467,10 +498,10 @@ void imprimirTableroGuerra(struct player *player, struct player *enemy) {
         // Recorrer cada columna
         for (j = 0; j < BOARD_SIZE; j++) {
             print_status = WATER; // Por defecto el estado es agua
-            for (idx_ship = 0; idx_ship < NUM_SHIPS && print_status == WATER; idx_ship++) {
-                for (s_part = 0; s_part < enemy->ships[idx_ship].size; s_part++) {
+            for (idx_ship = 0; idx_ship < NUM_SHIPS && (print_status == WATER || print_status == FAILED_SHOT); idx_ship++) {
+                for (s_part = 0; s_part < player->ships[idx_ship].size; s_part++) {
 
-                    // Comprobar si la parte del barco coincide con la posici¢n actual(i, j).
+                    // Comprobar si la parte del barco coincide con la posiciÃ³n actual(i, j).
                     if (posicion_barco(enemy, idx_ship, s_part, i, j)) {
 
                         // Si coincide, asignar el estado correspondiente
@@ -483,6 +514,9 @@ void imprimirTableroGuerra(struct player *player, struct player *enemy) {
                     }
                 }
             }
+            if (player->failed_shooted_coordinates[i][j] == FAILED_SHOT) {
+                print_status = FAILED_SHOT; // Si es un disparo fallido, asignar el estado correspondiente
+            }
             switch (print_status) {
                 case SHIP_STER_D:
                     color_txt(ERROR_COLOR);
@@ -494,17 +528,21 @@ void imprimirTableroGuerra(struct player *player, struct player *enemy) {
                     printf("%c ", BODY_PRINT);
                     color_txt(DEFAULT_COLOR);
                     break;
-                default:
+                case FAILED_SHOT:
+                    color_txt(DEFAULT_COLOR);
+                    printf("%c ", FAILED_SHOT_PRINT);
+                    break;
+                default:    
                     color_txt(WATER_COLOR);
                     printf("%c ", WATER_PRINT);
                     color_txt(DEFAULT_COLOR);
                     break;
             }
         }
-        // Mostrar chequeo de fila al final de la fila solo si est  activado
+        // Mostrar chequeo de fila al final de la fila solo si estÃ¡ activado
         if (player->chequeo_fila[i]) {
-            barcos_en_fila(player, enemy);
-            int barcosf = barcos_en_fila(player, enemy);
+            player->contador_fila[i] = barcos_en_fila(player, enemy, i); // Mostrar el nÃºmero de barcos en la fila
+            int barcosf = player->contador_fila[i];
             color_txt(SUCCESS_COLOR);
             if (barcosf == BOARD_SIZE) {
                 printf("F "); // F = Full
@@ -516,11 +554,12 @@ void imprimirTableroGuerra(struct player *player, struct player *enemy) {
         printf("\n");
     }
 
-    // Mostrar chequeo de columna (una sola l¡nea debajo del tablero)
+    // Mostrar chequeo de columna (una sola lÃ­nea debajo del tablero)
     printf("%*s   ", relleno, "");
         for (j = 0; j < BOARD_SIZE; j++) {
             if (player->chequeo_columna[j]) {
-                int barcosc = barcos_en_columna(player, enemy);
+                player->contador_columna[j] = barcos_en_columna(player, enemy, j); // Mostrar el nÃºmero de barcos en la columna
+                int barcosc = player->contador_columna[j];
                 color_txt(SUCCESS_COLOR);
                 if (barcosc == BOARD_SIZE) {
                     printf(" F "); // F = Full
@@ -529,7 +568,7 @@ void imprimirTableroGuerra(struct player *player, struct player *enemy) {
                 }
                 color_txt(DEFAULT_COLOR);
             } else {
-                printf("  "); // Espacio vac¡o si no hay chequeo
+                printf("  "); // Espacio vacÃ­o si no hay chequeo
             }
         }
     printf("\n");
@@ -572,7 +611,7 @@ void imprimirReporteBarcosEnemigos(struct player *player, struct player *enemy) 
             loop = false;
         } else {
             color_txt(ERROR_COLOR);
-            printf("­Tecla invalida!\n");
+            printf("ï¿½Tecla invalida!\n");
             color_txt(DEFAULT_COLOR);
         }
     } while (loop);
@@ -587,7 +626,7 @@ void imprimirReporteBarcos(struct player *player, struct player *enemy) {
     printf("\n");
     printf("Reporte de barcos:\n");
 
-    // Encontrar el tama¤o m ximo de los barcos
+    // Encontrar el tamaï¿½o mï¿½ximo de los barcos
     for (i = 0; i < NUM_SHIPS; i++) {
         if (player->ships[i].size > dimension_maxima) {
             dimension_maxima = player->ships[i].size;
@@ -645,7 +684,7 @@ void imprimirReporteBarcos(struct player *player, struct player *enemy) {
             loop = false;
         } else {
             color_txt(ERROR_COLOR);
-            printf("­Tecla invalida!\n");
+            printf("ï¿½Tecla invalida!\n");
         color_txt(DEFAULT_COLOR);
     }
     } while (loop);
@@ -687,10 +726,11 @@ void mostrar_info_carta(struct cartas *carta) {
 
 void capturar_coordenada(struct player *player, struct player *enemy) {
     char fila_c;
-    int columna;
+    int columna_num;
+    char linea[32];
+    char *nl;
     bool validacion = false;
-    char linea[32]; // Buffer para la entrada del usuario
-    char *nl; // Puntero para el salto de l¡nea
+
     do {
         puts("Ingrese las coordenadas (Fila: letras de A a la J; Columna: numeros del 1 al 10): ");
         printf("Ejemplo: "); color_txt(INFO_COLOR); printf("A 1\n"); color_txt(DEFAULT_COLOR);
@@ -705,21 +745,31 @@ void capturar_coordenada(struct player *player, struct player *enemy) {
         }
 
         nl = strchr(linea, '\n');
-        if(nl) *nl = '\0'; // Eliminar el salto de l¡nea al final de la entrada
-
+        if(nl) *nl = '\0'; // Eliminar el salto de lÃ­nea al final de la entrada
+        char colLetra;
         // Intentar leer las coordenadas en el formato "A 1" o "A1"
-        if (sscanf(linea, " %c %d", &fila_c, &columna) != 2
-          && sscanf(linea, " %c%d", &fila_c, &columna) != 2) {
+         if ((sscanf(linea, " %c %c", &fila_c, &colLetra) == 2 ||
+                 sscanf(linea, " %c%c",  &fila_c, &colLetra) == 2)
+                && isalpha((unsigned char)colLetra)) {
+            fila_c   = toupper((unsigned char)fila_c);
+            colLetra = toupper((unsigned char)colLetra);
+            player->last_input_fila    = fila_c   - 'A';
+            player->last_input_columna = colLetra - 'A';
+        }
+        // 2) letra+nÃºmero (ej. "J10" o "J 10")
+        else if (sscanf(linea, " %c %d", &fila_c, &columna_num) == 2
+                || sscanf(linea, " %c%d",  &fila_c, &columna_num) == 2) {
+            fila_c = toupper((unsigned char)fila_c);
+            player->last_input_fila    = fila_c      - 'A';
+            player->last_input_columna = columna_num - 1;
+        }
+        else {
             color_txt(ERROR_COLOR);
             printf("Formato invalido.");
-            color_txt(INFO_COLOR); printf("CodeError: 0\n");
+            color_txt(INFO_COLOR); printf(" CodeError: 0\n");
             color_txt(DEFAULT_COLOR);
-            continue; // Repetir el ciclo si la entrada es invalida
+            continue;  // vuelve a pedir
         }
-        
-        fila_c = toupper(fila_c); // Convertir a may£scula para evitar problemas de comparaci¢n
-        player->last_input_fila = fila_c - 'A';
-        player->last_input_columna = columna - 1; // Ajustar columna a base 0
 
         // Rango de coordenadas
         if (!validar_ataque_cc_rango(player)) {
@@ -737,9 +787,9 @@ void capturar_coordenada(struct player *player, struct player *enemy) {
         }
     } while (!validacion);
 
-    printf("Coordenadas ingresadas: %c, %d\n", 
-            player->last_input_fila + 'A', 
-            player->last_input_columna + 1);
+    printf("Coordenadas ingresadas: %c, %d\n",
+           player->last_input_fila + 'A',
+           player->last_input_columna + 1);
 
     disparar(player, enemy);
 }
@@ -770,26 +820,55 @@ void capturar_fila_columna(struct player *player, struct player *enemy) {
                 printf("Error de formato,"); color_txt(INFO_COLOR); printf("CodeError: NULL\n");
                 color_txt(DEFAULT_COLOR);
             } else validacion = true;
-            fila_c = toupper(fila_c); // Convertir a may£scula para evitar problemas de comparaci¢n
-            player->last_input_fila = fila_c - 'A'; // Convertir letra a ¡ndice (A=0, B=1, ..., J=9)
+            fila_c = toupper(fila_c); // Convertir a mayÃºscula para evitar problemas de comparaciï¿½n
+            player->last_input_fila = fila_c - 'A'; // Convertir letra a Ã­ndice (A=0, B=1, ..., J=9)
 
             if (validar_ataque_cc_rango(player)) validacion = true; // Validar rango de coordenadas
 
         } while (!validacion);
     } else if (player->last_card_id == 4 || player->last_card_id == 7) {
-        // Bombardeo/Chequeo de columna: n£mero
+        // Bombardeo/Chequeo de columna: nÃºmero
+        char colInput[8];
         do {
-            printf("Ingrese la columna que desee %s (1-%d): ",(player->last_card_id==4) ? "bombardear" : "revisar",BOARD_SIZE);
-            if(scanf(" %d", &columna) == 0) {
-                limpiar_buffer_entrada(); // Limpiar el buffer de entrada
+            printf("Ingrese la columna que desee %s (1-%d o J): ",
+                   (player->last_card_id == 4) ? "bombardear" : "revisar",
+                   BOARD_SIZE);
+            if (!fgets(colInput, sizeof(colInput), stdin)) {
+                limpiar_buffer_entrada();
+                continue;
+            }
+            // Eliminar posible '\n'
+            colInput[strcspn(colInput, "\r\n")] = '\0';
+
+            int idxCol = -1, num;
+            // Caso numÃ©rico
+            if (sscanf(colInput, "%d", &num) == 1) {
+                if (num < 1 || num > BOARD_SIZE) {
+                    color_txt(ERROR_COLOR);
+                    printf("Columna fuera de rango.\n");
+                    color_txt(DEFAULT_COLOR);
+                    continue;
+                }
+                idxCol = num - 1;
+            }
+            // Caso letra 'J' o 'j' â†’ columna 10
+            else if (strlen(colInput) == 1 &&
+                     toupper((unsigned char)colInput[0]) == 'J') {
+                idxCol = BOARD_SIZE - 1;
+            }
+            else {
                 color_txt(ERROR_COLOR);
-                printf("Error de formato,"); color_txt(INFO_COLOR); printf("CodeError: NULL\n");
+                printf("Formato invalido.\n");
+                color_txt(INFO_COLOR);
+                printf("CodeError: NULL\n");
                 color_txt(DEFAULT_COLOR);
-            } else validacion = true;
-            player->last_input_columna = columna - 1; // Ajustar columna a base 0
+                continue;
+            }
 
-            if (validar_ataque_cc_rango(player)) validacion = true; // Validar rango de coordenadas
-
+            player->last_input_columna = idxCol;
+            if (!validar_ataque_cc_rango(player))
+                continue;
+            validacion = true;
         } while (!validacion);
     }
 
@@ -835,49 +914,4 @@ switch (player->last_card_id) {
         printf("Casillas enemigas encontradas: %d\n", player->contador_columna[player->ultima_columna_chequeada]);
         break;
     }
-}
-
-void solicitar_barco(struct player *player, struct player *enemy) {
-    int i, barco_seleccionado;
-    char opc;
-    bool loop = false;
-    do {
-        limpiar_pantalla();
-        printf("Turno de"); color_txt(INFO_COLOR); printf(" %s\n", player->name); color_txt(DEFAULT_COLOR);
-        imprimirTablero(player);
-        printf("Seleccione el barco que desea mover:\n");
-        for (i = 0; i < NUM_SHIPS; i++) {
-            if (validar_movimiento(player, &player->ships[i])) {
-                // Mostrar solo barcos que se pueden mover
-                printf("Barco %d: %d celdas\n", i + 1, player->ships[i].size);
-            }
-        }
-        printf("[z]: No mover ningun barco.\n");
-        scanf(" %c", &opc);
-        opc = toupper(opc);
-        switch (opc) {
-            case 'Z':
-                printf("No se movera ningun barco. Recibes una carta de"); color_txt(INFO_COLOR); printf(" disparo.\n");
-                color_txt(DEFAULT_COLOR);
-                loop = false; // Salir del bucle
-                capturar_coordenada(player, enemy);
-            case '1': case '2': case '3': case '4': case '5':
-                barco_seleccionado = opc - '1'; // Convertir a base 0
-                if (validar_movimiento(player, &player->ships[barco_seleccionado])) {
-                    mover_barco_adelante(player, barco_seleccionado);
-                } else {
-                        color_txt(ERROR_COLOR);
-                    printf("No puedes mover ese barco.\n");
-                    color_txt(DEFAULT_COLOR);
-                    Sleep(2000); // Pausa para mostrar el mensaje de error.
-                    continue; // Volver al inicio del bucle para seleccionar otro barco
-                }
-                break;
-            default:
-                color_txt(ERROR_COLOR);
-                printf("Opcion invalida. Intente de nuevo.\n");
-                color_txt(DEFAULT_COLOR);
-                Sleep(2000);
-            }
-        } while (loop);
 }

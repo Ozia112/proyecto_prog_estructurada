@@ -8,7 +8,7 @@ void inicializar_jugador(struct player *player) {
 
     // Inicializar estado de jugador.
     player->placed_ships = 0;
-    player->turno = -1; // Turno inicial del jugador
+    player->turno = -1; // Turno inicial del jugador, indicando estado no inicializado
     
     // Variables para barcos.
     inicializar_flota(player);
@@ -77,32 +77,27 @@ void inicializar_cartas(struct player *player) {
             case 6:
                 strcpy(player->cartas[i].nombre, "Chequeo fila");
                 strcpy(player->cartas[i].descripcion, "Tu equipo logro activar el sonar. Elige un numero y podras ver el numero de coordenadas en esa fila.");
-                player->cartas[i].peso = 1;
+                player->cartas[i].peso = 10; // 1
                 break;
             case 7:
                 strcpy(player->cartas[i].nombre, "Chequeo columna");
                 strcpy(player->cartas[i].descripcion, "Tu equipo logro activar el sonar. Elige una letra y podras ver el numero de coordenadas en esa columna.");
-                player->cartas[i].peso = 1;
+                player->cartas[i].peso = 10; // 1
                 break;
             case 8:
                 strcpy(player->cartas[i].nombre, "Salvo");
                 strcpy(player->cartas[i].descripcion, "Esta carta activa el modo Salvo. Dispara los mismos tiros que tengas en flota.");
-                player->cartas[i].peso = 1;
+                player->cartas[i].peso = 0; // 1
                 break;
             case 9:
                 strcpy(player->cartas[i].nombre, "Torre de ventaja");
                 strcpy(player->cartas[i].descripcion, "Acumula 4 tarjetas como esta para hundir instantaneamente los barcos.");
-                player->cartas[i].peso = 4;
+                player->cartas[i].peso = 0; // 4
                 break;
             case 10:
                 strcpy(player->cartas[i].nombre, "Tira y toma");
                 strcpy(player->cartas[i].descripcion, "Inserta coordenadas donde desees disparar y vuelve a sacar una carta.");
-                player->cartas[i].peso = 1;
-                break;
-            case 11:
-                strcpy(player->cartas[i].nombre, "Mover hacia adelante");
-                strcpy(player->cartas[i].descripcion, "Tu equipo logro obtener materiales para arreglar un motor momentaneamente.");
-                player->cartas[i].peso = 1;
+                player->cartas[i].peso = 0; // 1
                 break;
         }
         player->peso_total += player->cartas[i].peso;

@@ -163,34 +163,28 @@ bool validar_ataque_cc_rango(struct player *player) {
     return validar_cc_rango(f, c);
 }
 
-int barcos_en_fila(struct player *player, struct player *enemy) {
+int barcos_en_fila(struct player *player, struct player *enemy, int cc_fila) {
     int contador = 0;
     
-    // bf = barrido de fila
-    for (int bf = 0; bf < BOARD_SIZE; bf++) {
-        for (int idx_ship = 0; idx_ship < NUM_SHIPS; idx_ship++) {
-            for (int s_part = 0; s_part < enemy->ships[idx_ship].size; s_part++) {
-                // Comprobar si la parte del barco coincide con la fila y no está dañado
-                if (enemy->ships[idx_ship].status[s_part][CC_FILA] == player->last_input_fila && casilla_saludable(enemy, idx_ship, s_part)) {
-                    contador++;
-                }
+    for (int idx_ship = 0; idx_ship < NUM_SHIPS; idx_ship++) {
+        for (int s_part = 0; s_part < enemy->ships[idx_ship].size; s_part++) {
+            // Comprobar si la parte del barco coincide con la fila y no está dañado
+            if (enemy->ships[idx_ship].status[s_part][CC_FILA] == cc_fila && casilla_saludable(enemy, idx_ship, s_part)) {
+                contador++;
             }
         }
     }
     return contador;
 }
 
-int barcos_en_columna(struct player *player, struct player *enemy) {
+int barcos_en_columna(struct player *player, struct player *enemy, int cc_columna) {
     int contador = 0;
 
-    // bc = barrido de columna
-    for (int bc = 0; bc < BOARD_SIZE; bc++) {
-        for (int idx_ship = 0; idx_ship < NUM_SHIPS; idx_ship++) {
-            for (int s_part = 0; s_part < enemy->ships[idx_ship].size; s_part++) {
-                // Comprobar si la parte del barco coincide con la columna y no está dañado
-                if (enemy->ships[idx_ship].status[s_part][CC_COLUMNA] == player->last_input_columna && (casilla_saludable(enemy, idx_ship, s_part))) {
-                    contador++;
-                }
+    for (int idx_ship = 0; idx_ship < NUM_SHIPS; idx_ship++) {
+        for (int s_part = 0; s_part < enemy->ships[idx_ship].size; s_part++) {
+            // Comprobar si la parte del barco coincide con la columna y no está dañado
+            if (enemy->ships[idx_ship].status[s_part][CC_COLUMNA] == player->last_input_columna && (casilla_saludable(enemy, idx_ship, s_part))) {
+                contador++;
             }
         }
     }

@@ -143,13 +143,3 @@ void funcion_carta_10(struct player *player, struct player *enemy) {
 
     sacar_carta(player, enemy);
 }
-
-void funcion_carta_11(struct player *player, struct player *enemy) {
-    printf("Puedes mover un barco hacia adelante");
-    pausa_consola(1.3);
-    solicitar_barco(player, enemy);
-    enter_continuar();
-    mostrar_turno_y_tablero(player);
-    printf("Posicion de barco actualizada:\n");
-    enter_continuar();
-}
